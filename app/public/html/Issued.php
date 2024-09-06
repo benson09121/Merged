@@ -1,0 +1,275 @@
+<?php
+session_start();
+$_SESSION['currentpage'] = "issued";
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/DOMS_logo.png" type="image/x-icon">
+    <title>Manage Admin Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../css/manage.css">
+    <link rel="stylesheet" href="sidenav/sidenav.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/viob.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../css/violation-report.css">
+    <link rel="stylesheet" href="../css/studentviol.css">
+    <link rel="stylesheet" href="sidenav/sidenav.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/screen_timeout.js"></script>
+
+
+</head>
+
+<body>
+
+    <div class="sidenav">
+        <?php include('sidenav/sidenav.php'); ?>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const headerBtn = document.querySelector('.header-btn');
+            const sidenav = document.querySelector('.sidenav');
+
+            headerBtn.addEventListener('click', () => {
+                sidenav.classList.toggle('active');
+            });
+        });
+    </script>
+
+    <div class="header-btn">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <section class="main-do">
+
+
+        <div class="body-content">
+            <div class="title-page">
+                <h1>Issued Documents</h1>
+                    <hr>
+            </div>
+</select>
+
+            <div class="filter-group">
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Search...">
+                </div>
+                <div class="dropdowns">
+
+                    <select name="" id="">
+                        <option value="" style="display: none;" selected>Filter Course</option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+
+                    <span><i class="fa-solid fa-filter"></i> Date filter</span>
+
+                </div>
+            </div>
+
+            <div class="table-nav">
+            <div class="nav-list">
+                    <ul>
+                        <a class="nav-click" style="cursor: pointer; border-bottom: solid 3px rgb(98, 130, 172)" data-name="all">
+                            <li>ALL</li>
+                        </a>
+                        <a class="nav-click" style="cursor: pointer;" data-name="accepted">
+                            <li>ACCEPTED </li>
+                        </a>
+                        <a class="nav-click" style="cursor: pointer;" data-name="for review">
+                            <li>FOR REVIEW </li>
+                        </a>
+                        <a class="nav-click" style="cursor: pointer;" data-name="rejected">
+                            <li>REJECTED </li>
+                        </a>
+                        
+                    </ul>
+                </div>
+                <div class="generate-btn">
+                    <span id="generateReportBtn"><i class="fas fa-chart-bar"></i> Generate Report</span>
+                </div>
+
+            </div>
+
+            <!-- Modal DATE -->
+            <div id="dateModal" class="modal-date">
+                <div class="modal-content-date">
+
+                    <span class="close-date">&times;</span>
+
+                    <div class="date-header">
+                        <h2>FILTER DATE</h2>
+                    </div>
+
+                    <div class="modal-date-details">
+
+                        <div class="input-date">
+                            <label for="from">From</label>
+                            <input type="date" name="from">
+                        </div>
+
+                        <div class="input-date">
+                            <label for="to">To</label>
+                            <input type="date" name="to">
+                        </div>
+
+                        <button id="applyFilterBtn">APPLY FILTER</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="body-table">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Student ID</th>
+                        <th>Request Type</th>
+                        <th>Purpose</th>
+                        <th>Request Status</th>
+                    
+                    </thead>
+                    <tbody id="tableBody">
+                
+                    </tbody>
+                    </table>
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                </ul>
+            </nav>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        </div>
+
+    </section>
+
+    <script>
+        var select = 'all';
+        var search = '';
+        var currentPage = 1;
+        var itemsPerPage = 10;
+        $(document).ready(function() {
+
+            $('.nav-click').click(function() {
+                $('.nav-click').css('border-bottom', 'none');
+                $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
+                select = $(this).data('name').toLowerCase();
+                currentPage = 1;
+            });
+
+            setInterval(function(){
+                    $.ajax({
+                    url: 'php/get_issued_data.php',
+                    method: 'POST',
+                    data: {select: select,
+                        page: currentPage,
+                        limit: itemsPerPage,
+                        search: search
+                        },
+                    success: function(response){
+                        console.log(response);
+                        $('#tableBody').empty();
+                     data = JSON.parse(response);
+                     request = data.data;
+                     total = data.totalPages;
+                     if(request == 'no data'){
+                        $('#tableBody').append(`<tr>
+                        <td colspan="5">No data</td>
+                        </tr>`);
+                     } else{
+                     request.forEach(element => {
+                        $('#tableBody').append(`<tr style="cursor: pointerd">
+                        <td>${element.student_id}</td>
+                        <td>${element.request_type}</td>
+                        <td>${element.purpose}</td>
+                        <td>${element.status}</td>
+                        </tr>`);
+                     });                     
+                    }
+                    generatePagination(total);
+                    }
+                });
+
+                }, 500);
+                $('#searchInput').on('input', function () {
+            search = $(this).val();
+            currentPage = 1;
+        });
+        function generatePagination(totalPages) {
+            $('.pagination').empty();
+            $('.pagination').append(`
+        <li class="page-item" id="Previous">
+        <a class="page-link" href="#" aria-label="Previous" data-total-page="${totalPages}">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+      `);
+            for (let i = 1; i <= totalPages; i++) {
+                $('.pagination').append(
+                    `<li class="page-item"><button class="page-link pagination-number" 
+                data-page="${i}" data-total-page="${totalPages}">${i} </button></li>`
+                );
+            }
+            $('.pagination').append(`<li class="page-item" id="Next">
+      <a class="page-link" href="#" aria-label="Next" data-total-page="${totalPages}">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>`);
+
+            $(`.pagination-number[data-page= '${currentPage}']`).addClass('active');
+            if (currentPage === 1) {
+                $('#Previous').addClass('disabled');
+            } else {
+                $('#Previous').removeClass('disabled');
+            }
+            if (currentPage === totalPages) {
+                $('#Next').addClass('disabled');
+            } else {
+                $('#Next').removeClass('disabled');
+            }
+            if(totalPages === 0){
+                $('#Previous').addClass('disabled');
+                $('#Next').addClass('disabled');
+            }
+        }
+
+        $('.pagination').on('click', '.page-link', function () {
+            console.log($(this).data('total-page'));
+            if ($(this).attr('aria-label') === 'Previous' && currentPage > 1) {
+                currentPage--;
+            } else if ($(this).attr('aria-label') === 'Next' && currentPage < $(this).data('total-page')) {
+                currentPage++;
+            } else {
+                currentPage = $(this).data('page');
+            }
+
+        });
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+                
