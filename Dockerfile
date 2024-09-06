@@ -30,6 +30,9 @@ RUN composer install \
 
 # Add the project
 ADD app /var/www/html
+
+RUN chmod 755 /var/www/html/html/php/new_items
+
 WORKDIR /var/www/html
 
 COPY ./app/public /var/www/html
