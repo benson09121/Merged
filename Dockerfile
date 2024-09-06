@@ -38,8 +38,6 @@ WORKDIR /var/www/html
 
 COPY ./app/public /var/www/html
 
-RUN chmod 755 
-
 RUN composer install \
     --no-interaction \
     --no-plugins \
