@@ -40,11 +40,5 @@ RUN composer install \
     --no-scripts \
     --prefer-dist
 
-# Install MySQL (not typical for production)
-RUN apt-get update && apt-get install -y mysql-server
 
-# Initialize MySQL
 
-RUN service mysql start && mysql
-
-CMD ["deploy.sh"]
