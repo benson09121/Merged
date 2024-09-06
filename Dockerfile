@@ -31,12 +31,14 @@ RUN composer install \
 # Add the project
 ADD app /var/www/html
 
-RUN mkdir -p /var/www/html/html/php/new_items \
-    && chmod -R 755 /var/www/html/html/php/new_items
 
 WORKDIR /var/www/html
 
 COPY ./app/public /var/www/html
+
+
+RUN chown -R www-data:www-data /var/www/html/html/php/new_items \
+    && chmod -R 755 /var/www/html/html/php/new_items
 
 RUN composer install \
     --no-interaction \
