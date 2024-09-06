@@ -9,6 +9,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY ./app .
 
+
 # install composer
 RUN apt-get -yqq update \
 && apt-get -yqq install --no-install-recommends unzip \
@@ -30,6 +31,8 @@ RUN composer install \
 
 # Add the project
 ADD app /var/www/html
+
+COPY ./app/public /var/www/html
 
 RUN composer install \
     --no-interaction \
