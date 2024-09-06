@@ -19,7 +19,7 @@ RUN apt-get -yqq update \
 && composer --version
 
 # Cache Composer dependencies
-WORKDIR /tmp
+WORKDIR /tmp    
 ADD app/composer.json app/composer.lock /tmp/
 RUN composer install \
     --no-interaction \
@@ -39,3 +39,12 @@ RUN composer install \
     --no-plugins \
     --no-scripts \
     --prefer-dist
+
+# Install MySQL (not typical for production)
+RUN apt-get update && apt-get install -y mysql-server
+
+# Initialize MySQL
+
+RUN service mysql start && mysql
+
+CMD ["deploy.sh"]
