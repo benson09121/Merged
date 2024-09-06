@@ -7,7 +7,6 @@ COPY ./composer-installer.sh /usr/local/bin/composer-installer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-COPY ./app .
 
 
 # install composer
@@ -31,6 +30,7 @@ RUN composer install \
 
 # Add the project
 ADD app /var/www/html
+WORKDIR /var/www/html
 
 COPY ./app/public /var/www/html
 
