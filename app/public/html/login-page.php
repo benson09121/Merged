@@ -84,7 +84,7 @@ $(document).ready(function(){
                 $('#ErrorModal').modal('show');
             }
             else if(response == 'success'){
-                window.location.href = './html/home.php';
+                window.location.href = './home.php';
             }
         }, error: function(response){
 
