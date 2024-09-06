@@ -30,7 +30,6 @@ RUN composer install \
 
 # Add the project
 ADD app /var/www/html
-WORKDIR /var/www/html
 
 RUN composer install \
     --no-interaction \
