@@ -7,6 +7,8 @@ COPY ./composer-installer.sh /usr/local/bin/composer-installer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+COPY ./app .
+
 # install composer
 RUN apt-get -yqq update \
 && apt-get -yqq install --no-install-recommends unzip \
