@@ -205,7 +205,7 @@
 }
 
 .modal-header{
-    width: 120%;
+    width: 100%;
     background-color: var(--div-primary-color);
     color: white;
     text-align: center;
@@ -213,7 +213,7 @@
     justify-content: center;
 }
 
-.modal-content-add form{
+#form{
     padding: 20px 40px 20px 40px;
 }
 
