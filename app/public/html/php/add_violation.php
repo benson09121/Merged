@@ -31,3 +31,4 @@ echo 'success';
     echo 'success';
 }
 
+mysqli_close($conn);

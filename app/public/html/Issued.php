@@ -70,7 +70,7 @@ $_SESSION['currentpage'] = "issued";
                 <div class="dropdowns">
 
                     <select name="" id="">
-                        <option value="" style="display: none;" selected>Filter Course</option>
+                        <option value="" style="display: none;" selected>Filter Status</option>
                         <option value=""></option>
                         <option value=""></option>
                     </select>
@@ -84,16 +84,24 @@ $_SESSION['currentpage'] = "issued";
             <div class="nav-list">
                     <ul>
                         <a class="nav-click" style="cursor: pointer; border-bottom: solid 3px rgb(98, 130, 172)" data-name="all">
-                            <li>ALL</li>
+                            <li>ALL
+                            <span id="all_count">0</span>
+                            </li>
                         </a>
-                        <a class="nav-click" style="cursor: pointer;" data-name="accepted">
-                            <li>ACCEPTED </li>
+                        <a class="nav-click" style="cursor: pointer;" data-name="goodmoral">
+                            <li>GOOD MORAL
+                            <span id="goodmoral_count">0</span>
+                            </li>
                         </a>
-                        <a class="nav-click" style="cursor: pointer;" data-name="for review">
-                            <li>FOR REVIEW </li>
+                        <a class="nav-click" style="cursor: pointer;" data-name="admissionpass">
+                            <li>ADMISSION PASS
+                                <span id="admission_count">0</span>
+                            </li>
                         </a>
-                        <a class="nav-click" style="cursor: pointer;" data-name="rejected">
-                            <li>REJECTED </li>
+                        <a class="nav-click" style="cursor: pointer;" data-name="entrypass">
+                            <li>ENTRY PASS 
+                            <span id="entrypass_count">0</span>
+                            </li>
                         </a>
                         
                     </ul>
@@ -132,7 +140,7 @@ $_SESSION['currentpage'] = "issued";
                 </div>
             </div>
 
-            <div class="body-table">
+            <div class="body-table" data-nav="all">
                 <table class="table table-hover">
                     <thead>
                         <th>Student ID</th>
@@ -141,11 +149,60 @@ $_SESSION['currentpage'] = "issued";
                         <th>Request Status</th>
                     
                     </thead>
-                    <tbody id="tableBody">
+                    <tbody id="tableBody_all" class="table-select">
                 
                     </tbody>
                     </table>
             </div>
+            <div class="body-table" data-nav="goodmoral" style="display: none;">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Request No</th>
+                        <th>Student ID</th>
+                        <th>Purpose</th>
+                        <th>Date Requested</th>
+                        <th>Date Released</th>
+                        <th>Request Status</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    
+                    </thead>
+                    <tbody id="tableBody_goodmoral" class="table-select">
+                
+                    </tbody>
+                    </table>
+            </div>
+            <div class="body-table" data-nav="admissionpass" style="display: none;">
+                <table class="table table-hover" class="table-select">
+                    <thead>
+                        <th>Request No</th>
+                        <th>Student ID</th>
+                        <th>Purpose</th>
+                        <th>Date Requested</th>
+                        <th>Request Status</th>
+                    
+                    </thead>
+                    <tbody id="tableBody_admissionpass" class="table-select">
+                
+                    </tbody>
+                    </table>
+            </div>
+            <div class="body-table" data-nav="entrypass" style="display: none;">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Request No</th>
+                        <th>Student ID</th>
+                        <th>Purpose</th>
+                        <th>Date Requested</th>
+                        <th>Valid Until</th>
+                        <th>Request Status</th>
+                    
+                    </thead>
+                    <tbody id="tableBody_entrypass" class="table-select">
+                
+                    </tbody>
+                    </table>
+            </div> 
 
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
@@ -159,6 +216,28 @@ $_SESSION['currentpage'] = "issued";
 
 
         </div>
+    
+        <div class="modal fade " id="goodmoral_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Good Moral</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="add_announcement"class="btn btn-primary">ADD</button>
+      </div>
+    </div> 
+  </div>
+</div>
+
+<div id="overlay">
+                <img id="overlayImage" src="" alt="Overlay Image">
+            </div>
 
     </section>
 
@@ -173,7 +252,14 @@ $_SESSION['currentpage'] = "issued";
                 $('.nav-click').css('border-bottom', 'none');
                 $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
                 select = $(this).data('name').toLowerCase();
-                currentPage = 1;
+                $('.body-table').each(function() {
+                    $(this).attr('data-nav') === select ? $(this).show() : $(this).hide();
+                });
+                $('#tableBody_all').empty();
+                    $('#tableBody_goodmoral').empty();
+                    $('#tableBody_admissionpass').empty();
+                    $('#tableBody_entrypass').empty();
+                currentPage = 1; 
             });
 
             setInterval(function(){
@@ -187,25 +273,88 @@ $_SESSION['currentpage'] = "issued";
                         },
                     success: function(response){
                         console.log(response);
-                        $('#tableBody').empty();
+                    
                      data = JSON.parse(response);
                      request = data.data;
                      total = data.totalPages;
-                     if(request == 'no data'){
-                        $('#tableBody').append(`<tr>
-                        <td colspan="5">No data</td>
-                        </tr>`);
-                     } else{
-                     request.forEach(element => {
-                        $('#tableBody').append(`<tr style="cursor: pointerd">
+                     totalGoodMoral = data.totalGoodMoral;
+                     totalEntryPass = data.totalEntryPass;
+                    totalAdmissionPass = data.totalAdmissionPass;
+                    totalPass = data.totalPass;
+                    $('#tableBody_all').empty();
+                    $('#tableBody_goodmoral').empty();
+                    $('#tableBody_admissionpass').empty();
+                    $('#tableBody_entrypass').empty();
+                     if(select == 'all' && request != 'no data'){
+                        request.forEach(element => {
+                        $('#tableBody_all').append(`<tr class="row-data" data-type="${element.request_type}">
                         <td>${element.student_id}</td>
                         <td>${element.request_type}</td>
                         <td>${element.purpose}</td>
                         <td>${element.status}</td>
                         </tr>`);
-                     });                     
+                     });         
+                    } else{
+                        $('#tableBody_all').append(`<tr>
+                        <td colspan="5">No data</td>
+                        </tr>`);
+                    }                    
+                    if(select == 'goodmoral' && request != 'no data'){
+                        request.forEach(element => {
+                            if(element.date_released == null){
+                                element.date_released = 'N/A';
+                            }
+                            $('#tableBody_goodmoral').append(`<tr class="row-data" data-type="Good Moral">
+                        <td>${element.request_no}</td>
+                        <td>${element.student_id}</td>
+                        <td>${element.reason}</td>
+                        <td>${element.date_requested}</td>
+                        <td>${element.date_released}</td>
+                        <td>${element.status}</td>
+                        <td><img src="../proof_of_payments/${element.proof_of_payments}" alt="" class="image-click"></td>
+                        </tr>`);
+                        });
+                     } else{
+                        $('#tableBody_goodmoral').append(`<tr>
+                        <td colspan="7">No data</td>
+                        </tr>`);
+                     }
+                     if(select == 'admissionpass'){
+                        request.forEach(element => {
+                            $('#tableBody_admissionpass').append(`<tr class="row-data" data-type="Admission Pass">
+                        <td>${element.request_no}</td>
+                        <td>${element.student_id}</td>
+                        <td>${element.reason}</td>
+                        <td>${element.date_requested}</td>
+                        <td>${element.status}</td>
+                        </tr>`);
+                     });
+                    } else{
+                        $('#tableBody_admissionpass').append(`<tr>
+                        <td colspan="5">No data</td>
+                        </tr>`);
+                    }
+                    if(select == 'entrypass'){
+                        request.forEach(element => {
+                            $('#tableBody_entrypass').append(`<tr class="row-data" data-type="Entry Pass">
+                        <td>${element.request_no}</td>
+                        <td>${element.student_id}</td>
+                        <td>${element.purpose}</td>
+                        <td>${element.date_requested}</td>
+                        <td>${element.valid_until}</td>
+                        <td>${element.status}</td>
+                        </tr>`);
+                     });
+                    } else{
+                        $('#tableBody_entrypass').append(`<tr>
+                        <td colspan="6">No data</td>
+                        </tr>`);
                     }
                     generatePagination(total);
+                    $('#all_count').text(totalPass);
+                    $('#goodmoral_count').text(totalGoodMoral);
+                    $('#entrypass_count').text(totalEntryPass);
+                    $('#admission_count').text(totalAdmissionPass);
                     }
                 });
 
@@ -262,12 +411,22 @@ $_SESSION['currentpage'] = "issued";
             } else {
                 currentPage = $(this).data('page');
             }
-
         });
+        $('tableBody_goodmoral').on('click', '.image-click', function(){
+                let src = $(this).attr('src');
+                $('#overlayImage').attr('src', src);
+                $('#overlay').css('display', 'block');
+            })
+            $('#overlay').click(function(){
+                $(this).css('display', 'none');
+            })
+
         });
 
     </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

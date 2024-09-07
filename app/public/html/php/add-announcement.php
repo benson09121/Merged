@@ -14,3 +14,5 @@ $sql = "INSERT INTO tbl_announcement(employee_id,title,message,recipients,date_s
 $result = $conn->query($sql);
 
 echo 'success';
+
+mysqli_close($conn);

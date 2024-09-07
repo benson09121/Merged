@@ -88,7 +88,6 @@ while($row = $result->fetch_assoc()) {
     $students[] = $row;
 }
 
-
 $response = [
     'students' => $students,
     'totalPages' => $totalPages

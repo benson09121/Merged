@@ -39,3 +39,5 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
 } else {
     echo 'error'; 
 }
+
+mysqli_close($conn);
