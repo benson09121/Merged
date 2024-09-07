@@ -4,4 +4,5 @@
 
     echo 'ze database has connectedd succzesfuleh';
 
+    mysqli_close($conn);
 ?>

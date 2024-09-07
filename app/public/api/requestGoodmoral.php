@@ -33,5 +33,6 @@
     $myfile = fopen("../proof_of_payments/".$fileName.".png", "w");  
     fwrite($myfile, $decodedbase64); 
 
+    mysqli_close($conn);
 
 ?>
