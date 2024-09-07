@@ -23,4 +23,3 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($student);
-mysqli_close($conn);

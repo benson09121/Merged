@@ -16,5 +16,4 @@ else{
     echo json_encode('No data');
 }
 
-mysqli_close($conn);
 ?>

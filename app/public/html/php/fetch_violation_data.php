@@ -24,5 +24,5 @@ if (isset($_GET['offense_type'])) {
 } else {
     echo json_encode(array('error' => 'Offense type not provided'));
 }
-mysqli_close($conn);
+
 ?>
