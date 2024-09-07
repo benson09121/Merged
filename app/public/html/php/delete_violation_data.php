@@ -22,3 +22,4 @@ if($result){
 else{
     echo "failed";
 }
+mysqli_close($conn);
