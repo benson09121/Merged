@@ -40,6 +40,10 @@ COPY ./app/public /var/www/html
 RUN chown -R www-data:www-data /var/www/html/html/php/new_items \
     && chmod -R 755 /var/www/html/html/php/new_items
 
+    RUN chown -R www-data:www-data /var/www/html/proof_of_payments \
+    && chmod -R 755 /var/www/html/html/proof_of_payments
+
+
 RUN composer install \
     --no-interaction \
     --no-plugins \
