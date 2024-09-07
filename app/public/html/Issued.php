@@ -235,6 +235,10 @@ $_SESSION['currentpage'] = "issued";
   </div>
 </div>
 
+<div id="overlay">
+                <img id="overlayImage" src="" alt="Overlay Image">
+            </div>
+
     </section>
 
     <script>
@@ -283,7 +287,7 @@ $_SESSION['currentpage'] = "issued";
                     $('#tableBody_entrypass').empty();
                      if(select == 'all' && request != 'no data'){
                         request.forEach(element => {
-                        $('#tableBody_all').append(`<tr style="cursor: pointer" class="row-data" data-type="${element.request_type}">
+                        $('#tableBody_all').append(`<tr class="row-data" data-type="${element.request_type}">
                         <td>${element.student_id}</td>
                         <td>${element.request_type}</td>
                         <td>${element.purpose}</td>
@@ -300,7 +304,7 @@ $_SESSION['currentpage'] = "issued";
                             if(element.date_released == null){
                                 element.date_released = 'N/A';
                             }
-                            $('#tableBody_goodmoral').append(`<tr style="cursor: pointer" class="row-data" data-type="Good Moral">
+                            $('#tableBody_goodmoral').append(`<tr class="row-data" data-type="Good Moral">
                         <td>${element.request_no}</td>
                         <td>${element.student_id}</td>
                         <td>${element.reason}</td>
@@ -317,7 +321,7 @@ $_SESSION['currentpage'] = "issued";
                      }
                      if(select == 'admissionpass'){
                         request.forEach(element => {
-                            $('#tableBody_admissionpass').append(`<tr style="cursor: pointer" class="row-data" data-type="Admission Pass">
+                            $('#tableBody_admissionpass').append(`<tr class="row-data" data-type="Admission Pass">
                         <td>${element.request_no}</td>
                         <td>${element.student_id}</td>
                         <td>${element.reason}</td>
@@ -332,7 +336,7 @@ $_SESSION['currentpage'] = "issued";
                     }
                     if(select == 'entrypass'){
                         request.forEach(element => {
-                            $('#tableBody_entrypass').append(`<tr style="cursor: pointer" class="row-data" data-type="Entry Pass">
+                            $('#tableBody_entrypass').append(`<tr class="row-data" data-type="Entry Pass">
                         <td>${element.request_no}</td>
                         <td>${element.student_id}</td>
                         <td>${element.purpose}</td>
@@ -408,16 +412,14 @@ $_SESSION['currentpage'] = "issued";
                 currentPage = $(this).data('page');
             }
         });
-        $('.table-select').on('click','.row-data' ,function(){
-            type = $(this).data('type');
-            if(type == 'Good Moral'){
-                $('#goodmoral_modal').modal('show');
-            } else if (type == 'Admission Pass'){
-
-            } else if(type == 'Entry Pass'){
-
-            }
-        })
+        $('tableBody_goodmoral').on('click', '.image-click', function(){
+                let src = $(this).attr('src');
+                $('#overlayImage').attr('src', src);
+                $('#overlay').css('display', 'block');
+            })
+            $('#overlay').click(function(){
+                $(this).css('display', 'none');
+            })
 
         });
 
