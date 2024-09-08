@@ -32,6 +32,7 @@
     $decodedbase64 = base64_decode($base64);  
     $myfile = fopen("../proof_of_payments/".$fileName, "w");  
     fwrite($myfile, $decodedbase64); 
+    
 
     mysqli_close($conn);
 
