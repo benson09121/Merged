@@ -29,10 +29,7 @@
     $sqlUpdate = "UPDATE `sql12729827`.`tbl_request_goodmoral` SET `proof_of_payment` = '".$fileName."' WHERE (`request_no` = '".$requestNo."')";
     mysqli_query($conn, $sqlUpdate);
     $filePath = $directory . $fileName;
-    $ifp = fopen( $filePath, 'wb' ); 
-    $data = explode( ',', $base64 );
-    fwrite( $ifp, base64_decode( $data[ 1 ] ) );
-    fclose( $ifp ); 
+    file_put_contents($filePath, file_get_contents($base64));
 
 
     mysqli_close($conn);
