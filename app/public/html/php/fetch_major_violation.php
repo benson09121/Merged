@@ -11,3 +11,5 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($major_violation);
+$conn->close();
+?>
