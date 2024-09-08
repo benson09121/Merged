@@ -14,7 +14,7 @@
     ON info.violation_type_id = types.violation_type_id
     INNER JOIN sql12729827.tbl_for_intervention as intervention
     ON records.slip_no = intervention.slip_no
-    WHERE records.student_id = '2021-170017'";
+    WHERE records.student_id = '". $studID ."'";
 
     $result = mysqli_query($conn, $sql);
     $final_data = [];
