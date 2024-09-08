@@ -23,15 +23,15 @@
         }
 
     }
-
-    $fileName = $requestNo . '_' . $studID;
-
+    $directory = '../proof_of_payments/';
+    $fileName = $requestNo . '_' . $studID . '.png';
+    
     $sqlUpdate = "UPDATE `sql12729827`.`tbl_request_goodmoral` SET `proof_of_payment` = '".$fileName."' WHERE (`request_no` = '".$requestNo."')";
     mysqli_query($conn, $sqlUpdate);
+    $decoded_base64 = base64_decode($base64);
+    $filePath = $directory . $fileName;
+    file_put_contents($filePath, $decoded_base64);
 
-    $decodedbase64 = base64_decode($base64);  
-    $myfile = fopen("../proof_of_payments/".$fileName.".png", "w");  
-    fwrite($myfile, $decodedbase64); 
-
+    mysqli_close($conn);
 
 ?>
