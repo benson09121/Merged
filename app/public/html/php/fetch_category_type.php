@@ -11,4 +11,5 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($category_type);
+mysqli_close($conn);
 ?>

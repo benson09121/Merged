@@ -42,3 +42,4 @@ if ($result->num_rows > 0) {
 }
 
 echo json_encode($students);
+mysqli_close($conn);

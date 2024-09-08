@@ -11,3 +11,4 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($minor_violation);
+mysqli_close($conn);

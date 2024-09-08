@@ -16,4 +16,5 @@ if($id == 0){
     $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     echo json_encode($rows);
 }
+
 ?>
