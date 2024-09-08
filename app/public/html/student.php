@@ -381,6 +381,7 @@ unset($_SESSION['error_message']);
                         url: 'php/fetch_major_violation.php',
                         type: 'GET',
                         success: function(response){
+                        console.log(response);
                             $('#violation_type').empty();
                             var violation = JSON.parse(response);
                             $('#violation_type').html('<option value="" style="display: none;">Select Violation Type</option>');
