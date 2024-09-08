@@ -58,4 +58,4 @@ $data = [
     'totalPages' => $total_pages
 ];
 echo json_encode($data);
-mysqli_close($conn);
+$conn->close();

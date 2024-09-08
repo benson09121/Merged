@@ -32,4 +32,4 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($violations);
-mysqli_close($conn);
+$conn->close();

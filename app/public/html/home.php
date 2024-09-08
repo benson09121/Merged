@@ -4,7 +4,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
     header("Location: login-page.php");
 } else {
 $_SESSION['currentpage'] = "home";
-include("../database/database_conn.php");
+include '../database/database_conn.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

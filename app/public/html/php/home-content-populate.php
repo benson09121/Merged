@@ -1,5 +1,6 @@
 <?php
 
+
 $sql = 'SELECT * FROM tbl_school_info;';
 
 $result = mysqli_query($conn, $sql);
@@ -22,5 +23,5 @@ if (mysqli_num_rows($result) > 0) {
 } else{
     echo 'No Data Found.';
 }
-mysqli_close($conn);
+$conn->close();
 ?>

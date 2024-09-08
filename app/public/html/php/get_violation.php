@@ -68,4 +68,4 @@ $data = [
 ];
 
 echo json_encode($data);
-mysqli_close($conn);
+$conn->close();

@@ -8,3 +8,4 @@ $query = "UPDATE tbl_student_info SET account_status = '$status' WHERE student_i
 $result = mysqli_query($conn, $query);
 
 echo "success";
+$conn->close();

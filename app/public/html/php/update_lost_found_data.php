@@ -19,3 +19,4 @@ if ($result) {
 } else {
     echo "Error updating user information: " . mysqli_error($conn);
 }
+$conn->close();

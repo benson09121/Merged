@@ -10,5 +10,5 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($announce);
-mysqli_close($conn);
+$conn->close();
 ?>

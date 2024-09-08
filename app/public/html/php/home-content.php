@@ -1,6 +1,6 @@
 <?php
 session_start();
-include ('../../database/database_conn.php');
+include '../../database/database_conn.php';
 $id = $_POST['id'];
 
 
@@ -16,5 +16,5 @@ if($id == 0){
     $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     echo json_encode($rows);
 }
-
+$conn->close();
 ?>
