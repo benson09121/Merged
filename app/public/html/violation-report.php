@@ -1,27 +1,6 @@
 <?php
 session_start();
 $_SESSION['currentpage'] = "violation";
-$username = $_SESSION['username'];
-include("../database/database_conn.php");
-
-//count all data
-$query_count_all = "SELECT COUNT(*) AS count FROM violation_db WHERE offense_type IN ('MAJOR', 'MINOR')";
-$result_count_all = mysqli_query($conn, $query_count_all);
-$row_count_all = mysqli_fetch_assoc($result_count_all);
-$all_count = $row_count_all['count'];
-
-//count minor data
-$query_count_minor = "SELECT COUNT(*) AS count FROM violation_db WHERE offense_type = 'MINOR'";
-$result_count_minor = mysqli_query($conn, $query_count_minor);
-$row_count_minor = mysqli_fetch_assoc($result_count_minor);
-$minor_count = $row_count_minor['count'];
-
-//count major data
-$query_count_major = "SELECT COUNT(*) AS count FROM violation_db WHERE offense_type = 'MAJOR'";
-$result_count_major = mysqli_query($conn, $query_count_major);
-$row_count_major = mysqli_fetch_assoc($result_count_major);
-$major_count = $row_count_major['count'];
-
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +11,11 @@ $major_count = $row_count_major['count'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../images/DOMS_logo.png" type="image/x-icon">
     <title>Lost & Found</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../css/violation-report.css">
     <link rel="stylesheet" href="../css/viob.css">
@@ -113,49 +97,20 @@ $major_count = $row_count_major['count'];
             <div class="table-nav">
             <div class="nav-list">
                     <ul>
-                        <a href="#" style="border-bottom: solid 3px rgb(98, 130, 172)">
-                            <li>ALL VIOLATION <span><?php echo $all_count ?></span></li>
+                        <a style="cursor: pointer; border-bottom: solid 3px rgb(98, 130, 172)" data-nav="all">
+                            <li>ALL VIOLATION <span>0</span></li>
                         </a>
-                        <a href="violation-report-minor.php">
-                            <li>MINOR VIOLATION <span><?php echo $minor_count ?></span></li>
+                        <a style="cursor: pointer;" data-nav="minor">
+                            <li>MINOR VIOLATION <span>0</span></li>
                         </a>
-                        <a href="violation-report-major.php">
-                            <li>MAJOR VIOLATION <span><?php echo $major_count ?></span></li>
+                        <a style="cursor: pointer;" data-nav="major">
+                            <li>MAJOR VIOLATION <span>0</span></li>
                         </a>
                     </ul>
                 </div>
                 <div class="generate-btn">
                     <span id="generateReportBtn"><i class="fas fa-chart-bar"></i> Generate Report</span>
                 </div>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const generateReportBtn = document.getElementById('generateReportBtn');
-
-                        generateReportBtn.addEventListener('click', function() {
-                            const form = document.createElement('form');
-                            form.setAttribute('method', 'post');
-                            form.setAttribute('action', 'php/generate_report_excel.php');
-                            form.style.display = 'none';
-
-                            const fromDateInput = document.createElement('input');
-                            fromDateInput.setAttribute('type', 'hidden');
-                            fromDateInput.setAttribute('name', 'fromDate');
-                            fromDateInput.value = document.querySelector('input[name="from"]').value;
-
-                            const toDateInput = document.createElement('input');
-                            toDateInput.setAttribute('type', 'hidden');
-                            toDateInput.setAttribute('name', 'toDate');
-                            toDateInput.value = document.querySelector('input[name="to"]').value;
-
-                            form.appendChild(fromDateInput);
-                            form.appendChild(toDateInput);
-
-                            document.body.appendChild(form);
-
-                            form.submit();
-                        });
-                    });
-                </script>
             </div>
 
             <!-- Modal DATE -->
@@ -187,30 +142,11 @@ $major_count = $row_count_major['count'];
             </div>
 
 
-            <script>
-                var modaldate = document.getElementById("dateModal");
-
-                var btndate = document.querySelector(".dropdowns span");
-
-                var spandate = document.getElementsByClassName("close-date")[0];
-
-                btndate.onclick = function() {
-                    modaldate.style.display = "block";
-                }
-
-                spandate.onclick = function() {
-                    modaldate.style.display = "none";
-                }
-
-                window.onclick = function(event) {
-                    if (event.target == modaldate) {
-                        modaldate.style.display = "none";
-                    }
-                }
+            
             </script>
 
 
-            <div class="body-table">
+            <div class="body-table nav-table" data-nav="all">
                 <table>
                     <thead>
                         <th>Student ID</th>
@@ -221,49 +157,40 @@ $major_count = $row_count_major['count'];
                         <th>Status</th>
                         <th>Date created</th>
                     </thead>
-                    <tbody id="tableBody">
-                        <?php
-                        $query = "
-                                (SELECT s.student_id, s.f_name, s.l_name, s.course, m.date_created, m.violation_type, m.offense_type
-                                FROM student_db s
-                                INNER JOIN major_db m ON s.student_id = m.student_id)
-                                UNION
-                                (SELECT s.student_id, s.f_name, s.l_name, s.course, n.date_created, n.violation_type, n.offense_type
-                                FROM student_db s
-                                INNER JOIN minor_db n ON s.student_id = n.student_id)
-                                ORDER BY date_created DESC;
-                            ";
+                    <tbody id="tableBody_all nav-table">
+                    
+                    </tbody>
+                </table>
 
-                        $result = mysqli_query($conn, $query);
-
-                        if ($result && mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                $date_created = $row['date_created'];
-                                $violation_type = $row['violation_type'];
-                                $offense_type = $row['offense_type'];
-                                $student_id = $row['student_id'];
-                                $f_name = $row['f_name'];
-                                $l_name = $row['l_name'];
-                                $course = $row['course'];
-
-                                echo "
-                     <tr>
-                         <td>$student_id</td>
-                         <td>$f_name $l_name</td>
-                         <td>$course</td>
-                         <td>$offense_type</td>
-                         <td>$violation_type</td>
-                         <td>Cleared</td>
-                         <td>$date_created</td>
-                     </tr>
-                     ";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>No results found.</td></tr>";
-                        }
-
-                        mysqli_close($conn);
-                        ?>
+                <div class="body-table" data-nav="minor" style="display: none;">
+                <table>
+                    <thead>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>Offense</th>
+                        <th>Violation</th>
+                        <th>Date created</th>
+                    </thead>
+                    <tbody id="tableBody_minor">
+                    
+                    </tbody>
+                </table>
+            
+                <div class="body-table nav-table" data-nav="major" style="display: none;">
+                <table>
+                    <thead>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>Offense</th>
+                        <th>Violation</th>
+                        <th>Status</th>
+                        <th>Date created</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody id="tableBody_major">
+                    
                     </tbody>
                 </table>
 
@@ -289,174 +216,143 @@ $major_count = $row_count_major['count'];
                 </script>
 
             </div>
-
-            <!-- Modal ITEM -->
-            <div id="itemModal" class="modal-item">
-                <div class="modal-content-item">
-                    <div class="modal-body">
-                        <div class="modal-img">
-                            <img src="../images/logo.webp" alt="">
-                        </div>
-
-                        <hr>
-
-                        <div class="modal-details">
-                            <div class="details-header">
-                                <h3>Founder Information</h3>
-                            </div>
-                            <div class="details-body">
-                                <div class="input-wrap">
-                                    <label>Student Name:</label>
-                                    <p id="">Avril Belisario</p>
-                                </div>
-                                <div class="input-wrap">
-                                    <label>Student ID:</label>
-                                    <p id="">2021 190723</p>
-                                </div>
-                                <div class="input-wrap">
-                                    <label>Email Address:</label>
-                                    <p id="student_email">beliserio@students.nu-dasma.edu.ph</p>
-                                </div>
-                                <div class="input-wrap">
-                                    <label>Contact:</label>
-                                    <p id="">09195367363</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr>
-
-                        <div class="modal-details">
-                            <div class="details-header">
-                                <h3>Item Information</h3>
-                            </div>
-                            <div class="details-body">
-                                <div class="input-wrap">
-                                    <label>Item Brand:</label>
-                                    <p id="">Fibrella</p>
-                                </div>
-                                <div class="input-wrap">
-                                    <label>Item Color:</label>
-                                    <p id="">Black</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-buttons">
-                            <span class="close" id="close">Cancel</span>
-                            <span>Claimed</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Modal ADD -->
-            <div id="addModal" class="modal-add">
-                <div class="modal-content-add">
-
-                    <span class="close-add">&times;</span>
-
-                    <div class="add-header">
-                        <h1>Add Item</h1>
-                    </div>
-
-                    <form action="">
-                        <div class="modal-body-add">
-                            <div class="modal-body1">
-
-                                <div class="input-wrap2">
-                                    <label for="student-id">Student ID:</label>
-                                    <input type="text" name="student-id">
-                                </div>
-
-                                <div class="input-wrap2">
-                                    <label for="item-type">Item Type:</label>
-                                    <input type="text" name="item-type">
-                                </div>
-
-                                <div class="input-wrap2">
-                                    <label for="item-found">Item Found:</label>
-                                    <input type="text" name="item-found">
-                                </div>
-
-                                <div class="modal-desc">
-                                    <label for="description">Description:</label>
-                                    <textarea name="description" id=""></textarea>
-                                </div>
-
-                            </div>
-
-                            <div class="modal-body2">
-                                <div class="image-container" id="images"></div>
-                                <div class="upload-button">
-                                    <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
-                                    <label for="file-input"><i class="fas fa-upload"></i> Upload</label>
-                                </div>
-                            </div>
-
-
-                            <script>
-                                document.getElementById('file-input').addEventListener('change', function(event) {
-                                    const imageContainer = document.getElementById('images');
-                                    const files = event.target.files;
-
-                                    for (let i = 0; i < files.length; i++) {
-                                        const file = files[i];
-                                        const reader = new FileReader();
-
-                                        reader.onload = function(e) {
-                                            const imgElement = document.createElement('img');
-                                            imgElement.src = e.target.result;
-                                            imageContainer.appendChild(imgElement);
-                                        };
-
-                                        reader.readAsDataURL(file);
-                                    }
-                                });
-                            </script>
-
-                        </div>
-                        <div class="modal-form-btn">
-                            <button>SUBMIT</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
+            
         </div>
-
-        <script>
-            var modal2 = document.getElementById("addModal");
-
-            var btn2 = document.querySelector(".add-btn span");
-
-            var span2 = document.getElementsByClassName("close-add")[0];
-
-            btn2.onclick = function() {
-                modal2.style.display = "block";
-            }
-
-            span2.onclick = function() {
-                modal2.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                if (event.target == modal2) {
-                    modal2.style.display = "none";
-                }
-            }
-        </script>
-
-
-        </div>
-
-
+        <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    
+                </ul>
+            </nav>
         </div>
 
     </section>
-
-    <script src="../javascript/profile.js"></script>
 </body>
+<script>
+    var selected = 'all';
+    var search = '';
+    var currentPage = 1;
+    var itemsPerPage = 10;
+    $(document).ready(function() {
+      $('.nav-list ul a').click(function() {
+        $('.nav-list ul a').css('border-bottom', 'none');
+        selected = $(this).attr('data-nav');
+        $('.body-table').each(function(){
+            $(this).attr('data-nav') == selected ? $(this).show() : $(this).hide();
+        })
+        $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
+      });
+      setInterval(function(){
+        $.ajax({
+          url: 'php/violation_report_data.php',
+          type: 'POST',
+          data: {
+            selected: selected,
+            search: search,
+            page: currentPage,
+            limit: itemsPerPage
+          },
+          success: function(response) {
+            console.log(response);
+            var data = JSON.parse(data);
+            var data = data.all;
+            var totalPages = data.totalPages;
+            generatePagination(totalPages);
+            $('#tableBody_all').empty();
+            $('#tableBody_minor').empty();
+            $('#tableBody_major').empty();
+            data.forEach(function(item){
+                if(item.violation_type == 'minor'){
+                    $('#tableBody_minor').append(`
+                    <tr>
+                        <td>${item.student_id}</td>
+                        <td>${item.f_name} ${item.l_name}</td>
+                        <td>${item.course_complete}</td>
+                        <td>${item.violation_type}</td>
+                        <td>${item.violation_name}</td>
+                        <td>${item.date_of_apprehension}</td>
+                    </tr>
+                    `);
+                }else if(item.violation_type == 'major'){
+                    $('#tableBody_major').append(`
+                    <tr>
+                        <td>${item.student_id}</td>
+                        <td>${item.f_name} ${item.l_name}</td>
+                        <td>${item.course_complete}</td>
+                        <td>${item.violation_type}</td>
+                        <td>${item.violation_name}</td>
+                        <td>${item.status}</td>
+                        <td>${item.date_of_apprehension}</td>
+                    </tr>
+                    `);
+                }else{
+                    $('#tableBody_all').append(`
+                    <tr>
+                        <td>${item.student_id}</td>
+                        <td>${item.f_name} ${item.l_name}</td>
+                        <td>${item.course_complete}</td>
+                        <td>${item.violation_type}</td>
+                        <td>${item.violation_name}</td>
+                        <td>${item.status}</td>
+                        <td>${item.date_of_apprehension}</td>
+                    </tr>
+                    `);
+                }
+            });
+          }
+        });
+      }, 500);
+
+      function generatePagination(totalPages) {
+            $('.pagination').empty();
+            $('.pagination').append(`
+        <li class="page-item" id="Previous">
+        <a class="page-link" href="#" aria-label="Previous" data-total-page="${totalPages}">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+      `);
+            for (let i = 1; i <= totalPages; i++) {
+                $('.pagination').append(
+                    `<li class="page-item"><button class="page-link pagination-number" 
+                data-page="${i}" data-total-page="${totalPages}">${i} </button></li>`
+                );
+            }
+            $('.pagination').append(`<li class="page-item" id="Next">
+      <a class="page-link" href="#" aria-label="Next" data-total-page="${totalPages}">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>`);
+
+            $(`.pagination-number[data-page= '${currentPage}']`).addClass('active');
+            if (currentPage === 1) {
+                $('#Previous').addClass('disabled');
+            } else {
+                $('#Previous').removeClass('disabled');
+            }
+            if (currentPage === totalPages) {
+                $('#Next').addClass('disabled');
+            } else {
+                $('#Next').removeClass('disabled');
+            }
+            if(totalPages === 0){
+                $('#Previous').addClass('disabled');
+                $('#Next').addClass('disabled');
+            }
+        }
+
+        $('.pagination').on('click', '.page-link', function () {
+            console.log($(this).data('total-page'));
+            if ($(this).attr('aria-label') === 'Previous' && currentPage > 1) {
+                currentPage--;
+            } else if ($(this).attr('aria-label') === 'Next' && currentPage < $(this).data('total-page')) {
+                currentPage++;
+            } else {
+                currentPage = $(this).data('page');
+            }
+
+        });
+    });
+</script>
 
 </html>

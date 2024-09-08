@@ -330,24 +330,31 @@ include("../database/database_conn.php");
                                 console.log(JsonData);
                                 if(id != 0){
                                 $.each(JsonData, function(index,value){
-                                    $('.department-info').append(`<div class="dept dept1">
-                        <div class="color color1"></div>
-                        <div class="dept-info dept-info1">
-                        <p>${value.description} Dept.</p>
-                        </div>
-                        <p>?%</p>
-                    </div>`);
+                                    $('.department-info').append(`
+                                    <div class="dept dept1">
+         <div class="card">
+        <div class="card-header">-</div>
+        <div class="card-body">
+
+            <p class="card-text">${value.description} Dept.</p>
+        </div>
+                    </div>
+                    </div>
+                            `);
                                 })
                             }else{
                                 $.each(JsonData, function(index,value){
-                                    $('.department-info').append(`<div class="dept dept1">
-                        <div class="color color1"></div>
-
-                        <div class="dept-info dept-info1">
-                        <p>(${value.school_name}) ${value.description}</p>
-                        </div>
-                        <p>?%</p>
-                    </div>`)
+                                    $('.department-info').append(`
+                                    <div class="dept dept1">
+         <div class="card">
+        <div class="card-header">-</div>
+        <div class="card-body">
+            <h5 class="card-title">${value.school_name}</h5>
+            <p class="card-text">${value.description}</p>
+        </div>
+                    </div>
+                    </div>
+                    `)
                                 })
                             }
                             }

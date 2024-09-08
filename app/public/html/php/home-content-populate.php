@@ -7,14 +7,14 @@ if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)){
 
         ?>
-         <div class="dept dept1">
-                        <div class="color color1"></div>
-
-                        <div class="dept-info dept-info1">
-                        <p>(<?php echo $row['school_name']; ?>) <?php echo $row['description']; ?></p>
-                        </div>
-
-                        <p>?%</p>
+                    <div class="dept dept1">
+         <div class="card">
+        <div class="card-header">-</div>
+        <div class="card-body">
+            <h5 class="card-title"><?php echo $row['school_name']; ?></h5>
+            <p class="card-text"><?php echo $row['description']; ?></p>
+        </div>
+                    </div>
                     </div>
 
 <?php

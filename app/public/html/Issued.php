@@ -311,7 +311,7 @@ $_SESSION['currentpage'] = "issued";
                         <td>${element.date_requested}</td>
                         <td>${element.date_released}</td>
                         <td>${element.status}</td>
-                        <td><img src="../proof_of_payments/${element.proof_of_payments}" alt="" class="image-click"></td>
+                        <td><img src="../proof_of_payments/${element.proof_of_payment}" alt="" class="image-click"></td>
                         </tr>`);
                         });
                      } else{
