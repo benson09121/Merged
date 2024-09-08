@@ -28,22 +28,12 @@
     
     $sqlUpdate = "UPDATE `sql12729827`.`tbl_request_goodmoral` SET `proof_of_payment` = '".$fileName."' WHERE (`request_no` = '".$requestNo."')";
     mysqli_query($conn, $sqlUpdate);
-    
     $filePath = $directory . $fileName;
-    $decodedbase64 = base64_decode($base64);  
-     if ($decodedBase64) {
-        $filePath = $directory . $fileName;
-        if (file_put_contents($filePath, $decodedBase64)) {
-            echo "File successfully saved as " . $filePath;
-        } else {
-            echo "Failed to save the file.";
-        }
-    } else {
-        echo "Invalid base64 string.";
-    }
-} else {
-    echo "Missing base64 content or file name.";
-}
+    $ifp = fopen( $filePath, 'wb' ); 
+    $data = explode( ',', $base64 );
+    fwrite( $ifp, base64_decode( $data[ 1 ] ) );
+    fclose( $ifp ); 
+
 
     mysqli_close($conn);
 
