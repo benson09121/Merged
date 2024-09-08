@@ -1,7 +1,7 @@
 <?php
 include '../../database/database_conn.php';
 
-$sql = "SELECT * FROM tbl_minor_violations";
+$sql = "SELECT * FROM sql12729827.tbl_minor_violations";
 $result = $conn->query($sql);
 
 $minor_violation = array();

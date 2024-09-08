@@ -377,7 +377,16 @@ unset($_SESSION['error_message']);
                 $('#violation_type').attr('disabled', false);
                 var offense_type = $(this).val();
                 if(offense_type == 'Major'){
-                    $.ajax({
+                    get_major();
+                    $('#category_type').attr('disabled', false);
+                } else{
+                    get_minor();
+                    $('#category_txt').text('Category:');
+                    $('#category_type').attr('disabled', true);
+                }
+            })
+            function get_major(){
+                $.ajax({
                         url: 'php/fetch_major_violation.php',
                         type: 'GET',
                         success: function(response){
@@ -393,9 +402,9 @@ unset($_SESSION['error_message']);
                             });
                         }
                     })
-                    $('#category_type').attr('disabled', false);
-                } else{
-                    $.ajax({
+            }
+            function get_minor(){
+                $.ajax({
                         url: 'php/fetch_minor_violation.php',
                         type: 'GET',
                         success: function(response){
@@ -411,10 +420,7 @@ unset($_SESSION['error_message']);
                             });
                         }
                     })
-                    $('#category_txt').text('Category:');
-                    $('#category_type').attr('disabled', true);
-                }
-            })
+            }
             $('#next_btn').on('click', function(){
                 if('#studentIDField' == ''){
                     $('#error').css('display', 'block');
