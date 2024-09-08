@@ -7,10 +7,9 @@ $description = $_POST['description'];
 $item_found = $_POST['item_found'];
 $date_found = $_POST['date_found'];
 
-// Directory where the PHP file is located
 $targetDir = __DIR__ . '/new_items/';
 
-// Create the directory if it doesn't exist
+
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0775, true);
 }

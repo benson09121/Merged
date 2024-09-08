@@ -21,9 +21,7 @@ $currentpage = isset($_SESSION['currentpage']) ? $_SESSION['currentpage'] : '';
             <hr>
             <p>Management System.</p>
         </div>
-
     </div>
-
     <div class="menu">
         <a <?php if ($currentpage != 'home') {
                 echo 'href="home.php"';
