@@ -1,8 +1,8 @@
 <?php
-$db_server = "sql12.freesqldatabase.com";
-$db_user = "sql12729827";
-$db_pass = "q6PMIy6VXQ";
-$db_name = "sql12729827";
+$db_server = "localhost";
+$db_user = "root";
+$db_pass = "root";
+$db_name = "db_doms";
 
 // Establishing the mysqli connection
 $conn = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
@@ -11,6 +11,4 @@ $conn = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
-
 ?>

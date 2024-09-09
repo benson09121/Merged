@@ -1,33 +1,19 @@
 <?php
 include '../../database/database_conn.php';
-
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} else {
-}
 
 $sql = "SELECT * FROM tbl_major_violation";
 $result = $conn->query($sql);
-$major_violation = [];
-if ($result) {
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $major_violation[] = $row;
-        }
-    } else {
-        echo "No rows found in tbl_major_violation";
-    }
-} else {
-    die("SQL Error: " . $conn->error);
+if (!$result) {
+    die("Error in SQL query: " . $conn->error);
 }
-
-$encoded = json_encode($major_violation);
-
-echo $encoded;
+if ($result->num_rows > 0) {
+    $data = array();
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+    echo json_encode($data);
+} else {
+    echo json_encode(["message" => "No results found"]);
+}

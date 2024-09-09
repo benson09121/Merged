@@ -412,7 +412,7 @@ $_SESSION['currentpage'] = "issued";
                 currentPage = $(this).data('page');
             }
         });
-        $('tableBody_goodmoral').on('click', '.image-click', function(){
+        $('#tableBody_goodmoral').on('click', '.image-click', function(){
                 let src = $(this).attr('src');
                 $('#overlayImage').attr('src', src);
                 $('#overlay').css('display', 'block');

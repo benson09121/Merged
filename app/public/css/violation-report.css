@@ -772,6 +772,14 @@
   background-color: gainsboro;
 }
 
+td img {
+  cursor: pointer;
+  object-fit: cover;
+  width: 30px;
+  height: 30px;
+}
+
+
 @media (max-width: 1411px) {
 }
 
