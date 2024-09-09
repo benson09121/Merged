@@ -28,4 +28,6 @@ if ($result) {
     die("SQL Error: " . $conn->error);
 }
 
-echo json_encode($major_violation);
+$encoded = json_encode($major_violation);
+
+echo $encoded;
