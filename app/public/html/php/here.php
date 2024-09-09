@@ -10,5 +10,5 @@ while($row = $result->fetch_assoc()){
     $major[] = $row;
 }
 
-echo json_encode($major_violation);
+echo json_encode($major);
 ?>
