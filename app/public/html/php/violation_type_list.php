@@ -1,7 +1,7 @@
 <?php
 include '../../database/database_conn.php';
 
-$sql = "SELECT * FROM tbl_major_violation_types;";
+$sql = "SELECT * FROM tbl_major_violation_types ";
 
 $result = $conn->query($sql);
 

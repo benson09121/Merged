@@ -289,6 +289,8 @@ unset($_SESSION['error_message']);
     <script>
         var category = '';
         var search = '';
+        var minor_data = [];
+        var major_data = [];
         $(document).ready(function(){
             $('#studentID').on('input', function(){
                 search = $(this).val();
@@ -367,7 +369,11 @@ unset($_SESSION['error_message']);
                 url: 'php/fetch_category_type.php',
                 type: 'GET',
                 success: function(response){
-                    var category = JSON.parse(response);
+                    console.log(response);
+                    let data = JSON.parse(response);
+                    let category = data.category_type;
+                    minor_data = data.minor_violation;
+                    major_data = data.major_violation;
                     category.forEach(element => {
                         $('#category_type').append('<option value="'+element.penalty_id+'">'+element.penalty_name+'</option>');
                     });
@@ -377,50 +383,26 @@ unset($_SESSION['error_message']);
                 $('#violation_type').attr('disabled', false);
                 var offense_type = $(this).val();
                 if(offense_type == 'Major'){
-                    get_major();
+                    $('#violation_type').empty();
                     $('#category_type').attr('disabled', false);
+                    major_data.forEach(element => {
+                        if(element.violation_name.length > 100){
+                                    element.violation_name = element.violation_name.substring(0, 100) + '...';
+                                }
+                                $('#violation_type').append('<option value="'+element.violation_id+'">'+element.violation_name+'</option>');
+                    });   
                 } else{
-                    get_minor();
+                    $('#violation_type').empty();
+                    minor_data.forEach(element => {
+                        if(element.violation_name.length > 100){
+                                    element.violation_name = element.violation_name.substring(0, 100) + '...';
+                                }
+                                $('#violation_type').append('<option value="'+element.violation_id+'">'+element.violation_name+'</option>');
+                    });
                     $('#category_txt').text('Category:');
                     $('#category_type').attr('disabled', true);
                 }
             })
-            function get_major(){
-                $.ajax({
-                        url: 'php/fetch_major_violation.php',
-                        type: 'GET',
-                        success: function(response){
-                        console.log(response);
-                            $('#violation_type').empty();
-                            var violation = JSON.parse(response);
-                            $('#violation_type').html('<option value="" style="display: none;">Select Violation Type</option>');
-                            violation.forEach(element => {
-                                if(element.violation_name.length > 100){
-                                    element.violation_name = element.violation_name.substring(0, 100) + '...';
-                                }
-                                $('#violation_type').append('<option value="'+element.violation_id+'">'+element.violation_name+'</option>');
-                            });
-                        }
-                    })
-            }
-            function get_minor(){
-                $.ajax({
-                        url: 'php/fetch_minor_violation.php',
-                        type: 'GET',
-                        success: function(response){
-
-                            $('#violation_type').empty();
-                            var violation = JSON.parse(response);
-                            $('#violation_type').html('<option value="" style="display: none;">Select Violation Type</option>');
-                            violation.forEach(element => {
-                                if(element.violation_name.length > 100){
-                                    element.violation_name = element.violation_name.substring(0, 100) + '...';
-                                }
-                                $('#violation_type').append('<option value="'+element.violation_id+'">'+element.violation_name+'</option>');
-                            });
-                        }
-                    })
-            }
             $('#next_btn').on('click', function(){
                 if('#studentIDField' == ''){
                     $('#error').css('display', 'block');
@@ -443,7 +425,6 @@ unset($_SESSION['error_message']);
                         $('#service').css('display', 'block');
                         if($('#category_type').val() == '1'){
                             category = '1';
-                            console.log('HELLO');
                            $('#title_category').text('Categpry ' + category);
                            $('#service').attr('disabled', true);
                            $('#service').css('display', 'none');

@@ -49,7 +49,7 @@ $currentpage = isset($_SESSION['currentpage']) ? $_SESSION['currentpage'] : '';
                 echo 'class="active"';
             } ?>>Manage Admin Account</a>
             <a <?php if ($currentpage != 'issued') {
-                echo 'href="Issued.php"';
+                echo 'href="issued.php"';
             } else {
                 echo 'class="active"';
             } ?>>Issue Documentation</a>
