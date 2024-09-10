@@ -50,9 +50,4 @@ RUN composer install \
     --no-scripts \
     --prefer-dist
 
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-RUN service apache2 restart
-
-
 
