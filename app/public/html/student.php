@@ -370,7 +370,7 @@ unset($_SESSION['error_message']);
                 type: 'GET',
                 success: function(response){
                     console.log(response);
-                    let data = JSON.parse(response);
+                    let data = JSON.parse(JSON.stringify(response));
                     let category = data.category_type;
                     minor_data = data.minor_violation;
                     major_data = data.major_violation;
