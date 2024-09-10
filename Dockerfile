@@ -6,7 +6,7 @@ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 COPY ./composer-installer.sh /usr/local/bin/composer-installer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
+EXPOSE 80
 
 
 # install composer
