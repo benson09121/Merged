@@ -75,11 +75,7 @@ include("../database/database_conn.php");
                 </div>
                 <div class="dropdowns">
 
-                    <select name="" id="">
-                        <option value="" style="display: none;" selected>Item</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                    </select>
+
 
                     <span><i class="fa-solid fa-filter"></i> Date filter</span>
 
@@ -182,6 +178,7 @@ include("../database/database_conn.php");
                             <th>DATE LOST</th>
                             <th>Location Found</th>
                             <th>Description</th>
+                            <th>FOUNDER NAME</th>
                         </tr>
                     </thead>
                     <tbody id="body-lost">

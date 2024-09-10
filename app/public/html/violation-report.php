@@ -16,7 +16,9 @@ $_SESSION['currentpage'] = "violation";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../css/violation-report.css">
     <link rel="stylesheet" href="../css/viob.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
@@ -43,7 +45,7 @@ $_SESSION['currentpage'] = "violation";
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const headerBtn = document.querySelector('.header-btn');
             const sidenavBtn = document.querySelector('.sidenav-btn');
             const sidenav = document.querySelector('.sidenav');
@@ -73,8 +75,8 @@ $_SESSION['currentpage'] = "violation";
             </div>
 
             <?php
-  echo '<button class="back-button-viocon" onclick="history.back()">> Back</button>';
-?>
+            echo '<button class="back-button-viocon" onclick="history.back()">> Back</button>';
+            ?>
 
             <div class="filter-group">
                 <div class="search">
@@ -95,7 +97,7 @@ $_SESSION['currentpage'] = "violation";
             </div>
 
             <div class="table-nav">
-            <div class="nav-list">
+                <div class="nav-list">
                     <ul>
                         <a style="cursor: pointer; border-bottom: solid 3px rgb(98, 130, 172)" data-nav="all">
                             <li>ALL VIOLATION <span>0</span></li>
@@ -142,12 +144,12 @@ $_SESSION['currentpage'] = "violation";
             </div>
 
 
-            
+
             </script>
 
 
-            <div class="body-table nav-table" data-nav="all">
-                <table>
+            <div class="body-table">
+                <table class="nav-table" data-nav="all">
                     <thead>
                         <th>Student ID</th>
                         <th>Name</th>
@@ -157,13 +159,12 @@ $_SESSION['currentpage'] = "violation";
                         <th>Status</th>
                         <th>Date created</th>
                     </thead>
-                    <tbody id="tableBody_all nav-table">
-                    
+                    <tbody id="tableBody_all">
+
                     </tbody>
                 </table>
 
-                <div class="body-table" data-nav="minor" style="display: none;">
-                <table>
+                <table class="nav-table" data-nav="minor" style="display: none;">
                     <thead>
                         <th>Student ID</th>
                         <th>Name</th>
@@ -173,12 +174,11 @@ $_SESSION['currentpage'] = "violation";
                         <th>Date created</th>
                     </thead>
                     <tbody id="tableBody_minor">
-                    
+
                     </tbody>
                 </table>
-            
-                <div class="body-table nav-table" data-nav="major" style="display: none;">
-                <table>
+
+                <table class="nav-table" data-nav="major" style="display: none;">
                     <thead>
                         <th>Student ID</th>
                         <th>Name</th>
@@ -190,22 +190,22 @@ $_SESSION['currentpage'] = "violation";
                         <th>Action</th>
                     </thead>
                     <tbody id="tableBody_major">
-                    
+
                     </tbody>
                 </table>
 
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         const applyFilterBtn = document.getElementById('applyFilterBtn');
 
-                        applyFilterBtn.addEventListener('click', function() {
+                        applyFilterBtn.addEventListener('click', function () {
                             const fromDate = document.querySelector('input[name="from"]').value;
                             const toDate = document.querySelector('input[name="to"]').value;
 
                             const xhr = new XMLHttpRequest();
                             xhr.open('POST', 'php/filter_report_data.php');
                             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                            xhr.onload = function() {
+                            xhr.onload = function () {
                                 if (xhr.status === 200) {
                                     document.getElementById('tableBody').innerHTML = xhr.responseText;
                                 }
@@ -216,13 +216,13 @@ $_SESSION['currentpage'] = "violation";
                 </script>
 
             </div>
-            
+
         </div>
         <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-end">
-                    
-                </ul>
-            </nav>
+            <ul class="pagination justify-content-end">
+
+            </ul>
+        </nav>
         </div>
 
     </section>
@@ -232,77 +232,79 @@ $_SESSION['currentpage'] = "violation";
     var search = '';
     var currentPage = 1;
     var itemsPerPage = 10;
-    $(document).ready(function() {
-      $('.nav-list ul a').click(function() {
-        $('.nav-list ul a').css('border-bottom', 'none');
-        selected = $(this).attr('data-nav');
-        $('.body-table').each(function(){
-            $(this).attr('data-nav') == selected ? $(this).show() : $(this).hide();
-        })
-        $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
-      });
-      setInterval(function(){
-        $.ajax({
-          url: 'php/violation_report_data.php',
-          type: 'POST',
-          data: {
-            selected: selected,
-            search: search,
-            page: currentPage,
-            limit: itemsPerPage
-          },
-          success: function(response) {
-            console.log(response);
-            var data = JSON.parse(data);
-            var data = data.all;
-            var totalPages = data.totalPages;
-            generatePagination(totalPages);
-            $('#tableBody_all').empty();
-            $('#tableBody_minor').empty();
-            $('#tableBody_major').empty();
-            data.forEach(function(item){
-                if(item.violation_type == 'minor'){
-                    $('#tableBody_minor').append(`
+    $(document).ready(function () {
+        $('.nav-list ul a').click(function () {
+            $('.nav-list ul a').css('border-bottom', 'none');
+            selected = $(this).attr('data-nav');
+            $('.nav-table').each(function () {
+                ($(this).attr('data-nav') == selected) ? $(this).css('display', 'block') : $(this).css('display', 'none');
+            })
+            $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
+        });
+        setInterval(function () {
+            $.ajax({
+                url: 'php/violation_report_data.php',
+                type: 'POST',
+                data: {
+                    selected: selected,
+                    search: search,
+                    page: currentPage,
+                    limit: itemsPerPage
+                },
+                success: function (response) {
+                    console.log(response);
+                    let data = JSON.parse(response);
+                    let violations = data.all;
+                    let totalPages = data.totalPages;
+                    $('#tableBody_all').empty();
+                    $('#tableBody_minor').empty();
+                    $('#tableBody_major').empty();
+                    violations.forEach(item => {
+                        if (selected == 'all') {
+                            $('#tableBody_all').append(`
                     <tr>
                         <td>${item.student_id}</td>
-                        <td>${item.f_name} ${item.l_name}</td>
-                        <td>${item.course_complete}</td>
-                        <td>${item.violation_type}</td>
-                        <td>${item.violation_name}</td>
-                        <td>${item.date_of_apprehension}</td>
-                    </tr>
-                    `);
-                }else if(item.violation_type == 'major'){
-                    $('#tableBody_major').append(`
-                    <tr>
-                        <td>${item.student_id}</td>
-                        <td>${item.f_name} ${item.l_name}</td>
-                        <td>${item.course_complete}</td>
+                        <td>${item.name} ${item.lastname}</td>
+                        <td>${item.course_name}</td>
                         <td>${item.violation_type}</td>
                         <td>${item.violation_name}</td>
                         <td>${item.status}</td>
                         <td>${item.date_of_apprehension}</td>
                     </tr>
                     `);
-                }else{
-                    $('#tableBody_all').append(`
+                        } else if (selected == 'minor') {
+                            $('#table')
+                            $('#tableBody_minor').append(`
                     <tr>
                         <td>${item.student_id}</td>
-                        <td>${item.f_name} ${item.l_name}</td>
-                        <td>${item.course_complete}</td>
-                        <td>${item.violation_type}</td>
+                        <td>${item.name} ${item.last_name}</td>
+                        <td>${item.course_name}</td>
+                        <td>${item.offense}</td>
                         <td>${item.violation_name}</td>
-                        <td>${item.status}</td>
                         <td>${item.date_of_apprehension}</td>
                     </tr>
                     `);
+                        } else if (selected == 'major') {
+                            $('#tableBody_major').append(`
+                    <tr>
+                        <td>${item.student_id}</td>
+                        <td>${item.student_name}</td>
+                        <td>${item.course_name}</td>
+                        <td>${item.offense}</td>
+                        <td>${item.violation_name}</td>
+                        <td>${item.status}</td>
+                        <td>${item.date_of_apprehension}</td>
+                        <td><button class="btn btn-primary">View</button></td>
+                    </tr>
+                    `);
+                        }
+                    });
+                    generatePagination(totalPages);
                 }
             });
-          }
-        });
-      }, 500);
+        }, 500);
 
-      function generatePagination(totalPages) {
+        function generatePagination(totalPages) {
             $('.pagination').empty();
             $('.pagination').append(`
         <li class="page-item" id="Previous">
@@ -335,12 +337,12 @@ $_SESSION['currentpage'] = "violation";
             } else {
                 $('#Next').removeClass('disabled');
             }
-            if(totalPages === 0){
+            if (totalPages === 0) {
                 $('#Previous').addClass('disabled');
                 $('#Next').addClass('disabled');
             }
         }
-
+        $('')
         $('.pagination').on('click', '.page-link', function () {
             console.log($(this).data('total-page'));
             if ($(this).attr('aria-label') === 'Previous' && currentPage > 1) {
@@ -351,6 +353,10 @@ $_SESSION['currentpage'] = "violation";
                 currentPage = $(this).data('page');
             }
 
+        });
+
+        $('.generate-btn').on('click', '#generateReportBtn', function () {
+            window.location.href = './php/generate_violation_report.php';
         });
     });
 </script>

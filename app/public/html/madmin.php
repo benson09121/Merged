@@ -2,8 +2,6 @@
 session_start();
 $_SESSION['currentpage'] = "madmin";
 $username = $_SESSION['username'];
-include("../database/database_conn.php");
-include('php/fetch_student_data.php');
 ?>
 
 <!DOCTYPE html>
@@ -54,23 +52,10 @@ include('php/fetch_student_data.php');
                 <hr>
             </div>
 
-            <?php
-
-$buttonText = "Add";
-$buttonLink = "wala pa (example: announcement.php)"; 
-echo '<button type="button" class="add-admin-button" onclick="window.location.href=\'' . $buttonLink . '\'">' . $buttonText . '</button>';
-
-?>
+<button type="button" class="add-admin-button">Add </button>
 
 
-
-<?php
-
-$buttonText = "Remove";
-$buttonLink = "wala pa (example: announcement.php)"; 
-echo '<button type="button" class="remove-admin-button" onclick="window.location.href=\'' . $buttonLink . '\'">' . $buttonText . '</button>';
-
-?>
+<button type="button" class="remove-admin-button">Remove</button>
 
 <div class="body-table">
                 <table>
