@@ -1,21 +1,34 @@
 <?php
 include '../../database/database_conn.php';
-header('Content-Type: application/json');
 
-$conn->set_charset('utf8');
+// Ensure proper charset
+$conn->set_charset('utf8mb4');
+
+// Query the data
 $sql = "SELECT * FROM tbl_major_violation";
 $result = $conn->query($sql);
 
 if ($result) {
-    echo "Query executed successfully";
     if ($result->num_rows > 0) {
-        echo "Number of rows: " . $result->num_rows;
+        $data = array();
         while ($row = $result->fetch_assoc()) {
-            print_r($row);  // Print each row
+            $data[] = $row;
+        }
+
+        // Set headers for JSON output
+        header('Content-Type: application/json; charset=UTF-8');
+
+        // Convert to JSON and handle any errors
+        $json_data = json_encode($data, JSON_UNESCAPED_UNICODE);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo 'JSON Encode Error: ' . json_last_error_msg();
+        } else {
+            echo $json_data;
         }
     } else {
-        echo "No rows found in tbl_major_violation";
+        echo json_encode(["message" => "No results found"]);
     }
 } else {
-    die("SQL Error: " . $conn->error);
+    echo 'SQL Error: ' . $conn->error;
 }
+?>
