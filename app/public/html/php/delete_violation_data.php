@@ -5,21 +5,20 @@ include '../../database/database_conn.php';
 $id = $_POST['id'];
 $type = $_POST['type'];
 
-if($type == "minor"){
+if ($type == "minor") {
 
     $sql = "DELETE FROM tbl_minor_violations WHERE violation_id = '$id'";
-}
-else if($type == "major"){
+} else if ($type == "major") {
 
     $sql = "DELETE FROM tbl_major_violation WHERE violation_id = '$id'";
 }
 
 $result = $conn->query($sql);
 
-if($result){
+if ($result) {
     echo "success";
-}
-else{
+} else {
     echo "failed";
 }
+
 $conn->close();

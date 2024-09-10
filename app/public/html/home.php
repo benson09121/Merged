@@ -71,7 +71,7 @@ include '../database/database_conn.php';
                 <span><i class="fa-solid fa-filter"></i> Date filter</span>
             </div>
 
-<button type="button" id="announcement_button" class="all-announcement-button">ANNOUNCEMENT</button>
+            <button type="button" id="announcement_button" class="all-announcement-button">ANNOUNCEMENT</button>
 
             <!-- Modal DATE -->
             <div id="dateModal" class="modal-date">
@@ -150,44 +150,44 @@ include '../database/database_conn.php';
         </div>
                 <!-- Modal Announcement  -->
         <div class="modal fade " id="announcement_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Announcement</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-          <div class="row">
-            <!-- First Column -->
-            <div class="col-md-6">
-              <h5>Add Announcement</h5>
-              <div class="mb-3">
-      <label for="Select" class="form-label">Department</label>
-      <select id="Select" class="form-select">
-        <option selected>Select Department</option>
-        <option value="All">All Department</option>
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Announcement</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                    <div class="row">
+                        <!-- First Column -->
+                        <div class="col-md-6">
+                        <h5>Add Announcement</h5>
+                        <div class="mb-3">
+                <label for="Select" class="form-label">Department</label>
+                    <select id="Select" class="form-select">
+                        <option selected disabled>-- Select Department --</option>
+                        <option value="All">All Department</option>
 
-      </select>
-    </div>  
-              <div class="mb-3">
-    <label for="announcement_title" class="form-label">Announcement Title</label>
-    <input type="text" class="form-control" id="announcement_title" placeholder="Enter title" maxlength="70">
-    <small>0/70</small>
-  </div>
-  <div class="mb-3">
-    <label for="announcement_message">Announcement Message</label>
-    <textarea class="form-control" id="announcement_message" placeholder="Enter message" rows="5" style="resize: none;" maxlength="1000"></textarea>
-    <small>0/1000</small>
-  </div>
-
+                    </select>
+                </div>  
+                        <div class="mb-3">
+                <label for="announcement_title" class="form-label">Announcement Title</label>
+                <input type="text" class="form-control" id="announcement_title" placeholder="Enter title" maxlength="70">
+                <small>0/70</small>
             </div>
+            <div class="mb-3">
+                <label for="announcement_message">Announcement Message</label>
+                <textarea class="form-control" id="announcement_message" placeholder="Enter message" rows="5" style="resize: none;" maxlength="1000"></textarea>
+                <small>0/1000</small>
+            </div>
+
+        </div>
             <!-- Second Column -->
             <div class="col-md-6">
               <h5>Announcement List</h5>
               <div class="list-group overflow-auto" id="announcement-list" style="max-height: 400px; max-width: auto;">
   
-</div>
+            </div>
             </div>
           </div>
         </div>
@@ -232,44 +232,46 @@ include '../database/database_conn.php';
                         }]
                     }
                 });
+
                 $(document).ready(function(){
 
                     $.ajax({
-                    typ: "GET",
-                    url: "php/announcement-content.php",
-                    success: function(response){
+                        typ: "GET",
+                        url: "php/announcement-content.php",
+                        success: function(response){
 
-                        let JsonData = JSON.parse(response);
-                        JsonData.forEach(element=>{
-                            $('#Select').append(`<option value="${element.school_name}">${element.school_name}</option>`);
+                            let JsonData = JSON.parse(response);
+                            JsonData.forEach(element=>{
+                                $('#Select').append(`<option value="${element.school_name}">${element.school_name}</option>`);
+                            });
+                        }
+                    });
+
+                    setInterval(function(){
+                        $.ajax({
+                        type: "GET",
+                        url: "php/announcement-list.php",
+                        success: function(response){
+                            $('#announcement-list').empty();
+                            let JsonData = JSON.parse(response);
+                            JsonData.forEach(element=>{
+                                if(element.message.length > 40){
+                                    element.message = element.message.substring(0,40) + '...';
+                                }
+                                $('#announcement-list').append(`<a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                                <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">${element.title}</h5>
+                                <small>${element.date_sent}</small>
+                                </div>
+                                <p class="mb-1">${element.message}</p>
+                                <small>${element.recipients}</small>
+                            </a>`);
+                            });
+                        }
                         });
-                    }
-                 });
 
-                 setInterval(function(){
-                    $.ajax({
-                    type: "GET",
-                    url: "php/announcement-list.php",
-                    success: function(response){
-                        $('#announcement-list').empty();
-                        let JsonData = JSON.parse(response);
-                        JsonData.forEach(element=>{
-                            if(element.message.length > 40){
-                                element.message = element.message.substring(0,40) + '...';
-                            }
-                            $('#announcement-list').append(`<a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                            <div class="d-flex w-100 justify-content-between">
-                              <h5 class="mb-1">${element.title}</h5>
-                              <small>${element.date_sent}</small>
-                            </div>
-                            <p class="mb-1">${element.message}</p>
-                            <small>${element.recipients}</small>
-                          </a>`);
-                        });
-                 }
-                 });
+                    }, 1000);
 
-                 }, 1000);
                     $('#add_announcement').on('click', function(){
                         let title = $('#announcement_title').val();
                         let message = $('#announcement_message').val();
@@ -285,10 +287,10 @@ include '../database/database_conn.php';
                             success: function(response){
                                 console.log(response);
                                 if(response === 'success'){
-                                title = $('#announcement_title').val('');
-                                message = $('#announcement_message').val('');
-                                department = $('#Select').selectedIndex = 0;
-                                $('#announcement_modal').modal('hide');
+                                    title = $('#announcement_title').val('');
+                                    message = $('#announcement_message').val('');
+                                    department = $('#Select').selectedIndex = 0;
+                                    $('#announcement_modal').modal('hide');
                                 }
 
                             }
@@ -303,14 +305,17 @@ include '../database/database_conn.php';
                        let length = $(this).val().length;
                           $(this).next().text(`${length}/1000`);
                     })
+
                     $('#announcement_message').on('change', function(){
                         let length = $(this).val().length;
                           $(this).next().text(`${length}/1000`);
                     })
+
                     $('#announcement_title').on('keyup', function(){
                         let length = $(this).val().length;
                           $(this).next().text(`${length}/70`);
                     })
+
                     $('#announcement_title').on('change', function(){
                         let length = $(this).val().length;
                           $(this).next().text(`${length}/70`);
@@ -332,35 +337,31 @@ include '../database/database_conn.php';
                                 $.each(JsonData, function(index,value){
                                     $('.department-info').append(`
                                     <div class="dept dept1">
-         <div class="card">
-        <div class="card-header">-</div>
-        <div class="card-body">
-
-            <p class="card-text">${value.description} Dept.</p>
-        </div>
-                    </div>
-                    </div>
-                            `);
+                                        <div class="card">
+                                            <div class="card-header">-</div>
+                                            <div class="card-body">
+                                                <p class="card-text">${value.description} Dept.</p>
+                                            </div>
+                                        </div>  
+                                    </div>  `);
                                 })
-                            }else{
+                                }else{
                                 $.each(JsonData, function(index,value){
                                     $('.department-info').append(`
                                     <div class="dept dept1">
-         <div class="card">
-        <div class="card-header">-</div>
-        <div class="card-body">
-            <h5 class="card-title">${value.school_name}</h5>
-            <p class="card-text">${value.description}</p>
-        </div>
-                    </div>
-                    </div>
-                    `)
+                                        <div class="card">
+                                            <div class="card-header">-</div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">${value.school_name}</h5>
+                                                <p class="card-text">${value.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>  `)
                                 })
-                            }
+                                }
                             }
                         })
                     })
-                    
                 })
             </script>
 

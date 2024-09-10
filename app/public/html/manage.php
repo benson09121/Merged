@@ -247,6 +247,7 @@ $_SESSION['currentpage'] = "manage";
                                         </thead>
                                         <tbody id="goodmoral_tbody">
 
+                                        
                                         </tbody>
                                     </table>
                                 </div>
