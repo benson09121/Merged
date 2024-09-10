@@ -10,6 +10,7 @@ while($row = $result->fetch_assoc()){
     $category_type[] = $row;
 }
 
+
 $sql = "SELECT * FROM tbl_minor_violations";
 $result = $conn->query($sql);
 
@@ -35,7 +36,7 @@ $data = [
     'major_violation' => $major_violation
 ];
 
-echo json_encode($data);
+echo json_encode($data,  JSON_UNESCAPED_UNICODE);
 
 $conn->close();
 ?>
