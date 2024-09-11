@@ -274,24 +274,30 @@ $_SESSION['currentpage'] = "issued";
                     <div class="modal-header" style="background-color: #1B4284">
                         <h1 class="modal-title" id="deleteModalLabel" style="color: #fff; font-size:40px">Update
                             Status</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        <button type="button" class="btn-close closeModal" data-bs-dismiss="modal" aria-label="Close"
                             style="background-color: #fff"></button>
                     </div>
                     <div class="modal-body">
 
-                        <div class="form-floating">
-                            <select class="form-select" id="selectStatus" aria-label="Default select example">
-                                <option value="0" selected disabled> -- Select status --</option>
-                                <option value="Rejected">Rejected</option>
-                                <option value="Accepted">Accepted</option>
-                                <option value="Released">Released</option>
-                            </select>
-                            <label for="selectStatus">status</label>
-                        </div>
+                        <!-- <div class="form-floating"> -->
+                        <label for="selectStatus">Status</label>
+                        <select class="form-select" id="selectStatus" aria-label="Default select example">
+                            <option value="0" selected disabled> -- Select status --</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Accepted">Accepted</option>
+                            <!-- <option value="Released">Released</option> -->
+                        </select>
+
+                        <label class="mt-3" for="selectStatus" id="labelValidDate" style="display: none">Set Validity
+                            for document</label>
+                        <input type="date" class="form-control" id="inputValidDate" aria-label="ValidDate"
+                            aria-describedby="basic-addon1" style="display: none">
+
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary closeModal"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-warning" id="editYesBtn">Save Changes</button>
                     </div>
                 </div>
@@ -309,7 +315,7 @@ $_SESSION['currentpage'] = "issued";
                             style="background-color: #fff"></button>
                     </div>
                     <div class="modal-body text-center">
-                        Do you want to delete this request? This action is irreversible
+                        Do you want to release this document? This action is irreversible.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -539,7 +545,6 @@ $_SESSION['currentpage'] = "issued";
                 $('#deleteYesBtn').attr('reqType', $(this).attr('data-selection'));
             });
 
-
             $('#deleteYesBtn').click(function () {
 
                 let id = $(this).data('id');
@@ -564,6 +569,26 @@ $_SESSION['currentpage'] = "issued";
 
 
             // EDIT REQUEST
+
+            $('#selectStatus').change(function () {
+                let status = $('#selectStatus').val();
+                let reqType = $('#editYesBtn').attr("reqType");
+
+                if (status == 'Accepted' && reqType == 'entry') {
+                    $('#labelValidDate').attr('style', 'display: block');
+                    $('#inputValidDate').attr('style', 'display: block');
+                } else {
+                    $('#labelValidDate').attr('style', 'display: none');
+                    $('#inputValidDate').attr('style', 'display: none');
+                }
+            });
+
+            $('.closeModal').click(function () {
+                $('#labelValidDate').attr('style', 'display: none');
+                $('#inputValidDate').attr('style', 'display: none');
+                $('#selectStatus').val('0');
+            });
+
             $('#tableBody_goodmoral').on('click', '.editGoodmoralBtn', function (e) {
                 $('#editYesBtn').data('id', $(this).data('id'));
                 $('#editYesBtn').attr('reqType', $(this).attr('data-selection'));
@@ -583,11 +608,13 @@ $_SESSION['currentpage'] = "issued";
                 let reqType = $(this).attr("reqType");
                 let status = $('#selectStatus').val();
                 let admin = <?php echo $_SESSION['employee_id'] ?>;
+                let date = $('#inputValidDate').val() == '' ? null : $('#inputValidDate').val();
 
-                console.log(id);
-                console.log(reqType);
-                console.log(status);
-                console.log(admin);
+                // console.log(id);
+                // console.log(reqType);
+                // console.log(status);
+                // console.log(admin);
+                // console.log(date);
 
                 if (status != null) {
                     $.ajax({
@@ -597,9 +624,11 @@ $_SESSION['currentpage'] = "issued";
                             id: id,
                             reqType: reqType,
                             status: status,
-                            admin: admin
+                            admin: admin,
+                            date: date
                         },
                         success: function (response) {
+                            console.log(response);
                             if (response == 'success') {
                                 $('#editModal').modal('hide');
                             }
@@ -608,8 +637,49 @@ $_SESSION['currentpage'] = "issued";
                 }
 
                 $('#selectStatus').val('0');
+                $('#labelValidDate').attr('style', 'display: none');
+                $('#inputValidDate').attr('style', 'display: none');
             });
 
+            // RELEASE DOCUMENT
+            $('#tableBody_goodmoral').on('click', '.claimGoodmoralBtn', function (e) {
+                $('#claimYesBtn').data('id', $(this).data('id'));
+                $('#claimYesBtn').attr('reqType', $(this).attr('data-selection'));
+            });
+            $('#tableBody_admissionpass').on('click', '.claimAdmissionBtn', function (e) {
+                $('#claimYesBtn').data('id', $(this).data('id'));
+                $('#claimYesBtn').attr('reqType', $(this).attr('data-selection'));
+            });
+            $('#tableBody_entrypass').on('click', '.claimEntryBtn', function (e) {
+                $('#claimYesBtn').data('id', $(this).data('id'));
+                $('#claimYesBtn').attr('reqType', $(this).attr('data-selection'));
+            });
+
+            $('#claimYesBtn').click(function () {
+
+                let id = $(this).data('id');
+                let reqType = $(this).attr("reqType");
+
+                // console.log(id);
+                // console.log(reqType);
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'php/claim_request.php',
+                    data: {
+                        id: id,
+                        reqType: reqType,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        if (response == 'success') {
+                            $('#claimModal').modal('hide');
+                        }
+                    }
+                });
+
+
+            });
 
 
         });

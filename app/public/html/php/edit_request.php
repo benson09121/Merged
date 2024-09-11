@@ -6,6 +6,8 @@ $id = $_POST['id'];
 $reqType = $_POST['reqType'];
 $status = $_POST['status'];
 $admin = $_POST['admin'];
+$date = $_POST['date'];
+
 
 
 if ($reqType == "goodmoral") {
@@ -14,7 +16,11 @@ if ($reqType == "goodmoral") {
 
 } else if ($reqType == "entry") {
 
-    $sql = "UPDATE `sql12729827`.`tbl_request_entrypass` SET `status` = '$status',`admin_incharge` = '$admin' WHERE (`request_no` = '$id')";
+    if ($status != 'Accepted') {
+        $sql = "UPDATE `sql12729827`.`tbl_request_entrypass` SET `status` = '$status',`admin_incharge` = '$admin' WHERE (`request_no` = '$id')";
+    } else {
+        $sql = "UPDATE `sql12729827`.`tbl_request_entrypass` SET `status` = '$status',`admin_incharge` = '$admin',`valid_until` = '$date' WHERE (`request_no` = '$id')";
+    }
 
 } else if ($reqType == "admission") {
 
