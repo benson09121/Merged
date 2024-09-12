@@ -472,6 +472,79 @@ $_SESSION['currentpage'] = "manage";
             </form>
         </div>
     </div>
+
+            <!-- DELETE REQUEST MODAL -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteRequestModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #1B4284">
+                        <h1 class="modal-title" id="deleteModalLabel" style="color: #fff; font-size:40px">Delete
+                            Request</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: #fff"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        Do you want to delete this request? This action is irreversible
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id="deleteYesBtn">Delete Request</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDIT REQUEST    -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editRequestModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #1B4284">
+                        <h1 class="modal-title" id="deleteModalLabel" style="color: #fff; font-size:40px">Update
+                            Status</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: #fff"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-floating">
+                            <select class="form-select" id="selectStatus" aria-label="Default select example">
+                                <option value="0" selected disabled> -- Select status --</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Released">Released</option>
+                            </select>
+                            <label for="selectStatus">status</label>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <submit type="button" class="btn btn-warning" id="editYesBtn">Save Changes</submit>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLAIM MODAL -->
+        <div class="modal fade" id="claimModal" tabindex="-1" aria-labelledby="claimRequestModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #1B4284">
+                        <h1 class="modal-title" id="deleteModalLabel" style="color: #fff; font-size:40px">Releasing
+                            Request</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: #fff"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        Do you want to delete this request? This action is irreversible
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="claimYesBtn">Release Request</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 
 
@@ -836,6 +909,7 @@ $_SESSION['currentpage'] = "manage";
                 if(entrypass === 'No data'){
                     $('#entry_tbody').append('<tr><td colspan="5">No entry pass record found</td></tr>');
                 }else{
+                    $('#entry_tbody').empty();
                     entrypass.forEach(record => {
                         const tbody = $('#entry_tbody')[0];
                         const row = document.createElement('tr');
@@ -845,9 +919,9 @@ $_SESSION['currentpage'] = "manage";
                         <td>${record.valid_until}</td>
                         <td>${record.status}</td>
                         <td>
-                        <i class="fa-solid fa-trash-can deleteViolationBtn" style="color: #D40000; cursor: pointer;" title="Delete" data-id="${record.request_no}" data-selection="entrypass"></i>
-                         <i class="fa-regular fa-pen-to-square editViolationBtn" style="color:#1B4284; cursor:pointer;" title="Edit" data-id="${record.request_no}" data-selection="entrypass"></i>
-                         <i class="fa-solid fa-hand claimViolationBtn" style="color: #5cb85c; cursor: pointer;" title="Claim" data-id="${record.request_no}" data-selection="entrypass"></i>
+                        <i class="fa-solid fa-trash-can deleteViolationBtn" style="color: #D40000; cursor: pointer;" title="Delete" data-id="${record.request_no}" data-selection="entry"></i>
+                         <i class="fa-regular fa-pen-to-square editViolationBtn" style="color:#1B4284; cursor:pointer;" title="Edit" data-id="${record.request_no}" data-selection="entry"></i>
+                         <i class="fa-solid fa-hand claimViolationBtn" style="color: #5cb85c; cursor: pointer;" title="Claim" data-id="${record.request_no}" data-selection="entry"></i>
                         </td>
                          `;
                         tbody.append(row);
@@ -856,6 +930,85 @@ $_SESSION['currentpage'] = "manage";
 
             }
         })
+        $('#goodmoral_tbody').on('click', '.deleteViolationBtn', function(e){
+                $('#deleteYesBtn').attr('data-selection', 'goodmoral');
+                $('#deleteYesBtn').attr('data-id', $(this).data('id'));
+                $('#deleteModal').modal('show');
+            });
+            $('#admission_tbody').on('click', '.deleteViolationBtn', function(e){
+                $('#deleteYesBtn').attr('data-selection', 'admission');
+                $('#deleteYesBtn').attr('data-id', $(this).data('id'));
+                $('#deleteModal').modal('show');
+            });
+            $('#entry_tbody').on('click', '.deleteViolationBtn', function(e){
+                $('#deleteYesBtn').attr('data-selection', 'entry');
+                $('#deleteYesBtn').attr('data-id', $(this).data('id'));
+                $('#deleteModal').modal('show');
+            });
+            $('#deleteYesBtn').on('click', function(){
+                const selection = $(this).data('selection');
+                const id = $(this).data('id');
+                $.ajax({
+                    type: 'POST',
+                    url: 'php/delete_request.php',
+                    data: {
+                        reqType: selection,
+                        id: id
+                    },
+                    success: function(response){
+                        console.log(response);
+                        if(response === 'success'){
+                            $('#deleteModal').modal('hide');
+                            load_record();
+                        }
+                    }
+                });
+            })
+            $('#goodmoral_tbody').on('click', '.editViolationBtn', function(e){
+                $('#editYesBtn').attr('data-selection', 'goodmoral');
+                $('#editYesBtn').attr('data-id', $(this).data('id'));
+                $('#editModal').modal('show');
+            });
+            $('#admission_tbody').on('click', '.editViolationBtn', function(e){
+                $('#editYesBtn').attr('data-selection', 'admission');
+                $('#editYesBtn').attr('data-id', $(this).data('id'));
+                $('#editModal').modal('show');
+            });
+            $('#entry_tbody').on('click', '.editViolationBtn', function(e){
+                $('#editYesBtn').attr('data-selection', 'entry');
+                $('#editYesBtn').attr('data-id', $(this).data('id'));
+                $('#editModal').modal('show');
+            });
+            $('#editYesBtn').on('click', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                const selection = $(this).data('selection');
+                const id = $(this).data('id');
+                const status = $('#selectStatus').val();
+                let admin = <?php echo $_SESSION['employee_id'] ?>;
+                console.log(admin);
+                console.log(status);
+                console.log(id);
+                console.log(selection);
+                $.ajax({
+                    type: 'POST',
+                    url: 'php/edit_request.php',
+                    data: {
+                        reqType: selection,
+                        id: id,
+                        status: status,
+                        admin: admin
+                    },
+                    success: function(response){
+                        console.log(response);
+                        if(response === 'success'){
+                            $('#editModal').modal('hide');
+                            
+                            load_record();
+                        }
+                    }
+                });
+            });
     }
 </script>
 
