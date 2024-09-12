@@ -210,48 +210,71 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
     </body>
     <script>
-        // Doughnut Chart1
-        var doughnutChartCanvas = document.getElementById('doughnut-chart1');
-        var doughnutChart = new Chart(doughnutChartCanvas, {
-            type: 'doughnut',
-            data: {
-                labels: ['No ID', 'Improper Uniform', 'Cheating'],
-                datasets: [{
-                    label: 'Doughnut Chart',
-                    data: [30, 30, 40],
-                    backgroundColor: ['#e86c6c', '#18c0d3', '#e8d56c'],
-                    borderWidth: 1
-                }]
-            }
-        });
 
-        // Doughnut Chart2
-        var doughnutChartCanvas = document.getElementById('doughnut-chart2');
-        var doughnutChart = new Chart(doughnutChartCanvas, {
-            type: 'doughnut',
-            data: {
-                labels: ['No ID', 'Improper Uniform', 'Cheating'],
-                datasets: [{
-                    label: 'Doughnut Chart',
-                    data: [30, 30, 40],
-                    backgroundColor: ['#e86c6c', '#18c0d3', '#e8d56c'],
-                    borderWidth: 1
-                }]
-            }
-        });
         $(document).ready(function () {
 
             $.ajax({
                 typ: "GET",
                 url: "php/announcement-content.php",
                 success: function (response) {
-
                     let JsonData = JSON.parse(response);
                     JsonData.forEach(element => {
                         $('#Select').append(`<option value="${element.school_name}">${element.school_name}</option>`);
                     });
                 }
             });
+
+            $.ajax({
+                type: "GET",
+                url: "php/getMinorStatNumber.php",
+                success: function (response) {
+
+                    let donutMinorData = response[0];
+                    let donutMinorLabel = response[1];
+
+                    var doughnutChartCanvas = document.getElementById('doughnut-chart1');
+                    var doughnutChart = new Chart(doughnutChartCanvas, {
+                        type: 'doughnut',
+                        data: {
+                            labels: donutMinorLabel,
+                            datasets: [{
+                                label: 'No. of Offenders:',
+                                data: donutMinorData,
+                                backgroundColor: ['#e86c6c', '#18c0d3', '#e8d56c'],
+                                borderWidth: 1
+                            }]
+                        }
+                    });
+
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "php/getMajorStatNumber.php",
+                success: function (response) {
+
+                    let donutMajorData = response[0];
+                    let donutMajorLabel = response[1];
+
+                    // Doughnut Chart2
+                    var doughnutChartCanvas = document.getElementById('doughnut-chart2');
+                    var doughnutChart = new Chart(doughnutChartCanvas, {
+                        type: 'doughnut',
+                        data: {
+                            labels: donutMajorLabel,
+                            datasets: [{
+                                label: 'Doughnut Chart',
+                                data: donutMajorData,
+                                backgroundColor: ['#e86c6c', '#18c0d3', '#e8d56c'],
+                                borderWidth: 1
+                            }]
+                        }
+                    });
+
+                }
+            });
+
 
             setInterval(function () {
                 $.ajax({
@@ -265,13 +288,13 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 element.message = element.message.substring(0, 40) + '...';
                             }
                             $('#announcement-list').append(`<a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                                <div class="d-flex w-100 justify-content-between">
-                                  <h5 class="mb-1">${element.title}</h5>
-                                  <small>${element.date_sent}</small>
-                                </div>
-                                <p class="mb-1">${element.message}</p>
-                                <small>${element.recipients}</small>
-                              </a>`);
+                                                                                                                                                                                                                                                                                                                    <div class="d-flex w-100 justify-content-between">
+                                                                                                                                                                                                                                                                                                                      <h5 class="mb-1">${element.title}</h5>
+                                                                                                                                                                                                                                                                                                                      <small>${element.date_sent}</small>
+                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                    <p class="mb-1">${element.message}</p>
+                                                                                                                                                                                                                                                                                                                    <small>${element.recipients}</small>
+                                                                                                                                                                                                                                                                                                                  </a>`);
                         });
                     }
                 });
@@ -339,37 +362,37 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         if (id != 0) {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                        <div class="dept dept1">
-             <div class="card">
-            <div class="card-header">-</div>
-            <div class="card-body">
-
-                <p class="card-text">${value.description} Dept.</p>
-            </div>
-                        </div>
-                        </div>
-                                `);
+                                                                                                                                                                                                                                                                                                                    <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                        <div class="card">
+                                                                                                                                                                                                                                                                                                                            <div class="card-header">-</div>
+                                                                                                                                                                                                                                                                                                                            <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                <p class="card-text">${value.description} Dept.</p>
+                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                    </div>`);
                             })
                         } else {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                        <div class="dept dept1">
-             <div class="card">
-            <div class="card-header">-</div>
-            <div class="card-body">
-                <h5 class="card-title">${value.school_name}</h5>
-                <p class="card-text">${value.description}</p>
-            </div>
-                        </div>
-                        </div>
-                        `)
+                                                                                                                                                                                                                                                                                                                    <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                        <div class="card">
+                                                                                                                                                                                                                                                                                                                            <div class="card-header">-</div>
+                                                                                                                                                                                                                                                                                                                            <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                <h5 class="card-title">${value.school_name}</h5>
+                                                                                                                                                                                                                                                                                                                                <p class="card-text">${value.description}</p>
+                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                    </div>`)
                             })
                         }
                     }
                 })
             })
 
+
         })
+
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
