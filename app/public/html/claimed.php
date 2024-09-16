@@ -73,13 +73,13 @@ include("../database/database_conn.php");
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Search...">
                 </div>
-                <div class="dropdowns">
+                <!-- <div class="dropdowns">
 
 
 
                     <span><i class="fa-solid fa-filter"></i> Date filter</span>
 
-                </div>
+                </div> -->
             </div>
 
             <!-- Modal DATE -->
@@ -137,13 +137,13 @@ include("../database/database_conn.php");
                 <div class="nav-list">
                     <ul>
                         <a class="nav-class" style="border-bottom: solid 3px rgb(98, 130, 172); cursor: pointer;" data-name="claim">
-                            <li>CLAIMED ITEM <span>30</span></li>
+                            <li>CLAIMED ITEM <span id="claimed_number">0</span></li>
                         </a>
                         <a class="nav-class" style="cursor: pointer"data-name="lost">
-                            <li>SURRENDERED ITEM <span>25</span></li>
+                            <li>SURRENDERED ITEM <span id="surrendered_number">0</span></li>
                         </a>
                         <a class="nav-class" style="cursor: pointer" data-name="summary">
-                            <li>SUMMARY REPORT</li>
+                            <li>SUMMARY REPORT <span id="all_number">0</span></li>
                         </a>
                     </ul>
                 </div>
@@ -178,7 +178,6 @@ include("../database/database_conn.php");
                             <th>DATE LOST</th>
                             <th>Location Found</th>
                             <th>Description</th>
-                            <th>FOUNDER NAME</th>
                         </tr>
                     </thead>
                     <tbody id="body-lost">
@@ -221,45 +220,26 @@ include("../database/database_conn.php");
             <div id="itemModal" class="modal modal-item">
                 <div class="modal-content-item">
                     <div class="modal-body">
-                        <hr>
-                        <div class="modal-details">
-                            <div class="details-header">
-                                <h3>Owner Information</h3>
-                            </div>
-                            <div class="details-body">
-                                <div class="input-wrap">
-                                    <label>Student Name:</label>
-                                    <p id="">Avril Belisario</p>
-                                </div>
-                                <div class="input-wrap">
-                                    <label>Student ID:</label>
-                                    <p id="">2021 190723</p>
-                                </div>
-                                <div class="input-wrap">
-                                    <label>Email Address:</label>
-                                    <p id="student_email">beliserio@students.nu-dasma.edu.ph</p>
-                                </div>
-                            </div>
+                    <div class="modal-img">
+                            <img id="claimed_img" src="../images/logo.webp" alt="">
                         </div>
-
                         <hr>
-
                         <div class="modal-details">
                             <div class="details-header">
-                                <h3>Founder Information</h3>
+                                <h3>Information</h3>
                             </div>
                             <div class="details-body">
                                 <div class="input-wrap">
-                                    <label>Student Name:</label>
-                                    <p id="">Avril Belisario</p>
+                                    <label>Owner Name</label>
+                                    <p id="owner_name"></p>
                                 </div>
                                 <div class="input-wrap">
-                                    <label>Student ID:</label>
-                                    <p id="">2021 190723</p>
+                                    <label>Founder Name:</label>
+                                    <p id="founder_name"></p>
                                 </div>
                                 <div class="input-wrap">
-                                    <label>Email Address:</label>
-                                    <p id="student_email">beliserio@students.nu-dasma.edu.ph</p>
+                                    <label>Location:</label>
+                                    <p id="location_found"></p>
                                 </div>
                             </div>
                         </div>
@@ -272,12 +252,16 @@ include("../database/database_conn.php");
                             </div>
                             <div class="details-body">
                                 <div class="input-wrap">
-                                    <label>Item Brand:</label>
-                                    <p id="">Fibrella</p>
+                                    <label>Item type:</label>
+                                    <p id="item_type">Fibrella</p>
                                 </div>
                                 <div class="input-wrap">
-                                    <label>Item Color:</label>
-                                    <p id="">Black</p>
+                                    <label>Date Lost:</label>
+                                    <p id="date_lost">Black</p>
+                                </div>
+                                <div class="input-wrap">
+                                    <label>Description:</label>
+                                    <p id="item_description">Black</p>
                                 </div>
                             </div>
                         </div>
@@ -502,7 +486,20 @@ include("../database/database_conn.php");
             })
 
             $('#body-claim').on('click', '.claim-items', function(){
-               $('#itemModal').css('display', 'block');
+                owner = $(this).data('name');
+                founder = $(this).data('founder');
+                date_found = $(this).data('date-found');
+                location_found = $(this).data('location-found');
+                description = $(this).data('description');
+                image = $(this).data('img');
+                $('#itemModal').find('#owner_name').text(owner);
+                $('#itemModal').find('#founder_name').text(founder);
+                $('#itemModal').find('#location_found').text(location_found);
+                $('#itemModal').find('#item_type').text(owner);
+                $('#itemModal').find('#date_lost').text(date_found);
+                $('#itemModal').find('#item_description').text(description);
+                $('#claimed_img').attr('src', './php/new_items/'+image);
+                $('#itemModal').css('display', 'block');
             })
 
             $('#close-claim').click(function(){
@@ -515,9 +512,7 @@ include("../database/database_conn.php");
 
             $('#claim-submit').click(function (){
                 let name = $('#name_submit').val();
-                console.log(name);
                 let id = $((this)).attr('data-id');
-                console.log(id);
                 $.ajax({
                     url: 'php/claim_item.php',
                     type: 'POST',
@@ -527,7 +522,6 @@ include("../database/database_conn.php");
                         released_by: <?php echo $_SESSION['employee_id'] ?>
                     },
                     success: function(response){
-                        console.log(response);
                         if(response === 'success'){
                             $('#name_submit').val('');
                             $('#claimModal').css('display', 'none');
@@ -594,6 +588,7 @@ include("../database/database_conn.php");
                             $('input[name="item-found"]').val('');
                             $('textarea[name="description"]').val('');
                             $('#images').html('');
+                            $('#all-error').css('display', 'none'); 
                         }
                     }
                 })
@@ -613,6 +608,9 @@ include("../database/database_conn.php");
                      lost = data.lost_items;
                      claimed = data.claimed_items;
                      summary = data.summary;
+                     number_lost = data.number_lost_items;
+                     number_claimed = data.number_claimed_items;
+                     number_all = data.number_all_items;
                         $('#body-claim').html('');
                         $('#body-lost').html('');
                         $('#body-summary').html('');
@@ -630,7 +628,7 @@ include("../database/database_conn.php");
                         }
                         else{
                             claimed.forEach(function(item){
-                            $('#body-claim').append('<tr class="claim-items" style="cursor: pointer;"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.date_claimed+'</td><td>'+item.claimed_by+'</td></tr>')
+                            $('#body-claim').append('<tr class="claim-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" date-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.date_claimed+'</td><td>'+item.claimed_by+'</td></tr>')
                         })
                         }
                         if(summary === 'No data'){
@@ -647,11 +645,17 @@ include("../database/database_conn.php");
                                 <td>${item.description}</td>
                                 <td><img src="./php/new_items/${item.image}" alt="" class="image-click"></td>`)
                         })
-                    }  
+                    }
+                        $('#claimed_number').text(number_claimed);
+                        $('#surrendered_number').text(number_lost);
+                        $('#all_number').text(number_all);  
                     }
                 })
             }, 1000)
-                
+              $('#generate-report-btn').click(function(){
+                window.location.href = 'php/generate_lost_found_report.php';
+              });
+            
          })
         </script>
 

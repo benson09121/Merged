@@ -241,10 +241,10 @@ $_SESSION['currentpage'] = "issued";
                 </div>
             </div>
         </div>
-        <!-- 
+
         <div id="overlay">
             <img id="overlayImage" src="" alt="Overlay Image">
-        </div> -->
+        </div> 
 
         <!-- DELETE REQUEST MODAL -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteRequestModal" aria-hidden="true">
@@ -439,6 +439,9 @@ $_SESSION['currentpage'] = "issued";
                         }
                         if (select == 'entrypass') {
                             request.forEach(element => {
+                                if (element.valid_until == null) {
+                                    element.valid_until = 'N/A';
+                                }
                                 $('#tableBody_entrypass').append(`<tr class="row-data" data-type="Entry Pass">
                         <td>${element.request_no}</td>
                         <td>${element.student_id}</td>
@@ -610,12 +613,6 @@ $_SESSION['currentpage'] = "issued";
                 let admin = <?php echo $_SESSION['employee_id'] ?>;
                 let date = $('#inputValidDate').val() == '' ? null : $('#inputValidDate').val();
 
-                // console.log(id);
-                // console.log(reqType);
-                // console.log(status);
-                // console.log(admin);
-                // console.log(date);
-
                 if (status != null) {
                     $.ajax({
                         type: 'POST',
@@ -681,7 +678,12 @@ $_SESSION['currentpage'] = "issued";
 
             });
 
-
+            $('#tableBody_goodmoral').on('click', '.image-click', function () {
+                console.log('HELLO');
+                let src = $(this).attr('src');
+                $('#overlayImage').attr('src', src);
+                $('#overlay').css('display', 'block');
+            });
         });
 
     </script>

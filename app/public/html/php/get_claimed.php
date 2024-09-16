@@ -100,12 +100,27 @@ else{
     $items = 'No data';
 }
 
+$sql= "SELECT 
+    COUNT(*) AS lost_items FROM tbl_lost_items";
+$result = $conn->query($sql);
+$row = mysqli_fetch_assoc($result);
+$number_lost_items = $row['lost_items'];
 
+$sql= "SELECT 
+    COUNT(*) AS claimed_items FROM tbl_claimed_items";
+$result = $conn->query($sql);
+$row = mysqli_fetch_assoc($result);
+$number_claimed_items = $row['claimed_items'];
+
+$number_all_items = $number_lost_items + $number_claimed_items;
 
 $data  = [
     'lost_items' => $lost_items,
     'claimed_items' => $claimed_items,
-    'summary' => $items
+    'summary' => $items,
+    'number_lost_items' => $number_lost_items,
+    'number_claimed_items' => $number_claimed_items,
+    'number_all_items' => $number_all_items
 ];
 
 echo json_encode($data);

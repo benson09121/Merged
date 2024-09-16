@@ -29,9 +29,6 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         } else {
             echo 'error';
         }
-
-        $stmt->close();
-        $conn->close();
     } else {
         echo 'error'; 
     }

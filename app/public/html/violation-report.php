@@ -78,7 +78,7 @@ $_SESSION['currentpage'] = "violation";
             echo '<button class="back-button-viocon" onclick="history.back()">> Back</button>';
             ?>
 
-            <div class="filter-group">
+            <!-- <div class="filter-group">
                 <div class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Search...">
@@ -94,19 +94,19 @@ $_SESSION['currentpage'] = "violation";
                     <span><i class="fa-solid fa-filter"></i> Date filter</span>
 
                 </div>
-            </div>
+            </div> -->
 
             <div class="table-nav">
                 <div class="nav-list">
                     <ul>
                         <a style="cursor: pointer; border-bottom: solid 3px rgb(98, 130, 172)" data-nav="all">
-                            <li>ALL VIOLATION <span>0</span></li>
+                            <li>ALL VIOLATION <span id="all_count">0</span></li>
                         </a>
                         <a style="cursor: pointer;" data-nav="minor">
-                            <li>MINOR VIOLATION <span>0</span></li>
+                            <li>MINOR VIOLATION <span id="minor_count">0</span></li>
                         </a>
                         <a style="cursor: pointer;" data-nav="major">
-                            <li>MAJOR VIOLATION <span>0</span></li>
+                            <li>MAJOR VIOLATION <span id="major_count">0</span></li>
                         </a>
                     </ul>
                 </div>
@@ -231,10 +231,11 @@ $_SESSION['currentpage'] = "violation";
     var selected = 'all';
     var search = '';
     var currentPage = 1;
-    var itemsPerPage = 10;
+    var itemsPerPage = 5;
     $(document).ready(function () {
         $('.nav-list ul a').click(function () {
             $('.nav-list ul a').css('border-bottom', 'none');
+            currentPage = 1;
             selected = $(this).attr('data-nav');
             $('.nav-table').each(function () {
                 ($(this).attr('data-nav') == selected) ? $(this).css('display', 'block') : $(this).css('display', 'none');
@@ -256,6 +257,9 @@ $_SESSION['currentpage'] = "violation";
                     let data = JSON.parse(response);
                     let violations = data.all;
                     let totalPages = data.totalPages;
+                    let minorCount = data.minorCount;
+                    let majorCount = data.majorCount;
+                    let combinedCount = data.combinedCount;
                     $('#tableBody_all').empty();
                     $('#tableBody_minor').empty();
                     $('#tableBody_major').empty();
@@ -279,7 +283,7 @@ $_SESSION['currentpage'] = "violation";
                         <td>${item.student_id}</td>
                         <td>${item.name} ${item.last_name}</td>
                         <td>${item.course_name}</td>
-                        <td>${item.offense}</td>
+                        <td>${item.violation_type}</td>
                         <td>${item.violation_name}</td>
                         <td>${item.date_of_apprehension}</td>
                     </tr>
@@ -290,16 +294,20 @@ $_SESSION['currentpage'] = "violation";
                         <td>${item.student_id}</td>
                         <td>${item.student_name}</td>
                         <td>${item.course_name}</td>
-                        <td>${item.offense}</td>
+                        <td>${item.violation_type}</td>
                         <td>${item.violation_name}</td>
                         <td>${item.status}</td>
                         <td>${item.date_of_apprehension}</td>
-                        <td><button class="btn btn-primary">View</button></td>
+                        <td><button class="btn btn-primary" style="font-size: 10px">Send Email</button></td>
                     </tr>
                     `);
                         }
                     });
+                    console.log(totalPages);
                     generatePagination(totalPages);
+                    $('#all_count').text(combinedCount);
+                    $('#minor_count').text(minorCount);
+                    $('#major_count').text(majorCount);
                 }
             });
         }, 500);

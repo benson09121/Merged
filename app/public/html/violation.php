@@ -201,14 +201,14 @@ $_SESSION['currentpage'] = "violation";
                     <div id="form">
                         <input type="hidden" name="violation_id" id="editViolationId">
                         <label for="violationDetails">Violation Details:</label>
-                        <input type="text" name="violationDetails" id="violationDetails">
+                        <input type="text" name="violationDetails" id="violationDetails" disabled>
 
                         <label for="description">Description:</label>
                         <textarea name="description" id="description_edit"></textarea>
 
                         <div class="edit-button">
                             <button type="button" id="editCancelBtn">Cancel</button>
-                            <button type="submit">Save</button>
+                            <button type="submit" id="saveBtn">Save</button>
                         </div>
                     </div>
                 </div>
@@ -228,7 +228,7 @@ $_SESSION['currentpage'] = "violation";
                         else if ($('#violation_type').prop('selectedIndex') == 0 && $('#offense').val() == 'major') {
                             $('#violation_error').attr('hidden', false);
                         }
-                        else if ($('#category').prop('selectedIndex') == 0 && $('#ooense').val() == 'major') {
+                        else if ($('#category').prop('selectedIndex') == 0 && $('#offense').val() == 'major') {
                             $('#category_error').attr('hidden', false);
                         }
                         else if ($('#description').val() == '') {
@@ -281,6 +281,7 @@ $_SESSION['currentpage'] = "violation";
                     selected = $(this).find('li').text().split(' ')[0].toLowerCase();
                     $('.nav-offense').css('border-bottom', 'none');
                     $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
+                    currentPage = 1;
 
                 });
 
@@ -309,7 +310,7 @@ $_SESSION['currentpage'] = "violation";
 
                         },
                         success: function (response) {
-                            data = JSON.parse(response);
+                            data = JSON.parse(JSON.stringify(response));
                             totalPages = data.totalPages;
                             if (data != 'No data') {
                                 $('#table_body').html('');
@@ -319,7 +320,7 @@ $_SESSION['currentpage'] = "violation";
                                         <td>${element.type}</td>
                                         <td>${element.violation_name}</td>
                                         <td>
-                                            <i class="fa-regular fa-pen-to-square editViolationBtn" style="color:#1B4284; cursor:pointer; margin-right: 5px; data-id="${element.violation_id}" data-description="${element.violation_name}" data-type="${element.type}"></i>
+                                            <i class="fa-regular fa-pen-to-square editViolationBtn" style="color:#1B4284; cursor:pointer; margin-right: 5px;" data-id="${element.violation_id}" data-description="${element.violation_name}" data-type="${element.type}"></i>
                                             <i class="fa-solid fa-trash-can deleteViolationBtn" style="color: #D40000; cursor: pointer;" data-id="${element.violation_id}"></i>
                                         </td>
                                     </tr>
@@ -405,7 +406,6 @@ $_SESSION['currentpage'] = "violation";
                 $('#deleteYesBtn').click(function () {
                     let id = $(this).data('id');
                     let type = selected;
-                    console.log(id);
                     $.ajax({
                         type: 'POST',
                         url: 'php/delete_violation_data.php',
@@ -414,7 +414,6 @@ $_SESSION['currentpage'] = "violation";
                             type: selected
                         },
                         success: function (response) {
-                            console.log(response);
                             if (response == 'success') {
                                 $('#deleteViolationModal').attr('style', 'display: none');
                             }
@@ -423,7 +422,7 @@ $_SESSION['currentpage'] = "violation";
                 });
                 $('#table_body').on('click', '.editViolationBtn', function () {
                     $('#editViolationModal').attr('style', 'display: block');
-                    $('#editViolationId').val($(this).data('id'));
+                    $('#saveBtn').data('id', $(this).data('id'));
                     $('#description_edit').text($(this).data('description'));
                     $('#violationDetails').val($(this).data('type'));
                 });
@@ -431,8 +430,20 @@ $_SESSION['currentpage'] = "violation";
                     $('#editViolationModal').attr('style', 'display: none');
 
                 });
-                $('#saveEditBtn').click(function () {
-
+                $('#saveBtn').click(function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'php/edit_violations.php',
+                        data: {
+                            id: $(this).data('id'),
+                            violation_name: $('#violationDetails').val(),
+                            description: $('#description_edit').val()                     },
+                        success: function (response) {
+                            if (response == 'success') {
+                                $('#editViolationModal').attr('style', 'display: none');
+                            }
+                        }
+                    });
                 });
                 $.ajax({
                     type: 'GET',

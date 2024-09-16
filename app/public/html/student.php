@@ -76,12 +76,6 @@ unset($_SESSION['error_message']);
                                 <ul>
                                     <a href="#" style="border-bottom: solid 3px rgb(98, 130, 172)">
                                         <li>SINGLE VIOLATION</li>
-                                    <fa>
-                                    <a href="multiple-violation.php">
-                                        <li>MULTIPLE VIOLATION</li>
-                                    </a>
-                                    <a href="multiple-students.php">
-                                        <li>MULTIPLE STUDENTS</li>
                                     </a>
                                 </ul>
                             </div>
@@ -383,22 +377,24 @@ unset($_SESSION['error_message']);
                 $('#violation_type').attr('disabled', false);
                 var offense_type = $(this).val();
                 if(offense_type == 'Major'){
-                    $('#violation_type').empty();
+                    $('#viol    ation_type').empty();
                     $('#category_type').attr('disabled', false);
                     major_data.forEach(element => {
+                        let violation = element.violation_name;
                         if(element.violation_name.length > 100){
-                                    element.violation_name = element.violation_name.substring(0, 100) + '...';
+                            element.violation_name = element.violation_name.substring(0, 100) + '...';
                                 }
-                                $('#violation_type').append('<option value="'+element.violation_id+'">'+element.violation_name+'</option>');
+                                $('#violation_type').append('<option value="'+element.violation_id+'" data-value="'+violation+'">'+element.violation_name+'</option>');
                     });   
                 } else{
                     $('#violation_type').empty();
                     minor_data.forEach(element => {
+                        let violation = element.violation_name;
                         if(element.violation_name.length > 100){
-                                    element.violation_name = element.violation_name.substring(0, 100) + '...';
+                            element.violation_name = element.violation_name.substring(0, 100) + '...';
                                 }
-                                $('#violation_type').append('<option value="'+element.violation_id+'">'+element.violation_name+'</option>');
-                    });
+                                $('#violation_type').append('<option value="'+element.violation_id+'" data-value="'+violation+'">'+element.violation_name+'</option>');
+                    });   
                     $('#category_txt').text('Category:');
                     $('#category_type').attr('disabled', true);
                 }

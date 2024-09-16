@@ -66,7 +66,7 @@ $_SESSION['currentpage'] = "manage";
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Search..." id="searchInput">
                 </div>
-                <div class="dropdown-lang">
+                <!-- <div class="dropdown-lang">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
                         data-bs-toggle="dropdown" aria-expanded="false" data-box="section">Section</button>
                     <ul class="dropdown-menu" id="detect-section" aria-labelledby="section">
@@ -74,9 +74,9 @@ $_SESSION['currentpage'] = "manage";
                             onkeydown="return /[a-zA-Z1-9]/i.test(event.key)">
                             <?php //include('php/get_section.php'); ?>
                     </ul>
-                </div>
+                </div> -->
 
-                <div class="dropdown-lang">
+                <!-- <div class="dropdown-lang">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
                         data-bs-toggle="dropdown" aria-expanded="false" data-box="course">Course</button>
                     <ul class="dropdown-menu" id="detect-Course" aria-labelledby="section">
@@ -84,9 +84,9 @@ $_SESSION['currentpage'] = "manage";
                             onkeydown="return /[a-zA-Z]/i.test(event.key)">
                             <?php //include('php/get_course.php'); ?>
                     </ul>
-                </div>
+                </div> -->
 
-                <div class="dropdown-lang">
+                <!-- <div class="dropdown-lang">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
                         data-bs-toggle="dropdown" aria-expanded="false" data-box="department">Department</button>
                     <ul class="dropdown-menu" id="detect-department" aria-labelledby="section">
@@ -94,7 +94,7 @@ $_SESSION['currentpage'] = "manage";
                             onkeydown="return /[a-zA-Z]/i.test(event.key)">
                             <?php //include('php/get_department.php'); ?>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
         <div>
@@ -199,10 +199,11 @@ $_SESSION['currentpage'] = "manage";
                                                 <th>Date Created</th>
                                                 <th>Status</th>
                                                 <th>Intervention</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="major_violation_tbody">
-                                            <tr id="major-row" class="major-row">
+                                            <tr class="major-row">
 
                                             </tr>
                                         </tbody>
@@ -557,6 +558,7 @@ $_SESSION['currentpage'] = "manage";
     var section = "";
     var course = "";
     var department = "";
+    var name = "";
     $(document).ready(function () {
 
         $('.close-goodmoral').on('click', function () {
@@ -590,7 +592,6 @@ $_SESSION['currentpage'] = "manage";
                 },
                 url: 'php/update_student_status.php',
                 success: function (response) {
-                    console.log(response);
                     if(response === 'success'){
                         $('#studentProfileModal').modal('hide');
                     }
@@ -618,7 +619,7 @@ $_SESSION['currentpage'] = "manage";
             modal.find('#student_course').text(student_course_complete + " (" + student_course + ")");
             modal.find('#student_dept').text(student_department_full + " (" + student_department + ")");
             modal.find('#student_email').text(student_email);
-            console.log(student_status);
+            modal.find(".fa-print").data('name', student_f_name + ' ' + student_l_name);
             if(student_status === 'active'){
                 $('#account_block').show();
                 $('#account_unblock').hide();
@@ -746,7 +747,6 @@ $_SESSION['currentpage'] = "manage";
         }
 
         $('.pagination').on('click', '.page-link', function () {
-            console.log($(this).data('total-page'));
             if ($(this).attr('aria-label') === 'Previous' && currentPage > 1) {
                 currentPage--;
             } else if ($(this).attr('aria-label') === 'Next' && currentPage < $(this).data('total-page')) {
@@ -796,6 +796,10 @@ $_SESSION['currentpage'] = "manage";
             });
 
         })
+        $('#major_violation_tbody').on('click', '.print-endorsement' ,function(){
+                window.location.href = './printable/endorsement_letter.php';
+                
+        });
 
     });
     function load_Violation(){
@@ -806,7 +810,6 @@ $_SESSION['currentpage'] = "manage";
                 student_id: $('#student_id').text()
             },
             success: function (response) {
-                console.log(response);
                 $('#minor_violation_tbody').empty();
                 $('#major_violation_tbody').empty();
                 const data = JSON.parse(response);
@@ -814,7 +817,7 @@ $_SESSION['currentpage'] = "manage";
                 const major = data.major;
                 if(minor === 'no data'){
                     $('#minor_violation_tbody').append('<tr><td colspan="3">No minor offense found</td></tr>');
-
+                    
             }
             else{
                 minor.forEach(record => {
@@ -835,12 +838,16 @@ $_SESSION['currentpage'] = "manage";
                 major.forEach(record => {
                     const tbody = $('#major_violation_tbody')[0];
                     const row = document.createElement('tr');
+                    row.classList.add('major-row');
                     row.innerHTML = `
                     <td>Major</td>
                     <td>${record.violation_name}</td>
                     <td>${record.date_of_apprehension}</td>
                     <td>${record.record_status}</td>
                     <td>${record.method}</td>
+                    <td>
+                    <i class="fas fa-print print-endorsement" style="cursor: pointer;" data-name=""></i>
+                    </td>
                     `;
                     tbody.append(row);
                 });
@@ -859,7 +866,6 @@ $_SESSION['currentpage'] = "manage";
                 student_id: $('#student_id').text()
             },
             success: function(response){
-                console.log(response);
                 data =JSON.parse(response);
                 goodmoral = data.goodmoral;
                 admissionpass = data.admissionpass;
@@ -956,7 +962,6 @@ $_SESSION['currentpage'] = "manage";
                         id: id
                     },
                     success: function(response){
-                        console.log(response);
                         if(response === 'success'){
                             $('#deleteModal').modal('hide');
                             load_record();
@@ -986,10 +991,6 @@ $_SESSION['currentpage'] = "manage";
                 const id = $(this).data('id');
                 const status = $('#selectStatus').val();
                 let admin = <?php echo $_SESSION['employee_id'] ?>;
-                console.log(admin);
-                console.log(status);
-                console.log(id);
-                console.log(selection);
                 $.ajax({
                     type: 'POST',
                     url: 'php/edit_request.php',
@@ -1000,7 +1001,6 @@ $_SESSION['currentpage'] = "manage";
                         admin: admin
                     },
                     success: function(response){
-                        console.log(response);
                         if(response === 'success'){
                             $('#editModal').modal('hide');
                             
