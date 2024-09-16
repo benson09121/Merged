@@ -651,7 +651,11 @@
     padding: 8px 12px; 
 }
 
-#overlay {
+td > img{
+    cursor: pointer;
+  }
+
+#overlayy {
     display: none;
     position: fixed;
     top: 0;
@@ -663,12 +667,11 @@
     text-align: center;
   }
   
-  #overlay img {
+#overlayy img {
     max-width: 80%;
     max-height: 80%;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
     margin: auto;
-    
   }

@@ -19,7 +19,6 @@ $_SESSION['currentpage'] = "issued";
     <!-- <link rel="stylesheet" href="../css/manage.css"> -->
     <link rel="stylesheet" href="sidenav/sidenav.css">
     <link rel="stylesheet" href="../css/general.css">
-    <link rel="stylesheet" href="../css/viob.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -30,6 +29,7 @@ $_SESSION['currentpage'] = "issued";
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/screen_timeout.js"></script>
+    <link rel="stylesheet" href="../css/viob.css">
 
 
 </head>
@@ -240,7 +240,7 @@ $_SESSION['currentpage'] = "issued";
             </div>
         </div>
 
-        <div id="overlay">
+        <div id="overlayy">
             <img id="overlayImage" src="" alt="Overlay Image">
         </div> 
 
@@ -525,7 +525,7 @@ $_SESSION['currentpage'] = "issued";
             $('#tableBody_goodmoral').on('click', '.image-click', function () {
                 let src = $(this).attr('src');
                 $('#overlayImage').attr('src', src);
-                $('#overlay').css('display', 'block');
+                $('#overlayy').css('display', 'block');
             });
 
             $('#overlay').click(function () {
@@ -623,7 +623,7 @@ $_SESSION['currentpage'] = "issued";
                             date: date
                         },
                         success: function (response) {
-                            console.log(response);
+                            // console.log(response);
                             if (response == 'success') {
                                 $('#editModal').modal('hide');
                             }
@@ -677,7 +677,6 @@ $_SESSION['currentpage'] = "issued";
             });
 
             $('#tableBody_goodmoral').on('click', '.image-click', function () {
-                console.log('HELLO');
                 let src = $(this).attr('src');
                 $('#overlayImage').attr('src', src);
                 $('#overlay').css('display', 'block');
