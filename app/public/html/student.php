@@ -377,7 +377,7 @@ unset($_SESSION['error_message']);
                 $('#violation_type').attr('disabled', false);
                 var offense_type = $(this).val();
                 if(offense_type == 'Major'){
-                    $('#viol    ation_type').empty();
+                    $('#violation_type').empty();
                     $('#category_type').attr('disabled', false);
                     major_data.forEach(element => {
                         let violation = element.violation_name;
