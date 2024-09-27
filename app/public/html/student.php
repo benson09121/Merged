@@ -272,6 +272,9 @@ unset($_SESSION['error_message']);
       </div>
       <div class="modal-body">
         <p>Minor violation has been successfully recorded.</p>
+        <div class="buttons">
+                            <input type="submit" name="send_email" id="print_violation_minor" value="Print Violation">
+                        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -285,6 +288,11 @@ unset($_SESSION['error_message']);
         var search = '';
         var minor_data = [];
         var major_data = [];
+        var coursee = '';
+        var sectionn = '';
+        var student_id = '';
+        var name = '';
+        var email = '';
         $(document).ready(function(){
             $('#studentID').on('input', function(){
                 search = $(this).val();
@@ -342,8 +350,13 @@ unset($_SESSION['error_message']);
                             }
                             var student = JSON.parse(response);
                             $('#studentIDField').val(student[0].student_id);
+                            student_id = $('#studentIDField').val();
                             $('#nameField').val(student[0].f_name + ' ' + student[0].m_name + ' ' + student[0].l_name);
+                            name = $('#nameField').val();
+                            email = student[0].email;
                             $('#courseField').val(student[0].course + ' - ' + student[0].section);
+                            coursee = student[0].course;
+                            sectionn = student[0].section;
                             $('#minor_count').val(student[0].minor_offense);
                             $('#major_count').val(student[0].major_offense);
                             $('#emailField').val(student[0].email);
@@ -371,7 +384,7 @@ unset($_SESSION['error_message']);
                     category.forEach(element => {
                         $('#category_type').append('<option value="'+element.penalty_id+'">'+element.penalty_name+'</option>');
                     });
-                }
+                }   
             })
             $('#offense_type').on('change', function(){
                 $('#violation_type').attr('disabled', false);
@@ -419,11 +432,49 @@ unset($_SESSION['error_message']);
                     if($('#offense_type').val() == 'Major'){
                         $('#service').attr('disabled', false);
                         $('#service').css('display', 'block');
-                        if($('#category_type').val() == '1'){
-                            category = '1';
-                           $('#title_category').text('Categpry ' + category);
-                           $('#service').attr('disabled', true);
-                           $('#service').css('display', 'none');
+                        if($('#category_type').val() == '2'){
+                            category = '2';
+                            $('#title_category').text('Category ' + category);
+                            choice = "counseling";
+                            $('#dateField').css('display', 'block');
+                            $('.conf-items').css('display', 'none');
+ 
+                        }
+                        if($('#category_type').val() == '3'){
+                            category = '3';
+                            $('#title_category').text('Category ' + category);
+                            $('#service').attr('disabled', true);
+                            $('#service').css('display', 'none');
+                            $('#conference').css('display', 'block');
+                            $('#counseling').css('display', 'none');
+                            choice = "conference";
+                            $('#dateField').css('display', 'none');
+                            $('.conf-items').css('display', 'block');
+                            $('.conf-table').css('display', 'block');
+                        }
+                        if($('#category_type').val() == '4'){
+                            category = '4';
+                            $('#title_category').text('Category ' + category);
+                            $('#service').attr('disabled', true);
+                            $('#service').css('display', 'none');
+                            $('#conference').css('display', 'block');
+                            $('#counseling').css('display', 'none');
+                            choice = "conference";
+                            $('#dateField').css('display', 'none');
+                            $('.conf-items').css('display', 'block');
+                            $('.conf-table').css('display', 'block');
+                        }
+                        if($('#category_type').val() == '5'){
+                            category = '5';
+                            $('#title_category').text('Category ' + category);
+                            $('#service').attr('disabled', true);
+                            $('#service').css('display', 'none');
+                            $('#conference').css('display', 'block');
+                            $('#counseling').css('display', 'none');
+                            choice = "conference";
+                            $('#dateField').css('display', 'none');
+                            $('.conf-items').css('display', 'block');
+                            $('.conf-table').css('display', 'block');
                         }
                         $('#nextstep').css('display', 'block');
                     $('#main_body').css('display', 'none');
@@ -461,7 +512,29 @@ unset($_SESSION['error_message']);
                 }
             })
 
+            $('#print_violation_minor').on('click', function () {
+            $.ajax({
+                url: 'printable/set_print.php',
+                type: 'POST',
+                data: {
+                    student_id: student_id,
+                    category: $('#category_type').val(),
+                    name: name,
+                    type: 'minor',
+                    choice: choice,
+                    course :coursee,
+                    section: sectionn
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            }).then(function () {
+                window.location.href = 'printable/print.php';
+            });
+           
         })
+
+        });
         </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

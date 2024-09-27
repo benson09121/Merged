@@ -131,6 +131,13 @@ hr {
   margin-bottom: 1rem;
 }
 
+.input-wrap2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .info-left {
   display: flex;
   gap: 1rem;

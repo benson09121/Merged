@@ -186,13 +186,18 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                                 maxlength="1000"></textarea>
                                             <small>0/1000</small>
                                         </div>
+                                        <div class="mb-3" style="margin-top: -3%">
+                                        <label for="formFile" class="form-label">Insert Photo</label>
+                                        <input class="form-control" type="file" accept=".jpg,.gif,.jpeg,.tiff,.png" id="formFile">
+                                        </div>
+                                        
 
                                     </div>
                                     <!-- Second Column -->
                                     <div class="col-md-6">
                                         <h5>Announcement List</h5>
                                         <div class="list-group overflow-auto" id="announcement-list"
-                                            style="max-height: 400px; max-width: auto;">
+                                            style="max-height: 450px; max-width: auto;">
 
                                         </div>
                                     </div>
@@ -200,6 +205,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <p id="error" style="color: red"></p>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" id="add_announcement" class="btn btn-primary">ADD</button>
                         </div>
@@ -288,19 +294,23 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 element.message = element.message.substring(0, 40) + '...';
                             }
                             $('#announcement-list').append(`<a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                                                                                                                                                                                                                                                                                                                    <div class="d-flex w-100 justify-content-between">
-                                                                                                                                                                                                                                                                                                                      <h5 class="mb-1">${element.title}</h5>
-                                                                                                                                                                                                                                                                                                                      <small>${element.date_sent}</small>
-                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                    <p class="mb-1">${element.message}</p>
-                                                                                                                                                                                                                                                                                                                    <small>${element.recipients}</small>
-                                                                                                                                                                                                                                                                                                                  </a>`);
+                                                                                                                                                                                                                                                  <div class="d-flex w-100 justify-content-between">
+                                                                                               <h5 class="mb-1">${element.title}</h5>
+                                                                                                                                                     <small>${element.date_sent}</small>
+                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                           <p class="mb-1">${element.message}</p>
+                                                                                                                                                                                        <small>${element.recipients}</small>
+                                                                                                                                                                                                                                                                                    </a>`);
                         });
                     }
                 });
 
             }, 1000);
             $('#add_announcement').on('click', function () {
+                if($('#announcement_title').val() == '' || $('#announcement_message').val() == '' || $('#Select').val() == 'Select Department') {
+                    $('#error').text('Please fill up all fields.');
+                    return;
+                }
                 let title = $('#announcement_title').val();
                 let message = $('#announcement_message').val();
                 let department = $('#Select').val();
@@ -324,6 +334,12 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
                     }
                 })
+            })
+            $('#announcement_modal').on('hidden.bs.modal', function () {
+                $('#announcement_title').val('');
+                $('#announcement_message').val('');
+                $('#Select').selectedIndex = 0;
+                $('#error').text('');
             })
 
             $('#announcement_button').on('click', function () {
@@ -362,27 +378,27 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         if (id != 0) {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                                                                                                                                                                                                                                                                                                    <div class="dept dept1">
-                                                                                                                                                                                                                                                                                                                        <div class="card">
-                                                                                                                                                                                                                                                                                                                            <div class="card-header">-</div>
-                                                                                                                                                                                                                                                                                                                            <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                <p class="card-text">${value.description} Dept.</p>
+                                                                                                                                                                                                                                                                                                                        <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                            <div class="card">
+                                                                                                                                                                                                                                                                                                                                <div class="card-header">-</div>
+                                                                                                                                                                                                                                                                                                                                <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                    <p class="card-text">${value.description} Dept.</p>
+                                                                                                                                                                                                                                                                                                                                </div>
                                                                                                                                                                                                                                                                                                                             </div>
-                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                    </div>`);
+                                                                                                                                                                                                                                                                                                                        </div>`);
                             })
                         } else {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                                                                                                                                                                                                                                                                                                    <div class="dept dept1">
-                                                                                                                                                                                                                                                                                                                        <div class="card">
-                                                                                                                                                                                                                                                                                                                            <div class="card-header">-</div>
-                                                                                                                                                                                                                                                                                                                            <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                <h5 class="card-title">${value.school_name}</h5>
-                                                                                                                                                                                                                                                                                                                                <p class="card-text">${value.description}</p>
+                                                                                                                                                                                                                                                                                                                        <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                            <div class="card">
+                                                                                                                                                                                                                                                                                                                                <div class="card-header">-</div>
+                                                                                                                                                                                                                                                                                                                                <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                    <h5 class="card-title">${value.school_name}</h5>
+                                                                                                                                                                                                                                                                                                                                    <p class="card-text">${value.description}</p>
+                                                                                                                                                                                                                                                                                                                                </div>
                                                                                                                                                                                                                                                                                                                             </div>
-                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                    </div>`)
+                                                                                                                                                                                                                                                                                                                        </div>`)
                             })
                         }
                     }
