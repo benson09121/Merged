@@ -31,7 +31,7 @@ try {
 
     //Recipients
     $mail->setFrom('khonJoute@outlook.com', 'Khon Joute');
-    $mail->addAddress($recipient_email, 'Recipeint');     //Add a recipient
+    $mail->addAddress('javierbb@students.nu-dasma.edu.ph', 'Recipeint');     //Add a recipient
    // $mail->addAddress('ellen@example.com');               //Name is optional
     $mail->addReplyTo('khonJoute@outlook.com', 'Khon Joute');
     //$mail->addCC('cc@example.com');
