@@ -99,7 +99,7 @@
                 </div>
                 <div class="explanation">
                     <label for="notice" style="display: none;">Notice to Explain:</label>
-                    <textarea name="notice" id="notice"></textarea>
+                    <textarea name="notice" id="notice" style="display: none"></textarea>
                     <div class="buttons">
                         <p id="add_error"></p>
                         <input type="submit" name="send_email" id="add_violation" value="ADD VIOLATION">
