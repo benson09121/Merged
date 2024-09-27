@@ -281,7 +281,7 @@
                         choice: choice,
                     },
                     success: function (data) {
-                        console.log(data);
+
                         if (data == 'success') {
                             $.ajax({
                                 url: 'email/mail.php',
@@ -295,9 +295,11 @@
                                     message: $('#notice').val(),
                                     email: email
                                 },success: function(data){
-                                    console.log(data);
                                 }
                             })
+                            $('#teacher-list').empty();
+                            $('conf-items').css('display', 'none');
+                            $('conf-table').css('display', 'none');
                             $('#major_success').modal('show');
                         }
                     }
@@ -322,7 +324,6 @@
                         choice: choice
                     },
                     success: function (data) {
-                        console.log(data);
                         if (data == 'success') {
                             $.ajax({
                                 url: 'email/mail.php',
@@ -336,7 +337,7 @@
                                     message: $('#notice').val(),
                                     email: email
                                 },success: function(data){
-                                    console.log(data);
+
                                 }
                             })
                             $('#major_success').modal('show');
@@ -368,7 +369,7 @@
                         attendees: attendees
                     },
                     success: function (data) {
-                        console.log(data);
+
                         if (data == 'success') {
                             $.ajax({
                                 url: 'email/mail.php',
@@ -382,7 +383,6 @@
                                     message: $('#notice').val(),
                                     email: email
                                 },success: function(data){
-                                    console.log(data);
                                 }
                             })
                             $('#major_success').modal('show');
@@ -429,7 +429,6 @@
                     section: sectionn
                 },
                 success: function (data) {
-                    console.log(data);
                 }
             })
             window.location.href = './printable/print.php';
