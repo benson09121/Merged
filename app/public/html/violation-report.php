@@ -254,7 +254,7 @@ $_SESSION['currentpage'] = "violation";
                 },
                 success: function (response) {
                     console.log(response);
-                    let data = JSON.parse(response);
+                    let data = JSON.parse(JSON.stringify(response));
                     let violations = data.all;
                     let totalPages = data.totalPages;
                     let minorCount = data.minorCount;

@@ -7,6 +7,8 @@ $limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 10;
 $search = isset($_POST['search']) ? $_POST['search'] : '';
 $offset = ($page - 1) * $limit;
 
+$conn->set_charset('utf8mb4');
+
 // Query to get the data based on the selected type
 if ($selected == 'all') {
     $sql = "SELECT 
@@ -168,6 +170,11 @@ $data = [
     'combinedCount' => $combinedCount
 ];
 
-echo json_encode($data);
+// Set headers for JSON output
+header('Content-Type: application/json; charset=UTF-8');
+
+// Encode and output the data as JSON
+echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
 $conn->close();
 ?>
