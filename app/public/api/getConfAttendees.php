@@ -4,7 +4,7 @@ include '../database/database_conn.php';
 
 $conferenceNo = $_POST['conferenceNo'];
 
-$sql = "SELECT name
+$sql = "SELECT *
         FROM sql12729827.tbl_conf_attendees as attendees
         WHERE conference_no = '$conferenceNo'"
 ;
@@ -19,6 +19,8 @@ if (mysqli_num_rows($result) >= 1) {
 
         $final_data[$index] = [
             'attendee_name' => $row["name"],
+            'conference_type' => $row["conference_type"],
+            'scheduled_date' => $row["date"]
         ];
 
         $index++;
