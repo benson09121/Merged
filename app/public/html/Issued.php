@@ -183,6 +183,7 @@ $_SESSION['currentpage'] = "issued";
                         <th>Purpose</th>
                         <th>Date Requested</th>
                         <th>Request Status</th>
+                        <th>Date Surrendered</th>
                         <th>Action</th>
 
                     </thead>
@@ -200,6 +201,7 @@ $_SESSION['currentpage'] = "issued";
                         <th>Date Requested</th>
                         <th>Valid Until</th>
                         <th>Request Status</th>
+                        <th>Date Surrendered</th>
                         <th>Action</th>
                     </thead>
                     <tbody id="tableBody_entrypass" class="table-select">
@@ -242,7 +244,7 @@ $_SESSION['currentpage'] = "issued";
 
         <div id="overlayy">
             <img id="overlayImage" src="" alt="Overlay Image">
-        </div> 
+        </div>
 
         <!-- DELETE REQUEST MODAL -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteRequestModal" aria-hidden="true">
@@ -318,6 +320,28 @@ $_SESSION['currentpage'] = "issued";
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-success" id="claimYesBtn">Release Request</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SURRENDER MODAL -->
+        <div class="modal fade" id="surrenderModal" tabindex="-1" aria-labelledby="surrenderRequestModal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #1B4284">
+                        <h1 class="modal-title" id="deleteModalLabel" style="color: #fff; font-size:40px">Document
+                            Surrender</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: #fff"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        Do you want to set this document as surrendered? This action is irreversible.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="surrenderYesBtn">Set as Surrendered</button>
                     </div>
                 </div>
             </div>
@@ -402,11 +426,13 @@ $_SESSION['currentpage'] = "issued";
                         <td>${element.date_released}</td>
                         <td>${element.status}</td>
                         <td><img src="../proof_of_payments/${element.proof_of_payment}" alt="" class="image-click"></td>
-                        <td>
+                        <td style="text-align: end">
+                        
+                        <i class="fa-solid fa-hand claimGoodmoralBtn" style="color: #5cb85c; cursor: pointer; display:${element.status == 'Pending' ? 'inline' : 'none'}" title="Claim" data-id="${element.request_no}" data-selection="goodmoral" data-bs-toggle="modal" data-bs-target="#claimModal"></i>
+
                         <i class="fa-solid fa-trash-can deleteGoodmoralBtn" style="color: #D40000; cursor: pointer;" title="Delete" data-id="${element.request_no}" data-selection="goodmoral" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                         <i class="fa-regular fa-pen-to-square editGoodmoralBtn " style="color:#1B4284; cursor:pointer;" title="Edit" data-id="${element.request_no}" data-selection="goodmoral" data-bs-toggle="modal" data-bs-target="#editModal"></i>
-                         <i class="fa-solid fa-hand claimGoodmoralBtn" style="color: #5cb85c; cursor: pointer;" title="Claim" data-id="${element.request_no}" data-selection="goodmoral" data-bs-toggle="modal" data-bs-target="#claimModal"></i>
-                         </td>
+                        
+                        </td>
                         </tr>`);
                             });
                         } else {
@@ -422,11 +448,16 @@ $_SESSION['currentpage'] = "issued";
                         <td>${element.reason}</td>
                         <td>${element.date_requested}</td>
                         <td>${element.status}</td>
-                        <td>
+                        <td>${element.date_surrendered ?? ''}</td>
+                        <td style="text-align: end">
+                        
+                        <i class="fa-solid fa-hand claimAdmissionBtn" style="color: #5cb85c; cursor: pointer; display:${element.status == 'Pending' ? 'inline' : 'none'}" title="Release" data-id="${element.request_no}" data-selection="admission" data-bs-toggle="modal" data-bs-target="#claimModal"></i>
+                        <i class="fa-solid fa-rotate-left surrenderAdmissionBtn" style="color: #D39200; cursor: pointer; display: ${element.date_surrendered || element.status == 'Pending' ? 'none' : 'inline'} " title="Surrender" data-id="${element.request_no}" data-selection="admission" data-bs-toggle="modal" data-bs-target="#surrenderModal"></i>
+
                         <i class="fa-solid fa-trash-can deleteAdmissionBtn" style="color: #D40000; cursor: pointer;" title="Delete" data-id="${element.request_no}" data-selection="admission" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                         <i class="fa-regular fa-pen-to-square editAdmissionBtn" style="color:#1B4284; cursor:pointer;" title="Edit" data-id="${element.request_no}" data-selection="admission" data-bs-toggle="modal" data-bs-target="#editModal"></i>
-                         <i class="fa-solid fa-hand claimAdmissionBtn" style="color: #5cb85c; cursor: pointer;" title="Claim" data-id="${element.request_no}" data-selection="admission" data-bs-toggle="modal" data-bs-target="#claimModal"></i>
-                         </td>
+
+                        </td>
+                        
                         
                         </tr>`);
                             });
@@ -447,10 +478,15 @@ $_SESSION['currentpage'] = "issued";
                         <td>${element.date_requested}</td>
                         <td>${element.valid_until}</td>
                         <td>${element.status}</td>
-                        <td>
+                        <td>${element.date_surrendered ?? ''}</td>
+                        <td style="text-align: end">
+                        
+                        <i class="fa-solid fa-rotate-left surrenderEntryBtn" style="color: #D39200; cursor: pointer; display: ${element.date_surrendered || element.status == 'Pending' ? 'none' : 'inline'} " title="Surrender" data-id="${element.request_no}" data-selection="entry" data-bs-toggle="modal" data-bs-target="#surrenderModal"></i>
+
+                        <i class="fa-solid fa-hand claimEntryBtn" style="color: #5cb85c; cursor: pointer; display: ${element.status == 'Pending' ? 'inline' : 'none'};" title="Release" data-id="${element.request_no}" data-selection="entry" data-bs-toggle="modal" data-bs-target="#claimModal"></i>
+
                         <i class="fa-solid fa-trash-can deleteEntryBtn" style="color: #D40000; cursor: pointer;" title="Delete" data-id="${element.request_no}" data-selection="entry" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                         <i class="fa-regular fa-pen-to-square editEntryBtn" style="color:#1B4284; cursor:pointer;" title="Edit" data-id="${element.request_no}" data-selection="entry" data-bs-toggle="modal" data-bs-target="#editModal"></i>
-                         <i class="fa-solid fa-hand claimEntryBtn" style="color: #5cb85c; cursor: pointer;" title="Claim" data-id="${element.request_no}" data-selection="entry" data-bs-toggle="modal" data-bs-target="#claimModal"></i>
+
                          </td>
                         </tr>`);
                             });
@@ -666,7 +702,7 @@ $_SESSION['currentpage'] = "issued";
                         reqType: reqType,
                     },
                     success: function (response) {
-                        console.log(response);
+                        // console.log(response);
                         if (response == 'success') {
                             $('#claimModal').modal('hide');
                         }
@@ -675,6 +711,42 @@ $_SESSION['currentpage'] = "issued";
 
 
             });
+
+
+            // SURRENDER DOCUMENT
+            $('#tableBody_admissionpass').on('click', '.surrenderAdmissionBtn', function (e) {
+                $('#surrenderYesBtn').data('id', $(this).data('id'));
+                $('#surrenderYesBtn').attr('reqType', $(this).attr('data-selection'));
+            });
+
+            $('#tableBody_entrypass').on('click', '.surrenderEntryBtn', function (e) {
+                $('#surrenderYesBtn').data('id', $(this).data('id'));
+                $('#surrenderYesBtn').attr('reqType', $(this).attr('data-selection'));
+            });
+
+            $('#surrenderYesBtn').click(function () {
+                let id = $(this).data('id');
+                let reqType = $(this).attr("reqType");
+
+                // console.log(id + 'surrender')
+                // console.log(reqType + 'surrender')
+                $.ajax({
+                    type: 'POST',
+                    url: 'php/surrender_request.php',
+                    data: {
+                        id: id,
+                        reqType: reqType,
+                    },
+                    success: function (response) {
+                        // console.log(response);
+                        if (response == 'success') {
+                            $('#surrenderModal').modal('hide');
+                        }
+                    }
+                });
+
+            });
+
 
             $('#tableBody_goodmoral').on('click', '.image-click', function () {
                 let src = $(this).attr('src');
