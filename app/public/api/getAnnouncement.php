@@ -23,10 +23,12 @@ if (mysqli_num_rows($result) >= 1) {
         $base64 = '';
 
 
-        if ($image_name != null) {
+        if ($image_name != null && file_exists("../image_announcement/$image_name")) {
             $imagedata = file_get_contents("../image_announcement/$image_name");
             $base64 = base64_encode($imagedata);
         }
+
+
 
         $final_data[$index] = [
             'announcement_id' => $row["announcement_id"],
