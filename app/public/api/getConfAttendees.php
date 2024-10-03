@@ -19,6 +19,8 @@ if (mysqli_num_rows($result) >= 1) {
 
         $final_data[$index] = [
             'attendee_name' => $row["name"],
+            // 'conference_type' => $row["conference_type"] ?? '',
+            // 'scheduled_date' => $row["date"]
         ];
 
         $index++;
