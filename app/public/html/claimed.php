@@ -73,13 +73,13 @@ include("../database/database_conn.php");
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Search...">
                 </div>
-                <!-- <div class="dropdowns">
+                    <div class="dropdowns">
 
 
 
                     <span><i class="fa-solid fa-filter"></i> Date filter</span>
 
-                </div> -->
+                </div>
             </div>
 
             <!-- Modal DATE -->
@@ -103,9 +103,8 @@ include("../database/database_conn.php");
                             <label for="to">To</label>
                             <input type="date" name="to">
                         </div>
-
-
-                        <button>APPLY FILTER</button>
+                        <button id="fil_apply">APPLY FILTER</button>
+                        <button id="fil_clear" style="margin-top: -2%; color: red">CLEAR FILTER</button>
                     </div>
 
                 </div>
@@ -386,7 +385,7 @@ include("../database/database_conn.php");
                             <div class="modal-body1">
 
                                 <div class="input-wrap2">
-                                    <label for="student-id">Founder Name:</label>
+                                    <label for="student-id">Founder Name (Optional):</label>
                                     <input type="text" name="student-id">
                                 </div>
 
@@ -432,7 +431,9 @@ include("../database/database_conn.php");
         </div>
 
         <script>
-            
+            var from = '';
+            var to = '';
+
          $(document).ready(function(){
             $('.nav-class').click(function(){
                $('.nav-class').css('border-bottom', 'none');
@@ -474,6 +475,9 @@ include("../database/database_conn.php");
                 let location_found = $(this).attr('date-location-found');
                 let description = $(this).attr('data-description');
                 let founder = $(this).attr('data-founder');
+                if(founder === ''){
+                    founder = 'Anonymous';
+                }
                 let image = $(this).attr('data-img');
                 $('#lostModal').find('#claim').attr('data-id', id);
                 $('#lostModal').find('#item_type').text(name);
@@ -488,6 +492,9 @@ include("../database/database_conn.php");
             $('#body-claim').on('click', '.claim-items', function(){
                 owner = $(this).data('name');
                 founder = $(this).data('founder');
+                if (founder === ''){
+                    founder = 'Anonymous';
+                }
                 date_found = $(this).data('date-found');
                 location_found = $(this).data('location-found');
                 description = $(this).data('description');
@@ -512,6 +519,9 @@ include("../database/database_conn.php");
 
             $('#claim-submit').click(function (){
                 let name = $('#name_submit').val();
+                if(name === ''){
+                    return;
+                }
                 let id = $((this)).attr('data-id');
                 $.ajax({
                     url: 'php/claim_item.php',
@@ -562,7 +572,7 @@ include("../database/database_conn.php");
                 let month = date.getMonth() + 1;
                 let day = date.getDate();
                 date_found = `${year}-${month}-${day}`;
-                if(student_id === '' || item_type === '' || item_found === '' || description === '' || imageFile === undefined){
+                if( item_type === '' || item_found === '' || description === '' || imageFile === undefined){
                     $('#all-error').css('display', 'block');
                 }
                 else{
@@ -603,7 +613,12 @@ include("../database/database_conn.php");
                 $.ajax({
                     url: 'php/get_claimed.php',
                     type: 'POST',
+                    data: {
+                        from: from,
+                        to: to
+                    },
                     success: function(response){
+                        console.log(response);
                      data = JSON.parse(response);
                      lost = data.lost_items;
                      claimed = data.claimed_items;
@@ -655,7 +670,20 @@ include("../database/database_conn.php");
               $('#generate-report-btn').click(function(){
                 window.location.href = 'php/generate_lost_found_report.php';
               });
-            
+            $('#fil_apply').on('click', function(){
+                from = $('input[name="from"]').val();
+                to = $('input[name="to"]').val();
+                $('#dateModal').css('display', 'none');
+                
+            })
+            $('#fil_clear').on('click', function(){
+                from = '';
+                to = '';
+                $('input[name="from"]').val('');
+                $('input[name="to"]').val('');
+                $('#dateModal').css('display', 'none');
+            })
+
          })
         </script>
 
