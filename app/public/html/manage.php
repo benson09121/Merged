@@ -123,20 +123,54 @@ $_SESSION['currentpage'] = "manage";
 
     </section>
 
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #1B4284">
+                        <h1 class="modal-title" id="deleteModalLabel" style="color: #fff; font-size:40px">Edit Student Profile</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: #fff"></button>
+                    </div>
+                    <div class="modal-body text-left">
+                    <div class="mb-3">
+                            <label for="student_id_edit" class="form-label">Student ID</label>
+                            <input type="text" class="form-control" id="student_id_edit">
+                        </div>
+                        <div id="edit_error_std_id" style="margin-top: -4%; color: red; display: none">Fill up the Student ID field</div>
+                        <div class="mb-3">
+                            <label for="firstname_edit" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstname_edit">
+                        </div>
+                        <div id="edit_error_firstname" style="margin-top: -4%; color: red; display: none">Fill up the first name field</div>
+
+                        <div class="mb-3">
+                            <label for="lastname_edit" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastname_edit">
+                        </div>
+                        <div id="edit_error_lastname" style="margin-top: -4%; color: red; display: none">Fill up the password field</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="edit-admin" data-id="">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    
                     <!-- Modal Structure -->
-                    <div id="studentProfileModal" class="modal fade"  >
+                    <div id="studentProfileModal" class="modal fade" tabindex="-1" aria-labelledby="studentProfileModal" aria-hidden="true">
                     <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <span class="close" id="close" data-bs-dismiss="modal">&times;</span>
                     <div class="modal-name">
-                        <h1 id="student_name">NONE</h1>
-                        <p id="student_id">NONE</p>
+                        <h1 id="student_name"></h1>
+                        <p id="student_id"></p>
                     </div>
                     <div class="modal-body">
                         <div class="modal-container">
                             <div class="modal-details">
                                 <div class="input-wrap">
-                                    <label>Course:</label>
+                                 <label>Course:</label>
                                     <p id="student_course"></p>
                                 </div>
                                 <div class="input-wrap">
@@ -148,7 +182,11 @@ $_SESSION['currentpage'] = "manage";
                                     <p id="student_email"></p>
                                 </div>
                             </div>
+                            <div class="abc">
+
+                            </div>
                             <div class="block_btn">
+                                <input type="submit" name="edit" id="account_edit" class="" value="EDIT" style="display: block;margin-top: -50%;background-color: #FCD116" data-bs-target="#editModal" data-bs-toggle="modal">
                                 <input type="submit" name="block" id="account_block" class="student_status" value="BLOCK" style="display: none;">
                                 <input type="submit" name="unblock" id="account_unblock" class="student_status" value="UNBLOCK" style="display: none;">
                             </div>
@@ -607,7 +645,7 @@ $_SESSION['currentpage'] = "manage";
             let course = table.find('.student-course');
             let department = table.find('.student-dept');
             let student_id = student.text();
-            let student_status = student.data('status').toLowerCase();
+            let student_status = student.data('status');
             let student_course = course.text();
             let student_course_complete = course.data('course');
             let student_department = department.text();
@@ -800,6 +838,48 @@ $_SESSION['currentpage'] = "manage";
                 window.location.href = './printable/endorsement_letter.php';
                 
         });
+        $('#account_edit').on('click', function(){
+            $('#student_id_edit').val($('#student_id').text());
+            $('#firstname_edit').val($('#student_name').text().split(' ')[0]);
+            $('#lastname_edit').val($('#student_name').text().split(' ')[1]);
+            });
+        $('#cancel-edit').on('click', function(){
+            $('#editModal').modal('hide'); 
+        });
+        $('#edit-admin').on('click', function(){
+            console.log('click');
+            const student_id = $('#student_id_edit').val();
+            const f_name = $('#firstname_edit').val();
+            const l_name = $('#lastname_edit').val();
+            if(student_id === ''){
+                $('#edit_error_std_id').show();
+            }
+            else if(f_name === ''){
+                $('#edit_error_firstname').show();
+            }
+            else if(l_name === ''){
+                $('#edit_error_lastname').show();
+            }
+            else{
+                console.log(student_id, f_name, l_name);
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        student_id: student_id,
+                        f_name: f_name,
+                        l_name: l_name
+                    },
+                    url: 'php/update_student_profile.php ',
+                    success: function(response){
+                        console.log(response);
+                        if(response === 'success'){
+                            $('#editModal').modal('hide');
+                            $('#studentProfileModal').modal('show');
+                        }
+                    }
+                })
+            }
+        });
 
     });
     function load_Violation(){
@@ -855,6 +935,8 @@ $_SESSION['currentpage'] = "manage";
             }
         })
     }
+
+
     function load_record(){
         $('#goodmoral_tbody').empty();
         $('#admission_tbody').empty();
