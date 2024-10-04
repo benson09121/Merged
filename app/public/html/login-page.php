@@ -83,8 +83,11 @@ $(document).ready(function(){
                 $('#content').text('The username or password you entered is invalid.');
                 $('#ErrorModal').modal('show');
             }
-            else if(response == 'success'){
+            else if(response == 'Success_Admin'){
                 window.location.href = './home.php';
+            }
+            else if(response == 'Success_ITSO'){
+                window.location.href = './madmin.php';
             }
         }, error: function(response){
 

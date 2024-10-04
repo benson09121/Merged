@@ -376,7 +376,6 @@ unset($_SESSION['error_message']);
                 url: 'php/fetch_category_type.php',
                 type: 'GET',
                 success: function(response){
-                    console.log(response);
                     let data = JSON.parse(JSON.stringify(response));
                     let category = data.category_type;
                     minor_data = data.minor_violation;
@@ -429,6 +428,7 @@ unset($_SESSION['error_message']);
                     $('#error').css('display', 'block');
                     return;
                 } else{
+                    
                     if($('#offense_type').val() == 'Major'){
                         $('#service').attr('disabled', false);
                         $('#service').css('display', 'block');
@@ -489,7 +489,6 @@ unset($_SESSION['error_message']);
                                 violation_type: $('#violation_type').val(),
                             },
                             success: function(response){
-                                console.log(response);
                                 if(response == 'success'){
                                     $('#error').css('display', 'none');
                                     $('#studentIDField').val('');
@@ -526,7 +525,6 @@ unset($_SESSION['error_message']);
                     section: sectionn
                 },
                 success: function (data) {
-                    console.log(data);
                 }
             }).then(function () {
                 window.location.href = 'printable/print.php';
