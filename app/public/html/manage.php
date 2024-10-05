@@ -123,7 +123,7 @@ $_SESSION['currentpage'] = "manage";
 
     </section>
 
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal fade" id="edit_student_Modal" tabindex="-1" aria-labelledby="edit_student_Modal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #1B4284">
@@ -191,7 +191,7 @@ $_SESSION['currentpage'] = "manage";
 
                             </div>
                             <div class="block_btn">
-                                <input type="submit" name="edit" id="account_edit" class="" value="EDIT" style="display: block;margin-top: -50%;background-color: #FCD116" data-bs-target="#editModal" data-bs-toggle="modal">
+                                <input type="submit" name="edit" id="account_edit" class="" value="EDIT" style="display: block;margin-top: -50%;background-color: #FCD116" data-bs-target="#edit_student_Modal" data-bs-toggle="modal">
                                 <input type="submit" name="block" id="account_block" class="student_status" value="BLOCK" style="display: none;">
                                 <input type="submit" name="unblock" id="account_unblock" class="student_status" value="UNBLOCK" style="display: none;">
                             </div>
@@ -659,6 +659,8 @@ $_SESSION['currentpage'] = "manage";
             let modal = $(this);
             modal.find('#student_id').text(student_id);
             modal.find('#student_name').text(student_f_name + ' ' + student_l_name);
+            modal.find('#student_name').data('fname', student_f_name);
+            modal.find('#student_name').data('lname', student_l_name);
             modal.find('#student_course').text(student_course_complete + " (" + student_course + ")");
             modal.find('#student_dept').text(student_department_full + " (" + student_department + ")");
             modal.find('#student_email').text(student_email);
@@ -845,12 +847,12 @@ $_SESSION['currentpage'] = "manage";
         });
         $('#account_edit').on('click', function(){
             $('#student_id_edit').val($('#student_id').text());
-            $('#firstname_edit').val($('#student_name').text().split(' ')[0]);
-            $('#lastname_edit').val($('#student_name').text().split(' ')[1]);
+            $('#firstname_edit').val($('#student_name').data('fname'));
+            $('#lastname_edit').val($('#student_name').data('lname'));
             $('#email_edit').val($('#student_email').text());
             });
         $('#cancel-edit').on('click', function(){
-            $('#editModal').modal('hide'); 
+            $('#edit_student_Modal').modal('hide'); 
         });
         $('#edit-admin').on('click', function(){
             console.log('click');
@@ -884,7 +886,7 @@ $_SESSION['currentpage'] = "manage";
                     success: function(response){
                         console.log(response);
                         if(response === 'success'){
-                            $('#editModal').modal('hide');
+                            $('#edit_student_Modal').modal('hide');
                             $('#studentProfileModal').modal('show');
                         }
                     }
