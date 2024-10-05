@@ -322,7 +322,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         message: message,
                         department: department,
                         employee_id: <?php echo $_SESSION['employee_id']; ?>,
-                        photo: $('#formFile')[0].files[0];
+                        photo: $('#formFile')[0].files[0]
 
                     },
                     success: function (response) {
