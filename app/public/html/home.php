@@ -188,7 +188,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                         </div>
                                         <div class="mb-3" style="margin-top: -3%">
                                         <label for="formFile" class="form-label">Insert Photo</label>
-                                        <input class="form-control" type="file" accept=".jpg,.gif,.jpeg,.tiff,.png" id="formFile">
+                                        <input class="form-control" type="file" accept="image/jpg,image/gif,image/jpeg,image/tiff,image/png" id="formFile">
                                         </div>
                                         
 
@@ -314,16 +314,18 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 let title = $('#announcement_title').val();
                 let message = $('#announcement_message').val();
                 let department = $('#Select').val();
+                let formData = new FormData();
+                formData.append('title', title);
+                formData.append('message', message);
+                formData.append('department', department);
+                formData.append('employee_id', <?php echo $_SESSION['employee_id']; ?>);
+                formData.append('photo', $('#formFile')[0].files[0]);
                 $.ajax({
                     type: "POST",
                     url: "php/add-announcement.php",
-                    data: {
-                        title: title,
-                        message: message,
-                        department: department,
-                        employee_id: <?php echo $_SESSION['employee_id']; ?>,
-                        photo: $('#formFile')[0].files[0]
-                    },
+                    data: formData,
+                    processData: false, // Prevent jQuery from converting the FormData object into a string
+                    contentType: false, // Prevent jQuery from setting Content-Type
                     success: function (response) {
                         console.log(response);
                         if (response === 'success') {
