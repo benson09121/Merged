@@ -43,6 +43,8 @@ RUN chown -R www-data:www-data /var/www/html/html/php/new_items \
 RUN chown -R www-data:www-data /var/www/html/proof_of_payments \
     && chmod -R 755 /var/www/html/proof_of_payments
 
+    RUN chown -R www-data:www-data /var/www/html/image_announcement \
+    && chmod -R 755 /var/www/html/image_announcement
 
 RUN composer install \
     --no-interaction \

@@ -148,6 +148,11 @@ $_SESSION['currentpage'] = "manage";
                             <input type="text" class="form-control" id="lastname_edit">
                         </div>
                         <div id="edit_error_lastname" style="margin-top: -4%; color: red; display: none">Fill up the password field</div>
+                        <div class="mb-3">
+                            <label for="email_edit" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email_edit">
+                        </div>
+                        <div id="edit_error_email" style="margin-top: -4%; color: red; display: none">Fill up the password field</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" id="edit-admin" data-id="">Save</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -842,6 +847,7 @@ $_SESSION['currentpage'] = "manage";
             $('#student_id_edit').val($('#student_id').text());
             $('#firstname_edit').val($('#student_name').text().split(' ')[0]);
             $('#lastname_edit').val($('#student_name').text().split(' ')[1]);
+            $('#email_edit').val($('#student_email').text());
             });
         $('#cancel-edit').on('click', function(){
             $('#editModal').modal('hide'); 
@@ -851,6 +857,7 @@ $_SESSION['currentpage'] = "manage";
             const student_id = $('#student_id_edit').val();
             const f_name = $('#firstname_edit').val();
             const l_name = $('#lastname_edit').val();
+            const email = $('#email_edit').val();
             if(student_id === ''){
                 $('#edit_error_std_id').show();
             }
@@ -860,6 +867,9 @@ $_SESSION['currentpage'] = "manage";
             else if(l_name === ''){
                 $('#edit_error_lastname').show();
             }
+            else if(email === ''){
+                $('#edit_error_email').show();
+            }
             else{
                 console.log(student_id, f_name, l_name);
                 $.ajax({
@@ -867,7 +877,8 @@ $_SESSION['currentpage'] = "manage";
                     data: {
                         student_id: student_id,
                         f_name: f_name,
-                        l_name: l_name
+                        l_name: l_name,
+                        email: email
                     },
                     url: 'php/update_student_profile.php ',
                     success: function(response){

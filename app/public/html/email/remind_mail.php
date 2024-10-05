@@ -36,7 +36,7 @@ try {
     $mail->addReplyTo('nud-doms@outlook.com', 'Disciplinary Office');
     //$mail->addCC('cc@example.com');
    // $mail->addBCC('bcc@example.com');
-    
+
     //Attachments
     //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
     //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name

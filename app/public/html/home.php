@@ -321,7 +321,9 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         title: title,
                         message: message,
                         department: department,
-                        employee_id: <?php echo $_SESSION['employee_id']; ?>
+                        employee_id: <?php echo $_SESSION['employee_id']; ?>,
+                        photo: $('#formFile')[0].files[0];
+
                     },
                     success: function (response) {
                         console.log(response);
