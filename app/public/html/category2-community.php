@@ -325,7 +325,10 @@
                     },
                     success: function (data) {
                         if (data == 'success') {
-                            $.ajax({
+                           if(email == ''){
+                           }
+                            else{
+                                $.ajax({
                                 url: 'email/mail.php',
                                 type: 'POST',
                                 data: {
@@ -340,6 +343,7 @@
 
                                 }
                             })
+                        }
                             $('#major_success').modal('show');
 
                         }
@@ -371,7 +375,10 @@
                     success: function (data) {
 
                         if (data == 'success') {
-                            $.ajax({
+                            if(email == ''){
+                            
+                            }else{
+                                $.ajax({
                                 url: 'email/mail.php',
                                 type: 'POST',
                                 data: {
@@ -385,6 +392,8 @@
                                 },success: function(data){
                                 }
                             })
+                            }
+                           
                             $('#major_success').modal('show');
 
                         }
