@@ -30,7 +30,7 @@ if (mysqli_num_rows($result) >= 1) {
 }
 header('Content-type: application/json; charset=utf-8');
 header("HTTP/1.0 200 goods");
-echo json_encode(['status' => 'Success', 'message' => 'Pick your poison', 'course' => $final_data]);
+echo json_encode(['status' => 'Success', 'message' => 'Pick your poison', 'section' => $final_data]);
 
 
 mysqli_close($conn);
