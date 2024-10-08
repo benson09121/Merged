@@ -2,9 +2,13 @@
 
 include '../database/database_conn.php';
 
+$course = $_POST['course'];
 
-
-$sql = "SELECT * FROM sql12729827.tbl_section_info;";
+$sql = "SELECT * 
+        FROM sql12729827.tbl_section_info
+        WHERE course_id = $course OR course_id is null
+        ORDER BY course_id"
+;
 
 $result = mysqli_query($conn, $sql);
 $final_data = [];
