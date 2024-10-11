@@ -63,7 +63,8 @@ $_SESSION['currentpage'] = "violation";
         <div class="body-content">
 
             <div class="title-page">
-                <h1>Manage Student Account</h1>
+                <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
+                        style="color: #1b4284;"></i>Manage Student Account</h1>
                 <hr>
             </div>
 
@@ -215,6 +216,7 @@ $_SESSION['currentpage'] = "violation";
             </div>
 
             <script>
+
                 var selected = 'minor';
                 var search = '';
                 var currentPage = 1;
@@ -320,8 +322,9 @@ $_SESSION['currentpage'] = "violation";
                                         <td>${element.type}</td>
                                         <td>${element.violation_name}</td>
                                         <td>
-                                            <i class="fa-regular fa-pen-to-square editViolationBtn" style="color:#1B4284; cursor:pointer; margin-right: 5px;" data-id="${element.violation_id}" data-description="${element.violation_name}" data-type="${element.type}"></i>
-                                            <i class="fa-solid fa-trash-can deleteViolationBtn" style="color: #D40000; cursor: pointer;" data-id="${element.violation_id}"></i>
+                                            <i class="fa-regular fa-pen-to-square editViolationBtn" style="color:#1B4284; cursor:pointer; margin-right: 5px;" data-id="${element.violation_id}" data-description="${element.violation_name}" data-type="${element.type}" title="Edit" ></i>
+
+                                            <i class="fa-solid fa-trash-can deleteViolationBtn" style="color: #D40000; cursor: pointer;" data-id="${element.violation_id}" title="Delete"></i>
                                         </td>
                                     </tr>
                                 `);
@@ -437,7 +440,8 @@ $_SESSION['currentpage'] = "violation";
                         data: {
                             id: $(this).data('id'),
                             violation_name: $('#violationDetails').val(),
-                            description: $('#description_edit').val()                     },
+                            description: $('#description_edit').val()
+                        },
                         success: function (response) {
                             if (response == 'success') {
                                 $('#editViolationModal').attr('style', 'display: none');

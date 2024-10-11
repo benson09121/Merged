@@ -70,7 +70,11 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
             <div class="body-content">
 
                 <div class="title-page">
-                    <h1>Student Compliance</h1>
+                    <!-- <button onclick="history.go(-1);"><i class="fa-solid fa-left-long"></i></button> -->
+
+                    <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
+                            style="color: #1b4284;"></i>Student
+                        Compliance</h1>
                     <hr>
                 </div>
 
