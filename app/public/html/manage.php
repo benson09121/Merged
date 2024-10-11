@@ -191,7 +191,7 @@ $_SESSION['currentpage'] = "manage";
 
                             </div>
                             <div class="block_btn">
-                                <input type="submit" name="edit" id="account_edit" class="" value="EDIT" style="display: block;margin-top: -50%;background-color: #FCD116" data-bs-target="#edit_student_Modal" data-bs-toggle="modal">
+                                <input type="submit" name="edit" id="account_edit" class="" value="EDIT" style="display: block;margin-top: -50%;background-color: #FCD116;margin-bottom: 5%" data-bs-target="#edit_student_Modal" data-bs-toggle="modal">
                                 <input type="submit" name="block" id="account_block" class="student_status" value="BLOCK" style="display: none;">
                                 <input type="submit" name="unblock" id="account_unblock" class="student_status" value="UNBLOCK" style="display: none;">
                             </div>
