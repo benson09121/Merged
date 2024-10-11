@@ -7,7 +7,8 @@ $search = isset($_POST['search']) ? $_POST['search'] : '';
 $sql = "SELECT
 a.student_id, 
     a.f_name, 
-    a.l_name, 
+    a.l_name,
+    a.email, 
     e.name as section, 
     b.name as course,
     b.description as course_complete, 

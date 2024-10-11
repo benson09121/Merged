@@ -475,7 +475,7 @@ textarea {
 }
 
 .violation-container {
-  height: 320px;
+  height: 200px;
   padding: 20px;
   display: flex;
   justify-content: space-between;

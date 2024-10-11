@@ -238,7 +238,7 @@ include("../database/database_conn.php");
                                 </div>
                                 <div class="input-wrap">
                                     <label>Location:</label>
-                                    <p id="location_found"></p>
+                                    <p id="location_founds"></p>
                                 </div>
                             </div>
                         </div>
@@ -472,7 +472,7 @@ include("../database/database_conn.php");
                 let id = $(this).attr('data-id');
                 let name = $(this).attr('data-name');
                 let date_found = $(this).attr('data-date-found');
-                let location_found = $(this).attr('date-location-found');
+                let location_found = $(this).attr('data-location-found');
                 let description = $(this).attr('data-description');
                 let founder = $(this).attr('data-founder');
                 if(founder === ''){
@@ -499,9 +499,10 @@ include("../database/database_conn.php");
                 location_found = $(this).data('location-found');
                 description = $(this).data('description');
                 image = $(this).data('img');
+                console.log(location_found);
                 $('#itemModal').find('#owner_name').text(owner);
                 $('#itemModal').find('#founder_name').text(founder);
-                $('#itemModal').find('#location_found').text(location_found);
+                $('#itemModal').find('#location_founds').text(location_found);
                 $('#itemModal').find('#item_type').text(owner);
                 $('#itemModal').find('#date_lost').text(date_found);
                 $('#itemModal').find('#item_description').text(description);
@@ -590,7 +591,6 @@ include("../database/database_conn.php");
                     contentType: false,
                     processData: false,
                     success: function(response){
-                        console.log(response);
                         if(response === 'success'){
                             $('#addModal').css('display', 'none');
                             $('input[name="student-id"]').val('');
@@ -618,7 +618,6 @@ include("../database/database_conn.php");
                         to: to
                     },
                     success: function(response){
-                        console.log(response);
                      data = JSON.parse(response);
                      lost = data.lost_items;
                      claimed = data.claimed_items;
@@ -635,7 +634,7 @@ include("../database/database_conn.php");
                         }
                         else{
                             lost.forEach(function(item){
-                            $('#body-lost').append('<tr class="lost-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" date-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.location_found+'</td><td>'+item.description+'</td></tr>')
+                            $('#body-lost').append('<tr class="lost-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" data-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.location_found+'</td><td>'+item.description+'</td></tr>')
                         })
                         }
                         if(claimed === 'No data'){
@@ -643,7 +642,8 @@ include("../database/database_conn.php");
                         }
                         else{
                             claimed.forEach(function(item){
-                            $('#body-claim').append('<tr class="claim-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" date-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.date_claimed+'</td><td>'+item.claimed_by+'</td></tr>')
+                            $('#body-claim').append('<tr class="claim-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" data-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.date_claimed+'</td><td>'+item.claimed_by+'</td></tr>')
+                            
                         })
                         }
                         if(summary === 'No data'){

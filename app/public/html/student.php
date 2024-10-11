@@ -39,7 +39,7 @@ unset($_SESSION['error_message']);
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const headerBtn = document.querySelector('.header-btn');
             const sidenavBtn = document.querySelector('.sidenav-btn');
             const sidenav = document.querySelector('.sidenav');
@@ -63,136 +63,135 @@ unset($_SESSION['error_message']);
 
         <div class="body-content">
 
-                <div class="form-container">
+            <div class="form-container">
 
-                    <div class="student-violation">
-                        <div class="student-header info-header">
-                            <h1>Student Violation</h1>
-                            <hr>
-                        </div>
-
-                        <div class="table-nav">
-                            <div class="nav-list">
-                                <ul>
-                                    <a href="#" style="border-bottom: solid 3px rgb(98, 130, 172)">
-                                        <li>SINGLE VIOLATION</li>
-                                    </a>
-                                </ul>
-                            </div>
-                        </div>
-
+                <div class="student-violation">
+                    <div class="student-header info-header">
+                        <h1>Student Violation</h1>
                         <hr>
+                    </div>
 
-                        <div class="student-content">
-
-                            <div class="student-left info-left">
-                                <div class="student-info info">
-                                    <div class="left">
-                                        <label>Search student:</label>
-                                        
-                                    </div>
-                                    <div class="middle">
-                                        <input type="text" name="studentID" id="studentID" required>
-                                    </div>
-                                </div>
-                                <div class="guide">
-                                    <div style="overflow: auto; width: 520px; height: 150px">
-                                    <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <td>Student ID</td>
-                                                    <td>Student Name</td>
-                                                    <td>Course</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="student_body">
-                                           
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                
-                                </div>
-
-                                <div class="guide2">
-                                <!-- <table>
-                                    <tbody>
-                                        <thead>
-                                        <td>Student_ID</td>
-                                        <td>Student Name</td>
-                                        <td>Course</td>
-                                        <td>Action</td>
-                                        </thead>
-                                    </tbody>
-                                   </table> -->
-                                </div>
-                            </div>
-
-                            <div class="right">
-                                <button type="button" id="viewProfileBtn">View Student Profile</button>
-                            </div>
-
+                    <div class="table-nav">
+                        <div class="nav-list">
+                            <ul>
+                                <a href="#" style="border-bottom: solid 3px rgb(98, 130, 172)">
+                                    <li>SINGLE VIOLATION</li>
+                                </a>
+                            </ul>
                         </div>
-
                     </div>
 
                     <hr>
 
-                    <div class="violation-header info-header">
-                        <div class="violation_slip">
-                            <h4>Violation Slip</h4>
-                        </div>
-                        <div class="date" id="currentDate"></div>
-                    </div>
+                    <div class="student-content">
 
-                    <div class="violation-container">
-
-                        <div class="violation-left info-left">
-                            <div class="info">
+                        <div class="student-left info-left">
+                            <div class="student-info info">
                                 <div class="left">
-                                    <label>Student ID:</label>
-                                    <label>Name:</label>
-                                    <label>Course & Section:</label>
-                                    <label>Offense Type:</label>
-                                    <label>Violation Type:</label>
-                                    <label>Description:</label>
-                                    <label id="category_txt">Category:</label>
+                                    <label>Search student:</label>
 
                                 </div>
                                 <div class="middle">
-                                    <input id="studentIDField" name="student_id_pass" placeholder="" readonly></input>
-                                    <input id="nameField" readonly></input>
-                                    <input id="courseField" readonly></input>
-                                    <select id="offense_type" name="offense_type" required disabled>
-                                        <option value="" style="display: none;">Select Offense Type</option>
-                                        <option value="Major">Major offense</option>
-                                        <option value="Minor">Minor offense</option>
-                                    </select>
-
-                                    <select id="violation_type" name="violation_type" required disabled>
-                                        <option value="" style="display: none;">Select Violation Type</option>
-                                    </select>
-
-                                    <textarea id="desicriptionField" name="description" readonly></textarea>
-
-                                    <select id="category_type" name="category_type" disabled>
-                                        <option value="" style="display: none;">Select Category</option>
-                                    </select>
-
+                                    <input type="text" name="studentID" id="studentID" required>
                                 </div>
                             </div>
+                            <div class="guide">
+                                <div style="overflow: auto; width: 520px; height: 140px">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <td>Student ID</td>
+                                                <td>Student Name</td>
+                                                <td>Course</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="student_body">
 
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            <div class="guide2">
+
+                                <div style="overflow: auto; width: 520px; height: 190px">
+                                    <table class="table">
+
+                                        <thead>
+                                            <td>Student_ID</td>
+                                            <td>Student Name</td>
+                                            <td>Course</td>
+                                            <td>Action</td>
+                                        </thead>
+                                        <tbody id="student_selected">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- <div class="right">
+                                <button type="button" id="viewProfileBtn">View Student Profile</button>
+                            </div> -->
 
-                        <div class="right">
-                            <p style="display: none; color: red" id="error">Fill in the fields to continue</p>
-                            <button id="next_btn">Next</button>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="violation-header info-header">
+                    <div class="violation_slip">
+                        <h4>Violation Slip</h4>
+                    </div>
+                    <div class="date" id="currentDate"></div>
+                </div>
+
+                <div class="violation-container">
+
+                    <div class="violation-left info-left">
+                        <div class="info">
+                            <div class="left">
+                                <label>Offense Type:</label>
+                                <label>Violation Type:</label>
+                                <label>Description:</label>
+                                <label id="category_txt">Category:</label>
+
+                            </div>
+                            <div class="middle">
+                                <select id="offense_type" name="offense_type" required disabled>
+                                    <option value="" style="display: none;">Select Offense Type</option>
+                                    <option value="Major">Major offense</option>
+                                    <option value="Minor">Minor offense</option>
+                                </select>
+
+                                <select id="violation_type" name="violation_type" required disabled>
+                                    <option value="" style="display: none;">Select Violation Type</option>
+                                </select>
+
+                                <textarea id="desicriptionField" name="description" readonly></textarea>
+
+                                <select id="category_type" name="category_type" disabled>
+                                    <option value="" style="display: none;">Select Category</option>
+                                </select>
+
+                            </div>
                         </div>
 
                     </div>
 
-                    <hr>
+
+                    <div class="right">
+                        <p style="display: none; color: red" id="error">Fill in the fields to continue</p>
+                        <button id="next_btn">Next</button>
+                    </div>
+
                 </div>
+
+                <hr>
+            </div>
 
         </div>
 
@@ -262,185 +261,171 @@ unset($_SESSION['error_message']);
             </div>
         </div>
 
-<!-- SELECT MODAL -->
-<div class="modal fade" id="success_minor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Success</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Minor violation has been successfully recorded.</p>
-        <div class="buttons">
+        <!-- SELECT MODAL -->
+        <div class="modal fade" id="success_minor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Success</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Minor violation has been successfully recorded.</p>
+                        <div class="buttons">
                             <input type="submit" name="send_email" id="print_violation_minor" value="Print Violation">
                         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <script>
         var category = '';
         var search = '';
         var minor_data = [];
         var major_data = [];
-        var coursee = '';
-        var sectionn = '';
-        var student_id = '';
         var name = '';
-        var email = '';
-        $(document).ready(function(){
-            $('#studentID').on('input', function(){
+        var students = [];
+        var email_list = [];
+        $(document).ready(function () {
+            $('#studentID').on('input', function () {
                 search = $(this).val();
             })
             setInterval(() => {
-            $.ajax({
-                type: 'POST',
-                data: {
-                    search: search
-                },
-                url: 'php/fetch_student.php',
-                success: function(response){
-                    var student = JSON.parse(response);
-                    $('#student_body').empty();
-                    student.forEach(element => {
-                        $('#student_body').append(`
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        search: search
+                    },
+                    url: 'php/fetch_student.php',
+                    success: function (response) {
+                        var student = JSON.parse(response);
+                        $('#student_body').empty();
+                        student.forEach(element => {
+                            $('#student_body').append(`
                         <tr style="cursor: pointer" class="row_student">
-                            <td>${element.student_id}</td>
-                            <td>${element.f_name} ${element.l_name}</td>
-                            <td>${element.course}</td>`);
-                    });
+                            <td class="s_id" data-email="${element.email}" data-section="${element.section}">${element.student_id}</td>
+                            <td class="s_name">${element.f_name} ${element.l_name}</td>
+                            <td class="s_course">${element.course}</td>`);
+                        });
+                    }
+                })
+            }, 500);
+            $('#student_body').on('click', '.row_student', function () {
+                let student_id = $(this).find('.s_id').text();
+                let student_name = $(this).find('.s_name').text();
+                let course = $(this).find('.s_course').text();
+                let email = $(this).find('.s_id').data('email');
+                let section = $(this).find('.s_id').data('section');
+                let studentExists = false;
+
+                $('#student_selected').find('.t_id').each(function () {
+                    if ($(this).text() == student_id) {
+                        studentExists = true;
+                        return false;
+                    }
+                });
+                let newStudent = {
+                student_id: student_id,
+                student_name: student_name,
+                course: course,
+                email: email,
+                section: section,
+            };
+            // Append the new student to the array
+                if(!studentExists) {
+                    students.push(newStudent);
+                    $('#student_selected').append(`
+             <tr>
+                                        <td class="t_id">${student_id}</td>
+                                        <td>${student_name}</td>
+                                        <td>${course}</td>
+                                        <td><button class="btn btn-danger btn-sm delete-student">Remove</button></td>
+                                    </tr>`);
                 }
+            $('#offense_type').attr('disabled', false);
             })
-        }, 500);
-        $('#student_body').on('click', '.row_student', function(){
-            var student_id = $(this).find('td').eq(0).text();
-            $('#studentID').val(student_id);
-            search = student_id;
-            $('#studentID').trigger('keyup');
-        })
-            $('.modal').on('shown.bs.modal', function() {
-  //Make sure the modal and backdrop are siblings (changes the DOM)
-  $(this).before($('.modal-backdrop'));
-  //Make sure the z-index is higher than the backdrop
-  $(this).css("z-index", parseInt($('.modal-backdrop').css('z-index')) + 1);
-});
-            $('#studentID').on('keyup', function(){
-                var studentID = $(this).val();
-                    $.ajax({
-                        url: 'php/fetch_student_data.php',
-                        type: 'POST',
-                        data: {student_id: studentID},
-                        success: function(response){
-                            if(response == 'error'){
-                                $('#studentIDField').val('');
-                            $('#nameField').val('');
-                            $('#courseField').val('');
-                            $('#minor_count').val('');
-                            $('#major_count').val('');
-                            $('#viewProfileBtn').attr('disabled', true);
-                            $('#offense_type').attr('disabled', true);
-                            $('#violation_type').attr('disabled', true);
-                            $('#category_type').attr('disabled', true);
-                                return;
-                            }
-                            var student = JSON.parse(response);
-                            $('#studentIDField').val(student[0].student_id);
-                            student_id = $('#studentIDField').val();
-                            $('#nameField').val(student[0].f_name + ' ' + student[0].m_name + ' ' + student[0].l_name);
-                            name = $('#nameField').val();
-                            email = student[0].email;
-                            $('#courseField').val(student[0].course + ' - ' + student[0].section);
-                            coursee = student[0].course;
-                            sectionn = student[0].section;
-                            $('#minor_count').val(student[0].minor_offense);
-                            $('#major_count').val(student[0].major_offense);
-                            $('#emailField').val(student[0].email);
-                            $('#nameField1').val(student[0].f_name + ' ' + student[0].m_name + ' ' + student[0].l_name);
-                            $('#viewProfileBtn').attr('disabled', false);
-                            $('#offense_type').attr('disabled', false);
-                        }
-                    });
+            $('#student_selected').on('click', '.delete-student', function () {
+                $(this).closest('tr').remove();
+
+        let student_id = $(this).closest('tr').find('.t_id').text();
+ 
+students = students.filter(student => student.student_id !== student_id);
+                console.log(students);
+            })
+            $('.modal').on('shown.bs.modal', function () {
+                //Make sure the modal and backdrop are siblings (changes the DOM)
+                $(this).before($('.modal-backdrop'));
+                //Make sure the z-index is higher than the backdrop
+                $(this).css("z-index", parseInt($('.modal-backdrop').css('z-index')) + 1);
             });
-            $('#viewProfileBtn').on('click', function(){
-                $('#studentProfileModal').css('display', 'block'); 
+            $('#viewProfileBtn').on('click', function () {
+                $('#studentProfileModal').css('display', 'block');
             })
-            $('.close').on('click', function(){
+            $('.close').on('click', function () {
                 $('#studentProfileModal').css('display', 'none');
             })
             $.ajax({
                 url: 'php/fetch_category_type.php',
                 type: 'GET',
-                success: function(response){
+                success: function (response) {
                     let data = JSON.parse(JSON.stringify(response));
                     let category = data.category_type;
                     minor_data = data.minor_violation;
                     major_data = data.major_violation;
                     category.forEach(element => {
-                        $('#category_type').append('<option value="'+element.penalty_id+'">'+element.penalty_name+'</option>');
+                        $('#category_type').append('<option value="' + element.penalty_id + '">' + element.penalty_name + '</option>');
                     });
-                }   
+                }
             })
-            $('#offense_type').on('change', function(){
+            $('#offense_type').on('change', function () {
                 $('#violation_type').attr('disabled', false);
                 var offense_type = $(this).val();
-                if(offense_type == 'Major'){
+                if (offense_type == 'Major') {
                     $('#violation_type').empty();
                     $('#category_type').attr('disabled', false);
                     major_data.forEach(element => {
                         let violation = element.violation_name;
-                        if(element.violation_name.length > 100){
+                        if (element.violation_name.length > 100) {
                             element.violation_name = element.violation_name.substring(0, 100) + '...';
-                                }
-                                $('#violation_type').append('<option value="'+element.violation_id+'" data-value="'+violation+'">'+element.violation_name+'</option>');
-                    });   
-                } else{
+                        }
+                        $('#violation_type').append('<option value="' + element.violation_id + '" data-value="' + violation + '">' + element.violation_name + '</option>');
+                    });
+                } else {
                     $('#violation_type').empty();
                     minor_data.forEach(element => {
                         let violation = element.violation_name;
-                        if(element.violation_name.length > 100){
+                        if (element.violation_name.length > 100) {
                             element.violation_name = element.violation_name.substring(0, 100) + '...';
-                                }
-                                $('#violation_type').append('<option value="'+element.violation_id+'" data-value="'+violation+'">'+element.violation_name+'</option>');
-                    });   
+                        }
+                        $('#violation_type').append('<option value="' + element.violation_id + '" data-value="' + violation + '">' + element.violation_name + '</option>');
+                    });
                     $('#category_txt').text('Category:');
                     $('#category_type').attr('disabled', true);
                 }
             })
-            $('#next_btn').on('click', function(){
-                if('#studentIDField' == ''){
+            $('#next_btn').on('click', function () {
+                if ($('#category_type').val() == '' && $('#offense_type').val() == 'Major') {
                     $('#error').css('display', 'block');
+                    console.log($('#offense_type').val());
                     return;
-                }
-                if($('#offense_type').val() == ''){
-                    $('#error').css('display', 'block');
-                    return;
-                }
-                if($('#violation_type').val() == ''){
-                    $('#error').css('display', 'block');
-                    return;
-                }
-                if($('#category_type').val() == '' && $('#offense_type').val() == 'Major'){
-                    $('#error').css('display', 'block');
-                    return;
-                } else{
-                    
-                    if($('#offense_type').val() == 'Major'){
+                } else {
+
+                    if ($('#offense_type').val() == 'Major') {
                         $('#service').attr('disabled', false);
                         $('#service').css('display', 'block');
-                        if($('#category_type').val() == '2'){
+                        if ($('#category_type').val() == '2') {
                             category = '2';
                             $('#title_category').text('Category ' + category);
                             choice = "counseling";
                             $('#dateField').css('display', 'block');
                             $('.conf-items').css('display', 'none');
- 
+
                         }
-                        if($('#category_type').val() == '3'){
+                        if ($('#category_type').val() == '3') {
                             category = '3';
                             $('#title_category').text('Category ' + category);
                             $('#service').attr('disabled', true);
@@ -452,7 +437,7 @@ unset($_SESSION['error_message']);
                             $('.conf-items').css('display', 'block');
                             $('.conf-table').css('display', 'block');
                         }
-                        if($('#category_type').val() == '4'){
+                        if ($('#category_type').val() == '4') {
                             category = '4';
                             $('#title_category').text('Category ' + category);
                             $('#service').attr('disabled', true);
@@ -464,7 +449,7 @@ unset($_SESSION['error_message']);
                             $('.conf-items').css('display', 'block');
                             $('.conf-table').css('display', 'block');
                         }
-                        if($('#category_type').val() == '5'){
+                        if ($('#category_type').val() == '5') {
                             category = '5';
                             $('#title_category').text('Category ' + category);
                             $('#service').attr('disabled', true);
@@ -477,23 +462,21 @@ unset($_SESSION['error_message']);
                             $('.conf-table').css('display', 'block');
                         }
                         $('#nextstep').css('display', 'block');
-                    $('#main_body').css('display', 'none');
-                    $('#error').css('display', 'none');
-                    } else{
+                        $('#main_body').css('display', 'none');
+                        $('#error').css('display', 'none');
+                    } else {
                         $('#error').css('display', 'none');
                         $.ajax({
                             url: 'php/insert_minor_violation.php',
                             type: 'POST',
                             data: {
-                                student_id: $('#studentIDField').val(),
                                 violation_type: $('#violation_type').val(),
+                                students: JSON.stringify(students),
                             },
-                            success: function(response){
-                                if(response == 'success'){
+                            success: function (response) {
+                                console.log(response);
+                                if (response == 'success') {
                                     $('#error').css('display', 'none');
-                                    $('#studentIDField').val('');
-                                    $('#nameField').val('');
-                                    $('#courseField').val('');
                                     $('#offense_type').val('');
                                     $('#violation_type').val('');
                                     $('#error').css('display', 'none');
@@ -501,7 +484,7 @@ unset($_SESSION['error_message']);
                                     $('#studentID').trigger('keyup');
                                     $('#error').css('display', 'none');
                                     $('#success_minor').modal('show');
-                                } else{
+                                } else {
                                     $('#error').css('display', 'block');
                                 }
                             }
@@ -512,31 +495,31 @@ unset($_SESSION['error_message']);
             })
 
             $('#print_violation_minor').on('click', function () {
-            $.ajax({
-                url: 'printable/set_print.php',
-                type: 'POST',
-                data: {
-                    student_id: student_id,
-                    category: $('#category_type').val(),
-                    name: name,
-                    type: 'minor',
-                    choice: choice,
-                    course :coursee,
-                    section: sectionn
-                },
-                success: function (data) {
-                }
-            }).then(function () {
-                window.location.href = 'printable/print.php';
-            });
-           
-        })
+                $.ajax({
+                    url: 'printable/set_print.php',
+                    type: 'POST',
+                    data: {
+                        student_id: student_id,
+                        category: $('#category_type').val(),
+                        name: name,
+                        type: 'minor',
+                        choice: choice,
+                        course: coursee,
+                        section: sectionn
+                    },
+                    success: function (data) {
+                    }
+                }).then(function () {
+                    window.location.href = 'printable/print.php';
+                });
+
+            })
 
         });
-        </script>
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <?php include('category2-community.php'); ?>
 
 </body>

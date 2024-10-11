@@ -21,7 +21,7 @@
                             </input>
                             <input type="submit" name="community" class="nav-choice" id="service"
                                 value="COMMUNITY SERVICE">
-                                <input type="submit" name="conference" class="nav-choice" id="conference"
+                            <input type="submit" name="conference" class="nav-choice" id="conference"
                                 value="CONFERENCE">
                         </ul>
                     </div>
@@ -31,15 +31,6 @@
 
                 <div class="violation-container1">
                     <div class="multi-left">
-                        <div class="input-wrap">
-                            <label for="name">Student Name:</label>
-                            <input name="name" id="nameField1" value="" disabled></input>
-                        </div>
-
-                        <div class="input-wrap">
-                            <label for="email">Student Email:</label>
-                            <input name="email" id="emailField" value="" disabled></input>
-                        </div>
 
                         <div class="input-wrap" id="date-due">
                             <label for="date" style="min-width: 240px;" id="datelabel">Due date of compliance:</label>
@@ -62,7 +53,8 @@
                         </div>
                         <div class="input-wrap">
                             <label for="date" class="conf-items" style="display: none">Date of Conference:</label>
-                            <input type="date" name="date" id="date_conference" class="conf-items" style="display: none"></input>
+                            <input type="date" name="date" id="date_conference" class="conf-items"
+                                style="display: none"></input>
                         </div>
                         <div class="input-wrap">
                             <label for="con-type" class="conf-items" style="display: none">Conference Type:</label>
@@ -76,25 +68,26 @@
                         <div class="input-wrap">
                             <label for="name" class="conf-items" style="display: none">Attendees:</label>
                             <input name="name" id="attendees" class="conf-items" style="display: none"></input>
-                            <buttton class="btn btn-success btn-sm conf-items" id="add-con" style="margin-left: 2%;display: none">Add</buttton>
+                            <buttton class="btn btn-success btn-sm conf-items" id="add-con"
+                                style="margin-left: 2%;display: none">Add</buttton>
                         </div>
-                      
+
                     </div>
                     <div class="multi-left">
-                    <div class="container mt-5">
+                        <div class="container mt-5">
 
-            <div class="col-md-6 conf-table" style="overflow: auto; height:300px; display: none;">
-            <table class="table">
-        <tr>
-            <th>Attendee Name</th>
-            <th>Action</th>
-        </tr>
-       <tbody id="teacher-list">
+                            <div class="col-md-6 conf-table" style="overflow: auto; height:300px; display: none;">
+                                <table class="table">
+                                    <tr>
+                                        <th>Attendee Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <tbody id="teacher-list">
 
-       </tbody>
-    </table>
-            </div>
-    </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="explanation">
@@ -142,23 +135,25 @@
                 choice = 'counseling';
                 $('.department-function').css('display', 'none');
                 $('#department').val('');
-                $('dateField').val('');
+                $('#dateField').val('');
                 $('#notice').val('');
                 $('#datelabel').css('display', 'block');
                 $('#dateField').css('display', 'block');
                 $('.conf-table').css('display', 'none');
                 $('#date_conference').val('');
                 $('.conf-items').css('display', 'none');
-            } else if($(this).attr('name') == 'community'){
+                email_list = [];
+            } else if ($(this).attr('name') == 'community') {
                 choice = 'community';
                 $('.department-function').css('display', 'block');
-                $('dateField').val('');
+                $('#dateField').val('');
                 $('#notice').val('');
                 $('#datelabel').css('display', 'block');
                 $('#dateField').css('display', 'block');
                 $('.conf-table').css('display', 'none');
-                $('#conf-items').css('display', 'none');
-            } else if($(this).attr('name') == 'conference'){
+                $('.conf-items').css('display', 'none');
+                email_list = [];
+            } else if ($(this).attr('name') == 'conference') {
                 choice = 'conference';
                 $('.department-function').css('display', 'none');
                 $('#dateField').css('display', 'none');
@@ -167,11 +162,16 @@
                 $('#notice').val('');
                 $('.conf-table').css('display', 'block');
                 $('.conf-items').css('display', 'block');
+                email_list = [];
             }
         });
-        $('#date_conference').change(function(){
-            $('#notice').val(`
-            <p>Dear ${$('#nameField').val()},</p>
+        $('#date_conference').change(function () {
+            email_list = [];
+            students.forEach(student => {
+                let email_entry = {
+                    email : student['email'],
+                    student_name : student['student_name'],
+                    message: `<p>Dear ${student['student_email']},</p>
 
 <h3>Notice of Conference</h3>
 
@@ -196,8 +196,11 @@
 <br>
 
 <p>Sincerely,</p>
-<p>[Name of School Official]<br>Disciplinary Counselor</p>`
-            );
+<p>[Name of School Official]<br>Disciplinary Counselor</p>`,
+                };
+                email_list.push(email_entry);
+            })
+            console.log(email_list);
         })
         $('#dateField').change(function () {
             let today = new Date();
@@ -206,7 +209,12 @@
             let futureDate = new Date($('#dateField').val());
             let formattedFutureDate = futureDate.toLocaleDateString('en-US', options);
             if (choice == 'counseling') {
-                $('#notice').val(`<p>Dear${$('#nameField').val()},</p>
+                email_list = [];
+                students.forEach(student => {
+                    let email_entry = {
+                        email : student['email'],
+                        student_name : student['student_name'],
+                        message : `<p>Dear ${student['student_name']},</p>
     <p>Notice of Violation</p>
     <p>This serves as a formal notice regarding a violation of the school's rules and regulations that you have committed.</p>
     <p>Details of Violation:</p>
@@ -223,11 +231,21 @@
     <br>
     <p>Sincerely,</p>
     <p>[Name of School Official]<br>Disciplinary Counselor</p>
-                    `);
+                    `,
+                    };
+                    email_list.push(email_entry);
+                }
+
+                );
+                console.log(email_list);
             }
-            else if(choice == 'community'){
-                $('#notice').val(`
-<p>Dear ${$('#nameField').val()},</p>
+            else if (choice == 'community') {
+                email_list = [];
+                students.forEach(student => {
+                    let email_entry = {
+                        email: student['email'],
+                        student_name : student['student_name'],
+                        message: `<p>Dear ${student['student_name']},</p>
     <h3>Notice of Violation</h3>
     <p>This serves as a formal notice regarding a violation of the school's rules and regulations that you have committed.</p>
     <p>Details of Violation:</p>
@@ -241,9 +259,14 @@
     <p>If you have any questions or require further clarification, do not hesitate to reach out to the Student Affairs Office.</p>
     <br>
     <p>Sincerely,</p>
-    <p>[Name of School Official]<br>Disciplinary Counselor</p>`);
+    <p>[Name of School Official]<br>Disciplinary Counselor</p>`,
+                    };
+                    email_list.push(email_entry);
+                })
+                console.log(email_list);
+
             }
-            
+
         })
         $('#department').on('change', function () {
             $('#dateField').trigger('change');
@@ -254,25 +277,26 @@
                 $('#add_error').text('Please select a date');
                 return;
             }
-            if($('#date_conference').val() == '' && choice == 'conference'){
+            if ($('#date_conference').val() == '' && choice == 'conference') {
                 $('#add_error').text('Please select a date');
                 return;
             }
-            if($('#con-type').val() == '' && choice == 'conference'){
+            if ($('#con-type').val() == '' && choice == 'conference') {
                 $('#add_error').text('Please select a conference type');
                 return;
             }
-            if($('#teacher-list').children().length == 0 && choice == 'conference'){
+            if ($('#teacher-list').children().length == 0 && choice == 'conference') {
                 $('#add_error').text('Please add attendees');
                 return;
-            }  
+            }
             if (choice == 'counseling') {
                 $('#add_error').text('');
+                <?php $_SESSION['violations'] = []; ?>
                 $.ajax({
                     url: 'php/add_violation.php',
                     type: 'POST',
                     data: {
-                        student_id: $('#studentIDField').val(),
+                        students: students,
                         due_date: $('#dateField').val(),
                         violation_type: $('#violation_type').val(),
                         category: $('#category_type').val(),
@@ -281,19 +305,14 @@
                         choice: choice,
                     },
                     success: function (data) {
-
+                        console.log(data);
                         if (data == 'success') {
                             $.ajax({
                                 url: 'email/mail.php',
                                 type: 'POST',
                                 data: {
-                                    student_id: $('#studentIDField').val(),
-                                    name: $('#nameField').val(),
-                                    course: coursee,
-                                    section: sectionn,
                                     subject: 'Notice of Violation',
-                                    message: $('#notice').val(),
-                                    email: email
+                                    email: email_list,
                                 },success: function(data){
                                 }
                             })
@@ -301,15 +320,18 @@
                             $('conf-items').css('display', 'none');
                             $('conf-table').css('display', 'none');
                             $('#major_success').modal('show');
+                            $('#student_selected').empty();
+                            students = [];
                         }
                     }
                 })
-            } else if(choice == 'community') {
+            } else if (choice == 'community') {
                 if ($('#department').val() == '') {
                     $('#add_error').text('Please select a department');
                     return;
                 }
                 $('#add_error').text('');
+                <?php $_SESSION['violations'] = []; ?>
                 $.ajax({
                     url: 'php/add_violation.php',
                     type: 'POST',
@@ -325,44 +347,41 @@
                     },
                     success: function (data) {
                         if (data == 'success') {
-                           if(email == ''){
-                           }
-                            else{
+
                                 $.ajax({
-                                url: 'email/mail.php',
-                                type: 'POST',
-                                data: {
-                                    student_id: $('#studentIDField').val(),
-                                    name: $('#nameField').val(),
-                                    course: coursee,
-                                    section: sectionn,
-                                    subject: 'Notice of Violation',
-                                    message: $('#notice').val(),
-                                    email: email
-                                },success: function(data){
+                                    url: 'email/mail.php',
+                                    type: 'POST',
+                                    data: {
+                                        subject: 'Notice of Violation',
+                                        email: email_list,
+                                    }, success: function (data) {
 
-                                }
-                            })
-                        }
+                                    }
+                                })
                             $('#major_success').modal('show');
-
+                            $('#teacher-list').empty();
+                            $('conf-items').css('display', 'none');
+                            $('conf-table').css('display', 'none');
+                            $('#major_success').modal('show');
+                            $('#student_selected').empty();
+                            students = [];
                         }
 
                     }
                 })
-                
-            }else if (choice == 'conference') {
+
+            } else if (choice == 'conference') {
                 $('#add_error').text('');
                 var attendees = [];
-                $('#teacher-list').children().each(function(){
+                $('#teacher-list').children().each(function () {
                     attendees.push($(this).children().first().text());
                 })
-
+                <?php $_SESSION['violations'] = []; ?>
                 $.ajax({
                     url: 'php/add_violation.php',
                     type: 'POST',
                     data: {
-                        student_id: $('#studentIDField').val(),
+                        students: students,
                         date_of_conference: $('#date_conference').val(),
                         violation_type: $('#violation_type').val(),
                         category: $('#category_type').val(),
@@ -373,29 +392,25 @@
                         attendees: attendees
                     },
                     success: function (data) {
-
                         if (data == 'success') {
-                            if(email == ''){
-                            
-                            }else{
-                                $.ajax({
+                            $.ajax({
                                 url: 'email/mail.php',
                                 type: 'POST',
                                 data: {
-                                    student_id: $('#studentIDField').val(),
-                                    name: $('#nameField').val(),
-                                    course: coursee,
-                                    section: sectionn,
                                     subject: 'Notice of Violation',
-                                    message: $('#notice').val(),
-                                    email: email
-                                },success: function(data){
+                                    email: email_list,
+                                }, success: function (data) {
+                                    console.log(data);
                                 }
                             })
-                            }
-                           
-                            $('#major_success').modal('show');
 
+                            $('#major_success').modal('show');
+                            $('#teacher-list').empty();
+                            $('conf-items').css('display', 'none');
+                            $('conf-table').css('display', 'none');
+                            $('#major_success').modal('show');
+                            $('#student_selected').empty();
+                            students = [];
                         }
 
                     }
@@ -429,27 +444,43 @@
                 url: 'printable/set_print.php',
                 type: 'POST',
                 data: {
-                    student_id: $('#studentIDField').val(),
                     category: $('#category_type').val(),
-                    name: $('#nameField').val(),    
                     type: 'major',
                     choice: choice,
-                    course :coursee,
-                    section: sectionn
                 },
+                dataType: 'json',
                 success: function (data) {
+                    console.log(data);
+
+                    if (Array.isArray(data)) {
+                        let delay = 0;
+
+                        data.forEach(function (entry) {
+                            const queryString = encodeURIComponent(JSON.stringify(entry));
+
+                            setTimeout(function () {
+                                window.open('./printable/print.php?data=' + queryString, '_blank');
+                            }, delay);
+
+                            delay += 200;
+                        });
+                    } else {
+                        console.error('Expected an array but got:', data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request failed:', status, error);
                 }
-            })
-            window.location.href = './printable/print.php';
-        })
+            });
+        });
         $('#add-con').on('click', function () {
-            if($('#attendees').val() == ''){
+            if ($('#attendees').val() == '') {
                 return;
             }
-            if($('#att-type').val() == ''){
+            if ($('#att-type').val() == '') {
                 return;
             }
-             else {
+            else {
                 $('#teacher-list').append(`
                 <tr>
             <td>
