@@ -642,7 +642,10 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                             $('#body-lost').append('<tr class="lost-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" data-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.location_found+'</td><td>'+item.description+'</td></tr>')
 
                         })
+                        }
+                    }
                     })
+                }, 1000);
 
                     $('#claim').click(function () {
                         let id = $(this).attr('data-id');

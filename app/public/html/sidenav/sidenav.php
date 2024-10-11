@@ -46,18 +46,13 @@ $admin_role = $_SESSION['role'];
             echo 'class="active"';
         } ?>>Issue
             Documentation</a>
-            <a <?php if ($currentpage != 'compliance') {
-                    echo 'href="compliance.php"';
-                } else {
-                    echo 'class="active"';
-                } ?>>Issue Documentation</a>
-            <a <?php if ($currentpage != 'compliance') {
-                    echo 'href="compliance.php"';
-                } else {
-                    echo 'class="active"';
-                } ?>>Student Compliance</a>
+        <a <?php if ($currentpage != 'compliance') {
+            echo 'href="compliance.php"';
+        } else {
+            echo 'class="active"';
+        } ?>>Student Compliance</a>
 
-        <?php endif; ?>
+    <?php endif; ?>
 
     <!-- Only show "Manage Admin Account" if the role is SuperUser -->
     <?php if ($admin_role == 'ITSO'): ?>
