@@ -70,13 +70,14 @@ $_SESSION['currentpage'] = "violation";
         <div class="body-content">
 
             <div class="title-page">
-                <h1>Violation Report</h1>
+                <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
+                        style="color: #1b4284;"></i>Violation Report</h1>
                 <hr>
             </div>
-
+            <!-- 
             <?php
-            echo '<button class="back-button-viocon" onclick="history.back()">> Back</button>';
-            ?>
+            // echo '<button class="back-button-viocon" onclick="history.back()">> Back</button>';
+            ?> -->
 
             <!-- <div class="filter-group">
                 <div class="search">
