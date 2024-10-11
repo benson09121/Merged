@@ -63,7 +63,7 @@ if (mysqli_num_rows($result) >= 1) {
 
 } else {
     header("HTTP/1.0 200 ok");
-    echo json_encode(['status' => 'Fail', 'message' => 'The following Student ID is not valid']);
+    echo json_encode(['status' => 'Fail', 'message' => 'The following Student ID is not in the system']);
 }
 
 
