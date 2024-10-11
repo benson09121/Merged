@@ -22,6 +22,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
         <link rel="stylesheet" href="../css/home.css">
         <link rel="stylesheet" href="sidenav/sidenav.css">
         <link rel="stylesheet" href="../css/general.css">
+
         <link rel="stylesheet" href="../css/studentCompliance.css">
 
         <link href="https://cdn.datatables.net/v/dt/dt-2.1.8/datatables.min.css" rel="stylesheet">
@@ -70,6 +71,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
             <div class="body-content">
 
                 <div class="title-page">
+                  
                     <!-- <button onclick="history.go(-1);"><i class="fa-solid fa-left-long"></i></button> -->
 
                     <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
@@ -356,8 +358,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-
-
 
     </html>
     <?php

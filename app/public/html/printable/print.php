@@ -1,18 +1,19 @@
 <?php
 session_start();
 
+$data = isset($_GET['data']) ? json_decode(urldecode($_GET['data']), true) : [];
 
-$student_id = $_SESSION['student_id'];
+
+$student_id = $data['student_id'];
+$name = $data['name'];
+$section = $data['section'];
+$course = $data['course'];
+$violation_slip_number = $data['violation_slip'];
+
 $violation = $_SESSION['violation'];
 $category = $_SESSION['category'];
 $type = $_SESSION['type'];
-$offense_type = $_SESSION['offense_type'];
-$name = $_SESSION['name'];
-$violation_slip = $_SESSION['violation_slip'];
-$section = $_SESSION['section'];
-$course = $_SESSION['course'];
 
-$violation_slip_number = $_SESSION['violation_slip'];
 $formatted_violation_slip_number = str_pad($violation_slip_number, 4, '0', STR_PAD_LEFT);
 
 ?>

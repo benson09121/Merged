@@ -230,7 +230,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                             <div class="modal-details">
                                 <div class="details-header">
                                     <h3>Information</h3>
-                                </div>
+
                                 <div class="details-body">
                                     <div class="input-wrap">
                                         <label>Owner Name</label>
@@ -240,10 +240,11 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                         <label>Founder Name:</label>
                                         <p id="founder_name"></p>
                                     </div>
-                                    <div class="input-wrap">
-                                        <label>Location:</label>
-                                        <p id="location_found"></p>
+                                <div class="input-wrap">
+                                    <label>Location:</label>
+                                    <p id="location_founds"></p>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -434,114 +435,212 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 </div>
             </div>
 
-            <script>
-                var from = '';
-                var to = '';
+        <script>
+            var from = '';
+            var to = '';
 
-                $(document).ready(function () {
-                    $('.nav-class').click(function () {
-                        $('.nav-class').css('border-bottom', 'none');
-                        $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
-                        let nav_name = $(this).attr('data-name');
-                        $('.body-table').each(function () {
-                            if ($(this).attr('data-name') === nav_name) {
-                                $(this).css('display', 'block');
-                                if (nav_name === 'summary') {
-                                    $('.generate-btn').css('display', 'block');
-                                }
-                                else {
-                                    $('.generate-btn').css('display', 'none');
-                                }
-                                if (nav_name === 'lost' || nav_name === 'claim') {
-                                    $('.add-btn').css('display', 'block');
-                                }
-                                else {
-                                    $('.add-btn').css('display', 'none');
-                                }
-                            }
-                            else {
-                                $(this).css('display', 'none');
-                            }
-                        })
-                    })
-                    $('#body-summary').on('click', '.image-click', function () {
-                        let src = $(this).attr('src');
-                        $('#overlayImage').attr('src', src);
-                        $('#overlay').css('display', 'block');
-                    })
-                    $('#overlay').click(function () {
-                        $(this).css('display', 'none');
-                    })
-                    $('#body-lost').on('click', '.lost-items', function () {
-                        let id = $(this).attr('data-id');
-                        let name = $(this).attr('data-name');
-                        let date_found = $(this).attr('data-date-found');
-                        let location_found = $(this).attr('date-location-found');
-                        let description = $(this).attr('data-description');
-                        let founder = $(this).attr('data-founder');
-                        if (founder === '') {
-                            founder = 'Anonymous';
+         $(document).ready(function(){
+            $('.nav-class').click(function(){
+               $('.nav-class').css('border-bottom', 'none');
+               $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
+                let nav_name = $(this).attr('data-name');
+               $('.body-table').each(function(){
+                     if($(this).attr('data-name') === nav_name){
+                          $(this).css('display', 'block');
+                          if(nav_name === 'summary'){
+                              $('.generate-btn').css('display', 'block');
+                          }
+                          else{
+                              $('.generate-btn').css('display', 'none');
+                          }
+                          if(nav_name === 'lost' || nav_name === 'claim'){
+                              $('.add-btn').css('display', 'block');
+                          }
+                          else{
+                              $('.add-btn').css('display', 'none');
+                          }
+                     }
+                     else{
+                          $(this).css('display', 'none');
+                     }
+               })
+            })
+            $('#body-summary').on('click', '.image-click', function(){
+                let src = $(this).attr('src');
+                $('#overlayImage').attr('src', src);
+                $('#overlay').css('display', 'block');
+            })
+            $('#overlay').click(function(){
+                $(this).css('display', 'none');
+            })
+            $('#body-lost').on('click', '.lost-items', function(){
+                let id = $(this).attr('data-id');
+                let name = $(this).attr('data-name');
+                let date_found = $(this).attr('data-date-found');
+                let location_found = $(this).attr('data-location-found');
+                let description = $(this).attr('data-description');
+                let founder = $(this).attr('data-founder');
+                if(founder === ''){
+                    founder = 'Anonymous';
+                }
+                let image = $(this).attr('data-img');
+                $('#lostModal').find('#claim').attr('data-id', id);
+                $('#lostModal').find('#item_type').text(name);
+                $('#lostModal').find('#date_surrender').text(date_found);
+                $('#lostModal').find('#location_found').text(location_found);
+                $('#lostModal').find('#description').text(description);
+                $('#lostModal').find('#founder').text(founder);
+                $('#lostModal').css('display', 'block');
+                $('#item_img').attr('src', './php/new_items/'+image);
+            })
+
+            $('#body-claim').on('click', '.claim-items', function(){
+                owner = $(this).data('name');
+                founder = $(this).data('founder');
+                if (founder === ''){
+                    founder = 'Anonymous';
+                }
+                date_found = $(this).data('date-found');
+                location_found = $(this).data('location-found');
+                description = $(this).data('description');
+                image = $(this).data('img');
+                console.log(location_found);
+                $('#itemModal').find('#owner_name').text(owner);
+                $('#itemModal').find('#founder_name').text(founder);
+                $('#itemModal').find('#location_founds').text(location_found);
+                $('#itemModal').find('#item_type').text(owner);
+                $('#itemModal').find('#date_lost').text(date_found);
+                $('#itemModal').find('#item_description').text(description);
+                $('#claimed_img').attr('src', './php/new_items/'+image);
+                $('#itemModal').css('display', 'block');
+            })
+
+            $('#close-claim').click(function(){
+                $('#claimModal').css('display', 'none');
+            })
+            
+            $('.close-lost').click(function(){
+                $('#lostModal').css('display', 'none');
+            })  
+
+            $('#claim-submit').click(function (){
+                let name = $('#name_submit').val();
+                if(name === ''){
+                    return;
+                }
+                let id = $((this)).attr('data-id');
+                $.ajax({
+                    url: 'php/claim_item.php',
+                    type: 'POST',
+                    data: {
+                        claimed_by: name,
+                        item_no: id,
+                        released_by: <?php echo $_SESSION['employee_id'] ?>
+                    },
+                    success: function(response){
+                        if(response === 'success'){
+                            $('#name_submit').val('');
+                            $('#claimModal').css('display', 'none');
+                            $('#lostModal').css('display', 'none');
                         }
-                        let image = $(this).attr('data-img');
-                        $('#lostModal').find('#claim').attr('data-id', id);
-                        $('#lostModal').find('#item_type').text(name);
-                        $('#lostModal').find('#date_surrender').text(date_found);
-                        $('#lostModal').find('#location_found').text(location_found);
-                        $('#lostModal').find('#description').text(description);
-                        $('#lostModal').find('#founder').text(founder);
-                        $('#lostModal').css('display', 'block');
-                        $('#item_img').attr('src', './php/new_items/' + image);
-                    })
+                    }
+                })
+            })
 
-                    $('#body-claim').on('click', '.claim-items', function () {
-                        owner = $(this).data('name');
-                        founder = $(this).data('founder');
-                        if (founder === '') {
-                            founder = 'Anonymous';
+            $('#claim').click(function(){
+                let id = $(this).attr('data-id');
+                $('#claimModal').find('#claim-submit').attr('data-id', id);
+                $('#claimModal').css('display', 'block');
+            })
+
+            $('.add-btn').click(function(){
+                $('#addModal').css('display', 'block');
+            })
+
+            $('#file-input').on('change', function(){
+                let file = $(this)[0].files[0];
+                let reader = new FileReader();
+                reader.onload = function(e){
+                    $('#images').html(`<img src="${e.target.result}" alt="">`)
+                }
+                reader.readAsDataURL(file);
+            })
+            $('#add-submit').click(function(){
+                let student_id = $('input[name="student-id"]').val();
+                let item_type = $('input[name="item-type"]').val();
+                let item_found = $('input[name="item-found"]').val();
+                let date_found = $('input[name="date-found"]').val();
+                let description = $('textarea[name="description"]').val();
+                let imageFile = $('#file-input')[0].files[0];
+                //Change the date found into mysql date format
+                let date = new Date(date_found);
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                date_found = `${year}-${month}-${day}`;
+                if( item_type === '' || item_found === '' || description === '' || imageFile === undefined){
+                    $('#all-error').css('display', 'block');
+                }
+                else{
+                    let formData = new FormData();
+                    formData.append('image', imageFile);
+                    formData.append('founder_name', student_id);
+                    formData.append('item_type', item_type);
+                    formData.append('date_found', date_found);
+                    formData.append('item_found', item_found);
+                    formData.append('description', description);
+                $.ajax({
+                    url: 'php/add_item_lost.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        if(response === 'success'){
+                            $('#addModal').css('display', 'none');
+                            $('input[name="student-id"]').val('');
+                            $('input[name="item-type"]').val('');
+                            $('input[name="item-found"]').val('');
+                            $('textarea[name="description"]').val('');
+                            $('#images').html('');
+                            $('#all-error').css('display', 'none'); 
                         }
-                        date_found = $(this).data('date-found');
-                        location_found = $(this).data('location-found');
-                        description = $(this).data('description');
-                        image = $(this).data('img');
-                        $('#itemModal').find('#owner_name').text(owner);
-                        $('#itemModal').find('#founder_name').text(founder);
-                        $('#itemModal').find('#location_found').text(location_found);
-                        $('#itemModal').find('#item_type').text(owner);
-                        $('#itemModal').find('#date_lost').text(date_found);
-                        $('#itemModal').find('#item_description').text(description);
-                        $('#claimed_img').attr('src', './php/new_items/' + image);
-                        $('#itemModal').css('display', 'block');
-                    })
+                    }
+                })
+                }
+            });
 
-                    $('#close-claim').click(function () {
-                        $('#claimModal').css('display', 'none');
-                    })
+            $('.close-add').click(function(){
+                $('#addModal').css('display', 'none');
+            })
 
-                    $('.close-lost').click(function () {
-                        $('#lostModal').css('display', 'none');
-                    })
+            setInterval(function(){
+                $.ajax({
+                    url: 'php/get_claimed.php',
+                    type: 'POST',
+                    data: {
+                        from: from,
+                        to: to
+                    },
+                    success: function(response){
+                     data = JSON.parse(response);
+                     lost = data.lost_items;
+                     claimed = data.claimed_items;
+                     summary = data.summary;
+                     number_lost = data.number_lost_items;
+                     number_claimed = data.number_claimed_items;
+                     number_all = data.number_all_items;
+                        $('#body-claim').html('');
+                        $('#body-lost').html('');
+                        $('#body-summary').html('');
 
-                    $('#claim-submit').click(function () {
-                        let name = $('#name_submit').val();
-                        if (name === '') {
-                            return;
+                        if(lost === 'No data'){
+                            $('#body-lost').append('<tr><td colspan="4">No data</td></tr>');
                         }
-                        let id = $((this)).attr('data-id');
-                        $.ajax({
-                            url: 'php/claim_item.php',
-                            type: 'POST',
-                            data: {
-                                claimed_by: name,
-                                item_no: id,
-                                released_by: <?php echo $_SESSION['employee_id'] ?>
-                            },
-                            success: function (response) {
-                                if (response === 'success') {
-                                    $('#name_submit').val('');
-                                    $('#claimModal').css('display', 'none');
-                                    $('#lostModal').css('display', 'none');
-                                }
-                            }
+                        else{
+                            lost.forEach(function(item){
+                            $('#body-lost').append('<tr class="lost-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" data-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.location_found+'</td><td>'+item.description+'</td></tr>')
+
                         })
                     })
 
@@ -579,33 +678,16 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         if (item_type === '' || item_found === '' || description === '' || imageFile === undefined) {
                             $('#all-error').css('display', 'block');
                         }
-                        else {
-                            let formData = new FormData();
-                            formData.append('image', imageFile);
-                            formData.append('founder_name', student_id);
-                            formData.append('item_type', item_type);
-                            formData.append('date_found', date_found);
-                            formData.append('item_found', item_found);
-                            formData.append('description', description);
-                            $.ajax({
-                                url: 'php/add_item_lost.php',
-                                type: 'POST',
-                                data: formData,
-                                contentType: false,
-                                processData: false,
-                                success: function (response) {
-                                    console.log(response);
-                                    if (response === 'success') {
-                                        $('#addModal').css('display', 'none');
-                                        $('input[name="student-id"]').val('');
-                                        $('input[name="item-type"]').val('');
-                                        $('input[name="item-found"]').val('');
-                                        $('textarea[name="description"]').val('');
-                                        $('#images').html('');
-                                        $('#all-error').css('display', 'none');
-                                    }
-                                }
-                            })
+
+                        else{
+                            claimed.forEach(function(item){
+                            $('#body-claim').append('<tr class="claim-items" style="cursor: pointer;" data-id="'+item.item_no+'" data-name="'+item.name+'" data-date-found="'+item.date_found+'" data-location-found="'+item.location_found+'" data-description="'+item.description+'" data-founder="'+item.founder+'" data-img="'+item.image+'"><td>'+item.name+'</td><td>'+item.date_found+'</td><td>'+item.date_claimed+'</td><td>'+item.claimed_by+'</td></tr>')
+                            
+                        })
+                        }
+                        if(summary === 'No data'){
+                            $('#body-summary').append('<tr><td colspan="6">No data</td></tr>');
+ 
                         }
                     });
 
@@ -626,7 +708,8 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 data = JSON.parse(response);
                                 lost = data.lost_items;
                                 claimed = data.claimed_items;
-                                summary = data.summary;
+                                
+                              = data.summary;
                                 number_lost = data.number_lost_items;
                                 number_claimed = data.number_claimed_items;
                                 number_all = data.number_all_items;
