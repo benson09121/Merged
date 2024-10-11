@@ -17,6 +17,14 @@ foreach ($students as $student) {
     $student_id = $student['student_id'];
     $stmt->bind_param('si', $student_id, $violation_type);
     $stmt->execute();
+    $last_id = $conn->insert_id;
+    $_SESSION['violations'][] = [
+        'violation_slip' => $last_id,
+        'student_id' => $student_id,
+        'name' => $student['student_name'],
+        'course' => $student['course'],
+        'section' => $student['section']
+    ];
 }
 
 

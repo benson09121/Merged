@@ -14,7 +14,7 @@
                 <div class="table-nav">
                     <div class="nav-list">
                         <h4 id="title_category">CATEGORY 2</h4>
-                        <h3 style="margin-top: 1rem;">INTERVENTION</h3>
+                        <h3 style="argin-top: 1rem;">INTERVENTION</h3>
                         <ul style="margin-top: .5rem;">
                             <input type="submit" name="counseling" class="nav-choice" value="COUNSELING" id="counseling"
                                 style="border-bottom: solid 3px rgb(98, 130, 172)">

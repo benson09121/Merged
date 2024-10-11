@@ -514,24 +514,36 @@ students = students.filter(student => student.student_id !== student_id);
 
             $('#print_violation_minor').on('click', function () {
                 $.ajax({
-                    url: 'printable/set_print.php',
-                    type: 'POST',
-                    data: {
-                        student_id: student_id,
-                        category: $('#category_type').val(),
-                        name: name,
-                        type: 'minor',
-                        choice: choice,
-                        course: coursee,
-                        section: sectionn
-                    },
-                    success: function (data) {
-                    }
-                }).then(function () {
-                    window.location.href = 'printable/print.php';
-                });
+                url: 'printable/set_print.php',
+                type: 'POST',
+                data: {
+                    category: $('#category_type').val(),
+                    type: 'minor',
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
 
-            })
+                    if (Array.isArray(data)) {
+                        let delay = 0;
+
+                        data.forEach(function (entry) {
+                            const queryString = encodeURIComponent(JSON.stringify(entry));
+
+                            setTimeout(function () {
+                                window.open('./printable/print.php?data=' + queryString, '_blank');
+                            }, delay);
+
+                            delay += 200;
+                        });
+                    } else {
+                        console.error('Expected an array but got:', data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request failed:', status, error);
+                }
+            });
 
         });
     </script>
