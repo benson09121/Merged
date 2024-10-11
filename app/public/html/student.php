@@ -85,6 +85,7 @@ unset($_SESSION['error_message']);
 
                     <div class="student-content">
 
+
                         <div class="student-left info-left">
                             <div class="student-info info">
                                 <div class="left">
@@ -97,6 +98,7 @@ unset($_SESSION['error_message']);
                             </div>
                             <div class="guide">
                                 <div style="overflow: auto; width: 520px; height: 140px">
+
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
@@ -115,8 +117,10 @@ unset($_SESSION['error_message']);
 
                             <div class="guide2">
 
+
                                 <div style="overflow: auto; width: 520px; height: 190px">
                                     <table class="table">
+
 
                                         <thead>
                                             <td>Student_ID</td>
@@ -124,6 +128,7 @@ unset($_SESSION['error_message']);
                                             <td>Course</td>
                                             <td>Action</td>
                                         </thead>
+
                                         <tbody id="student_selected">
 
                                         </tbody>
@@ -178,6 +183,7 @@ unset($_SESSION['error_message']);
                                 </select>
 
                             </div>
+
                         </div>
 
                     </div>
@@ -288,8 +294,10 @@ unset($_SESSION['error_message']);
         var minor_data = [];
         var major_data = [];
         var name = '';
+
         var students = [];
         var email_list = [];
+
         $(document).ready(function () {
             $('#studentID').on('input', function () {
                 search = $(this).val();
@@ -307,14 +315,17 @@ unset($_SESSION['error_message']);
                         student.forEach(element => {
                             $('#student_body').append(`
                         <tr style="cursor: pointer" class="row_student">
+
                             <td class="s_id" data-email="${element.email}" data-section="${element.section}">${element.student_id}</td>
                             <td class="s_name">${element.f_name} ${element.l_name}</td>
                             <td class="s_course">${element.course}</td>`);
+
                         });
                     }
                 })
             }, 500);
             $('#student_body').on('click', '.row_student', function () {
+
                 let student_id = $(this).find('.s_id').text();
                 let student_name = $(this).find('.s_name').text();
                 let course = $(this).find('.s_course').text();
@@ -356,11 +367,14 @@ unset($_SESSION['error_message']);
 students = students.filter(student => student.student_id !== student_id);
                 console.log(students);
             })
+          
             $('.modal').on('shown.bs.modal', function () {
                 //Make sure the modal and backdrop are siblings (changes the DOM)
                 $(this).before($('.modal-backdrop'));
                 //Make sure the z-index is higher than the backdrop
                 $(this).css("z-index", parseInt($('.modal-backdrop').css('z-index')) + 1);
+
+
             });
             $('#viewProfileBtn').on('click', function () {
                 $('#studentProfileModal').css('display', 'block');
@@ -408,10 +422,13 @@ students = students.filter(student => student.student_id !== student_id);
                 }
             })
             $('#next_btn').on('click', function () {
+
                 if ($('#category_type').val() == '' && $('#offense_type').val() == 'Major') {
+
                     $('#error').css('display', 'block');
                     console.log($('#offense_type').val());
                     return;
+
                 } else {
 
                     if ($('#offense_type').val() == 'Major') {
@@ -474,7 +491,8 @@ students = students.filter(student => student.student_id !== student_id);
                                 students: JSON.stringify(students),
                             },
                             success: function (response) {
-                                console.log(response);
+
+
                                 if (response == 'success') {
                                     $('#error').css('display', 'none');
                                     $('#offense_type').val('');

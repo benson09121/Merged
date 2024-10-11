@@ -59,7 +59,8 @@ $_SESSION['currentpage'] = "issued";
 
         <div class="body-content">
             <div class="title-page">
-                <h1>Issued Documents</h1>
+                <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
+                        style="color: #1b4284;"></i>Issued Documents</h1>
                 <hr>
             </div>
             </select>

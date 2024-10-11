@@ -1,0 +1,14 @@
+/* nav button {
+  color: aquamarine;
+  border: 1px slid red;
+} */
+
+.navigation .nav-link {
+  /* border: 1px solid red; */
+  color: grey;
+}
+.navigation .nav-link.active {
+  /* border: 1px solid red; */
+  color: #1b4284;
+  font-weight: 700;
+}

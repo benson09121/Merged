@@ -325,8 +325,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     url: "php/add-announcement.php",
                     data: formData,
                     processData: false, // Prevent jQuery from converting the FormData object into a string
-                    contentType: false, // Prevent jQuery from setting Content-Type
-                    
+                    contentType: false, // Prevent jQuery from setting Content-Typ
                     success: function (response) {
                         console.log(response);
                         if (response === 'success') {
