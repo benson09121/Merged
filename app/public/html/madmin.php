@@ -179,7 +179,7 @@ $username = $_SESSION['username'];
                     <tr>
                         <td>${admin.employee_id}</td>
                         <td>${admin.username}</td>
-                        <td>${admin.password}</td>
+                        <td>*********</td>
                         <td>
                             <button type="button" class="btn btn-status active btn-success btn-edit" style="margin-top: -3%">Edit</button>
                             <button type="button" class="btn btn-status active btn-danger btn-delete" style="margin-top: -3%">Delete</button>
@@ -198,7 +198,6 @@ $username = $_SESSION['username'];
             let id = row.find('td:eq(0)').text();
             $('#editModal').find('.btn-success').attr('data-id', id);
             $('#username_edit').val(username);
-            $('#password_edit').val(password);
             $('#editModal').modal('show');
         })
         $('#admin_body').on('click', '.btn-delete', function () {
