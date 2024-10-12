@@ -21,8 +21,8 @@ try {
     $mail->isSMTP();                                // Send using SMTP
     $mail->Host       = 'outlook.office365.com';   // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                     // Enable SMTP authentication
-    $mail->Username   = 'nud-doms@outlook.com'; // SMTP username
-    $mail->Password   = 'Doms-nud2024';           // SMTP password
+    $mail->Username   = 'doms_nud@outlook.com'; // SMTP username
+    $mail->Password   = '$$$$AABCfhe8^(#Q@(#NPDOBG#%OD9';           // SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable implicit TLS encryption
     $mail->Port       = 587;                  // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
