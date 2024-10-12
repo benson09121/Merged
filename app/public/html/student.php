@@ -340,14 +340,14 @@ unset($_SESSION['error_message']);
                     }
                 });
                 let newStudent = {
-                student_id: student_id,
-                student_name: student_name,
-                course: course,
-                email: email,
-                section: section,
-            };
-            // Append the new student to the array
-                if(!studentExists) {
+                    student_id: student_id,
+                    student_name: student_name,
+                    course: course,
+                    email: email,
+                    section: section,
+                };
+                // Append the new student to the array
+                if (!studentExists) {
                     students.push(newStudent);
                     $('#student_selected').append(`
              <tr>
@@ -357,17 +357,17 @@ unset($_SESSION['error_message']);
                                         <td><button class="btn btn-danger btn-sm delete-student">Remove</button></td>
                                     </tr>`);
                 }
-            $('#offense_type').attr('disabled', false);
+                $('#offense_type').attr('disabled', false);
             })
             $('#student_selected').on('click', '.delete-student', function () {
                 $(this).closest('tr').remove();
 
-        let student_id = $(this).closest('tr').find('.t_id').text();
- 
-students = students.filter(student => student.student_id !== student_id);
+                let student_id = $(this).closest('tr').find('.t_id').text();
+
+                students = students.filter(student => student.student_id !== student_id);
                 console.log(students);
             })
-          
+
             $('.modal').on('shown.bs.modal', function () {
                 //Make sure the modal and backdrop are siblings (changes the DOM)
                 $(this).before($('.modal-backdrop'));
@@ -514,38 +514,39 @@ students = students.filter(student => student.student_id !== student_id);
 
             $('#print_violation_minor').on('click', function () {
                 $.ajax({
-                url: 'printable/set_print.php',
-                type: 'POST',
-                data: {
-                    category: $('#category_type').val(),
-                    type: 'minor',
-                },
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
+                    url: 'printable/set_print.php',
+                    type: 'POST',
+                    data: {
+                        category: $('#category_type').val(),
+                        type: 'minor',
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
 
-                    if (Array.isArray(data)) {
-                        let delay = 0;
+                        if (Array.isArray(data)) {
+                            let delay = 0;
 
-                        data.forEach(function (entry) {
-                            const queryString = encodeURIComponent(JSON.stringify(entry));
+                            data.forEach(function (entry) {
+                                const queryString = encodeURIComponent(JSON.stringify(entry));
 
-                            setTimeout(function () {
-                                window.open('./printable/print.php?data=' + queryString, '_blank');
-                            }, delay);
+                                setTimeout(function () {
+                                    window.open('./printable/print.php?data=' + queryString, '_blank');
+                                }, delay);
 
-                            delay += 200;
-                        });
-                    } else {
-                        console.error('Expected an array but got:', data);
+                                delay += 200;
+                            });
+                        } else {
+                            console.error('Expected an array but got:', data);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX request failed:', status, error);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX request failed:', status, error);
-                }
-            });
+                });
 
-        });
+            });
+        })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
