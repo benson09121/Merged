@@ -133,12 +133,12 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 <div class="department-info2">
 
                     <div class="department-charts">
-                        <div class="chart-column doughnut-chart">
+                        <div class="chart-column doughnut-chart" id="minor_donut">
                             <h3>Minor Offense</h3>
                             <canvas id="doughnut-chart1"></canvas>
                         </div>
 
-                        <div class="chart-column doughnut-chart">
+                        <div class="chart-column doughnut-chart" id="major_donut">
                             <h3>Major Offense</h3>
                             <canvas id="doughnut-chart2"></canvas>
                         </div>
@@ -187,10 +187,11 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                             <small>0/1000</small>
                                         </div>
                                         <div class="mb-3" style="margin-top: -3%">
-                                        <label for="formFile" class="form-label">Insert Photo</label>
-                                        <input class="form-control" type="file" accept="image/jpg,image/gif,image/jpeg,image/tiff,image/png" id="formFile">
+                                            <label for="formFile" class="form-label">Insert Photo</label>
+                                            <input class="form-control" type="file"
+                                                accept="image/jpg,image/gif,image/jpeg,image/tiff,image/png" id="formFile">
                                         </div>
-                                        
+
 
                                     </div>
                                     <!-- Second Column -->
@@ -231,55 +232,128 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
             });
 
             $.ajax({
-                type: "GET",
-                url: "php/getMinorStatNumber.php",
-                success: function (response) {
+                typ: "GET",
+                url: "php/getViolationChart.php",
+                success: function (res) {
+                    let minorLabel = res.minor.all.label;
+                    let minorCount = res.minor.all.count;
+                    let majorLabel = res.major.all.label;
+                    let majorCount = res.major.all.count;
+                    setDount(minorLabel, minorCount, majorLabel, majorCount);
+                }
+            });
 
-                    let donutMinorData = response[0];
-                    let donutMinorLabel = response[1];
+            //set data for chart
 
+            $('.school-button').click(function () {
+
+                var btn_id = $(this).data("id");
+
+                $.ajax({
+                    type: "GET",
+                    url: "php/getViolationChart.php",
+                    success: function (res) {
+
+                        let minorLabel = [];
+                        let minorCount = [];
+                        let majorLabel = [];
+                        let majorCount = [];
+
+                        switch (btn_id) {
+                            case 0: // all
+                                minorLabel = res.minor.all.label;
+                                minorCount = res.minor.all.count;
+                                majorLabel = res.major.all.label;
+                                majorCount = res.major.all.count;
+                                setDount(minorLabel, minorCount, majorLabel, majorCount);
+
+
+                                $("#school_count").text("New text content");
+
+
+
+                                break;
+                            case 1: //sase
+                                minorLabel = res.minor.sase.label;
+                                minorCount = res.minor.sase.count;
+                                majorLabel = res.major.sase.label;
+                                majorCount = res.major.sase.count;
+                                setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                break;
+                            case 2: // sbma
+                                minorLabel = res.minor.sbma.label;
+                                minorCount = res.minor.sbma.count;
+                                majorLabel = res.major.sbma.label;
+                                majorCount = res.major.sbma.count;
+                                setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                break;
+                            case 3: //seca
+                                minorLabel = res.minor.seca.label;
+                                minorCount = res.minor.seca.count;
+                                majorLabel = res.major.seca.label;
+                                majorCount = res.major.seca.count;
+                                setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                break;
+                        };
+                    }
+                });
+            });
+
+            //set chart
+            function setDount(minL, minC, majL, majC) {
+
+
+                let chartStatus = Chart.getChart("doughnut-chart1"); // <canvas> id
+                if (chartStatus != undefined) {
+                    chartStatus.destroy();
+                }
+                let chartStatus2 = Chart.getChart("doughnut-chart2"); // <canvas> id
+                if (chartStatus2 != undefined) {
+                    chartStatus2.destroy();
+                }
+
+                if (minC.length == 0) { // walang records for minor violation
+                    $('#minor_donut').css('display', 'none');
+                } else {
+                    $('#minor_donut').css('display', 'inline');
+                    // Doughnut Chart1 minor
                     var doughnutChartCanvas = document.getElementById('doughnut-chart1');
                     var doughnutChart = new Chart(doughnutChartCanvas, {
                         type: 'doughnut',
                         data: {
-                            labels: donutMinorLabel,
+                            labels: minL,
                             datasets: [{
                                 label: 'No. of Offenders:',
-                                data: donutMinorData,
-                                backgroundColor: ['#e86c6c', '#18c0d3', '#e8d56c'],
+                                data: minC,
+                                backgroundColor: ['#00bbf9', '#f3a712', '#e86c6c', '#a0c4ff', '#38b000', '#f15bb5', '#bde0fe', '#ffafcc', '#d48ae3', '#fee440', '#9b5de5', '#18c0d3', '#ffaf70', '#8bc34a', '#ff5722', '#607d8b'],
                                 borderWidth: 1
                             }]
                         }
                     });
-
                 }
-            });
 
-            $.ajax({
-                type: "GET",
-                url: "php/getMajorStatNumber.php",
-                success: function (response) {
-
-                    let donutMajorData = response[0];
-                    let donutMajorLabel = response[1];
-
-                    // Doughnut Chart2
+                if (majC.length == 0) { // no records major violatio
+                    $('#major_donut').css('display', 'none');
+                } else {
+                    $('#major_donut').css('display', 'inline');
+                    // Doughnut Chart2 major
                     var doughnutChartCanvas = document.getElementById('doughnut-chart2');
                     var doughnutChart = new Chart(doughnutChartCanvas, {
                         type: 'doughnut',
                         data: {
-                            labels: donutMajorLabel,
+                            labels: majL,
                             datasets: [{
                                 label: 'Doughnut Chart',
-                                data: donutMajorData,
-                                backgroundColor: ['#e86c6c', '#18c0d3', '#e8d56c'],
+                                data: majC,
+                                backgroundColor: ['#00bbf9', '#f3a712', '#e86c6c', '#a0c4ff', '#38b000', '#f15bb5', '#bde0fe', '#ffafcc', '#d48ae3', '#fee440', '#9b5de5', '#18c0d3', '#ffaf70', '#8bc34a', '#ff5722', '#607d8b'],
                                 borderWidth: 1
                             }]
                         }
                     });
-
                 }
-            });
+
+
+            }
 
 
             setInterval(function () {
@@ -294,20 +368,20 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 element.message = element.message.substring(0, 40) + '...';
                             }
                             $('#announcement-list').append(`<a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                                                                                                                                                                                                                                                  <div class="d-flex w-100 justify-content-between">
-                                                                                               <h5 class="mb-1">${element.title}</h5>
-                                                                                                                                                     <small>${element.date_sent}</small>
-                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                           <p class="mb-1">${element.message}</p>
-                                                                                                                                                                                        <small>${element.recipients}</small>
-                                                                                                                                                                                                                                                                                    </a>`);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <div class="d-flex w-100 justify-content-between">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <h5 class="mb-1">${element.title}</h5>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <small>${element.date_sent}</small>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <p class="mb-1">${element.message}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <small>${element.recipients}</small>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </a>`);
                         });
                     }
                 });
 
             }, 1000);
             $('#add_announcement').on('click', function () {
-                if($('#announcement_title').val() == '' || $('#announcement_message').val() == '' || $('#Select').val() == 'Select Department') {
+                if ($('#announcement_title').val() == '' || $('#announcement_message').val() == '' || $('#Select').val() == 'Select Department') {
                     $('#error').text('Please fill up all fields.');
                     return;
                 }
@@ -327,7 +401,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     processData: false, // Prevent jQuery from converting the FormData object into a string
                     contentType: false, // Prevent jQuery from setting Content-Typ
                     success: function (response) {
-                        console.log(response);
+                        // console.log(response);
                         if (response === 'success') {
                             title = $('#announcement_title').val('');
                             message = $('#announcement_message').val('');
@@ -377,38 +451,38 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     success: function (response) {
                         $('.department-info').empty();
                         let JsonData = JSON.parse(response);
-                        console.log(JsonData);
+                        // console.log(JsonData);
                         if (id != 0) {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                                                                                                                                                                                                                                                                                                        <div class="dept dept1">
-                                                                                                                                                                                                                                                                                                                            <div class="card">
-                                                                                                                                                                                                                                                                                                                                <div class="card-header">-</div>
-                                                                                                                                                                                                                                                                                                                                <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                    <p class="card-text">${value.description} Dept.</p>
-                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                        </div>`);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="card-header">-</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <p class="card-text">${value.description} Dept.</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`);
                             })
                         } else {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                                                                                                                                                                                                                                                                                                        <div class="dept dept1">
-                                                                                                                                                                                                                                                                                                                            <div class="card">
-                                                                                                                                                                                                                                                                                                                                <div class="card-header">-</div>
-                                                                                                                                                                                                                                                                                                                                <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                    <h5 class="card-title">${value.school_name}</h5>
-                                                                                                                                                                                                                                                                                                                                    <p class="card-text">${value.description}</p>
-                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                        </div>`)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="card-header">-</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <h5 class="card-title">${value.school_name}</h5>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <p class="card-text">${value.description}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`)
                             })
                         }
                     }
                 })
             })
 
-        
+
         });
 
 
