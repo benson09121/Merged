@@ -85,13 +85,13 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         <div class="modal-date-details">
                             <div class="input-date">
                                 <label for="from">From</label>
-                                <input type="date" name="from">
+                                <input type="date" name="from" id="dateFrom">
                             </div>
                             <div class="input-date">
                                 <label for="to">To</label>
-                                <input type="date" name="to">
+                                <input type="date" name="to" id="dateTo">
                             </div>
-                            <button>APPLY FILTER</button>
+                            <button id="btn_filter">APPLY FILTER</button>
                         </div>
                     </div>
                 </div>
@@ -107,11 +107,15 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
                     spandate.onclick = function () {
                         modaldate.style.display = "none";
+                        $("#dateFrom").val('');
+                        $("#dateTo").val('');
                     }
 
                     window.onclick = function (event) {
                         if (event.target == modaldate) {
                             modaldate.style.display = "none";
+                            $("#dateFrom").val('');
+                            $("#dateTo").val('');
                         }
                     }
                 </script>
@@ -213,6 +217,25 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     </div>
                 </div>
             </div>
+
+            <!-- Modal Invalid Date -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Invalid Filter Date</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </body>
@@ -266,12 +289,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 majorLabel = res.major.all.label;
                                 majorCount = res.major.all.count;
                                 setDount(minorLabel, minorCount, majorLabel, majorCount);
-
-
-                                $("#school_count").text("New text content");
-
-
-
                                 break;
                             case 1: //sase
                                 minorLabel = res.minor.sase.label;
@@ -302,7 +319,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
             //set chart
             function setDount(minL, minC, majL, majC) {
 
-
+                console.log('set donut');
                 let chartStatus = Chart.getChart("doughnut-chart1"); // <canvas> id
                 if (chartStatus != undefined) {
                     chartStatus.destroy();
@@ -311,6 +328,8 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 if (chartStatus2 != undefined) {
                     chartStatus2.destroy();
                 }
+
+                // console.log(minL.length + '' + minC.length + '' + majL.length + '' + majC.length);
 
                 if (minC.length == 0) { // walang records for minor violation
                     $('#minor_donut').css('display', 'none');
@@ -368,13 +387,13 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 element.message = element.message.substring(0, 40) + '...';
                             }
                             $('#announcement-list').append(`<a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div class="d-flex w-100 justify-content-between">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <h5 class="mb-1">${element.title}</h5>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <small>${element.date_sent}</small>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <p class="mb-1">${element.message}</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <small>${element.recipients}</small>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </a>`);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div class="d-flex w-100 justify-content-between">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <h5 class="mb-1">${element.title}</h5>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <small>${element.date_sent}</small>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <p class="mb-1">${element.message}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <small>${element.recipients}</small>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </a>`);
                         });
                     }
                 });
@@ -440,29 +459,29 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 $(this).next().text(`${length}/70`);
             })
 
-            $('.school-button').on('click', function (event) {
-                $('.school-button').attr('style', '');
-                $(this).attr('style', 'background-color: var(--div-primary-color); color: white;');
-                let id = $(this).attr('data-id');
+            function setCards(data, id) {
+                // console.log('cards set');
+                // console.log(data);
                 $.ajax({
                     type: "POST",
                     url: "php/home-content.php",
-                    data: { id: id },
+                    data: data,
                     success: function (response) {
+                        // console.log(response)
                         $('.department-info').empty();
                         let JsonData = JSON.parse(response);
                         // console.log(JsonData);
                         if (id != 0) {
                             $.each(JsonData, function (index, value) {
                                 $('.department-info').append(`
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dept dept1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="card">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-header">${parseInt(value.majCount) + parseInt(value.minCount)}</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="card-text">${value.description} Dept.</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-header">${parseInt(value.majCount) + parseInt(value.minCount)}</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="card-text">${value.description} Dept.</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`);
                             })
                         } else {
                             $.each(JsonData, function (index, value) {
@@ -470,20 +489,110 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
 
                                 $('.department-info').append(`
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dept dept1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="card">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-header">${parseInt(value.majCount) + parseInt(value.minCount)}</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <h5 class="card-title">${value.school_name}</h5>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="card-text">${value.description}</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dept dept1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-header">${parseInt(value.majCount) + parseInt(value.minCount)}</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <h5 class="card-title">${value.school_name}</h5>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="card-text">${value.description}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`)
                             })
                         }
                     }
                 })
+            }
+
+            var id = 0;
+
+            $('.school-button').on('click', function (event) {
+                $('.school-button').attr('style', '');
+                $(this).attr('style', 'background-color: var(--div-primary-color); color: white;');
+                id = $(this).attr('data-id');
+
+                let data = { id: id, from: '', to: '' };
+
+                setCards(data, id);
             })
+
+            $('#btn_filter').on('click', function () {
+                var modaldate = document.getElementById("dateModal");
+                var dateFrom = $("#dateFrom").val();
+                var dateTo = $("#dateTo").val();
+
+
+
+                if (dateFrom == '' && dateTo == '') {
+                    // console.log('no date');
+                    modaldate.style.display = "none";
+                } else {
+
+                    if ((dateFrom != '' && dateTo != '') && (dateFrom > dateTo)) {
+                        alert('Invalid Filter Date. "Form" date cannot be ahead of "To" date.')
+
+                    } else {
+                        let data = { id: id, from: dateFrom, to: dateTo };
+
+                        setCards(data, id);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'php/getDonutFiltered.php',
+                            data: data,
+                            success: function (res) {
+                                // console.log(res);
+
+                                let minorLabel = [];
+                                let minorCount = [];
+                                let majorLabel = [];
+                                let majorCount = [];
+
+                                switch (id) {
+                                    case 0: // all
+                                        minorLabel = res.minor.label;
+                                        minorCount = res.minor.count;
+                                        majorLabel = res.major.label;
+                                        majorCount = res.major.count;
+                                        setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                        break;
+                                    case 1: //sase
+                                        minorLabel = res.minor.label;
+                                        minorCount = res.minor.count;
+                                        majorLabel = res.major.label;
+                                        majorCount = res.major.count;
+                                        setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                        break;
+                                    case 2: // sbma
+                                        minorLabel = res.minor.label;
+                                        minorCount = res.minor.count;
+                                        majorLabel = res.major.label;
+                                        majorCount = res.major.count;
+                                        setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                        break;
+                                    case 3: //seca
+                                        minorLabel = res.minor.label;
+                                        minorCount = res.minor.count;
+                                        majorLabel = res.major.label;
+                                        majorCount = res.major.count;
+                                        setDount(minorLabel, minorCount, majorLabel, majorCount);
+                                        break;
+                                };
+                            }
+                        });
+
+                        modaldate.style.display = "none";
+                    }
+
+                }
+
+                $("#dateFrom").val('');
+                $("#dateTo").val('');
+
+
+            });
+
+
 
 
         });
