@@ -231,7 +231,7 @@ if ($from != '' && $to == '') {
                 ON stu.student_id = min.student_id
                 INNER JOIN sql12729827.tbl_minor_violations as des
                 ON des.violation_id = min.violation_id
-                WHERE dep.school_id = '$id' &&(min.date_of_apprehension >= '$from' && rec.date_of_apprehension <= '$to')
+                WHERE dep.school_id = '$id' &&(min.date_of_apprehension >= '$from' && min.date_of_apprehension <= '$to')
                 GROUP BY label";
 
         $schoolMinResult = mysqli_query($conn, $sql1);
@@ -248,7 +248,7 @@ if ($from != '' && $to == '') {
                     ON stu.student_id = min.student_id
                     INNER JOIN sql12729827.tbl_major_violation as des
                     ON des.violation_id = min.violation_id
-                    WHERE dep.school_id = '$id' &&(min.date_of_apprehension >= '$from' && rec.date_of_apprehension <= '$to')
+                    WHERE dep.school_id = '$id' &&(min.date_of_apprehension >= '$from' && min.date_of_apprehension <= '$to')
                     GROUP BY label
                 ";
 
