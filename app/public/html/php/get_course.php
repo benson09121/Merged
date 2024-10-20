@@ -1,13 +1,13 @@
 <?php
 include '../database/database_conn.php';
 
-$sql = "SELECT * FROM course_db";
+$sql = "SELECT * FROM tbl_course_info";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             ?>
           <li><a class="dropdown-item" href="#" data-course-id="<?php echo $row['course_id']; ?>"
-          data-department-id="<?php echo $row['department_id']; ?>"><?php echo $row['course_acronym']; ?></a></li>
+          data-department-id="<?php echo $row['department_id']; ?>"><?php echo $row['name']; ?></a></li>
          <?php
         }
     }else{

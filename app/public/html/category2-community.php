@@ -291,14 +291,14 @@
             }
             if (choice == 'counseling') {
                 $('#add_error').text('');
-                <?php $_SESSION['violations'] = []; ?>
+                <?php $_SESSION['violations'] = []; ?>  
                 $.ajax({
                     url: 'php/add_violation.php',
                     type: 'POST',
                     data: {
                         students: students,
                         due_date: $('#dateField').val(),
-                        violation_type: $('#violation_type').val(),
+                        violation_list: violation_list,
                         category: $('#category_type').val(),
                         notice: $('#notice').val(),
                         type: 'major',
@@ -338,7 +338,7 @@
                     data: {
                         student_id: $('#studentIDField').val(),
                         due_date: $('#dateField').val(),
-                        violation_type: $('#violation_type').val(),
+                        violation_list: violation_list,
                         category: $('#category_type').val(),
                         notice: $('#notice').val(),
                         department: $('#department').val(),
@@ -383,7 +383,7 @@
                     data: {
                         students: students,
                         date_of_conference: $('#date_conference').val(),
-                        violation_type: $('#violation_type').val(),
+                        violation_list: violation_list,
                         category: $('#category_type').val(),
                         notice: $('#notice').val(),
                         conference: $('#con-type').val(),

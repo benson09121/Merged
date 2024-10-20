@@ -66,35 +66,35 @@ $_SESSION['currentpage'] = "manage";
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Search..." id="searchInput">
                 </div>
-                <!-- <div class="dropdown-lang">
+                <div class="dropdown-lang">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
                         data-bs-toggle="dropdown" aria-expanded="false" data-box="section">Section</button>
                     <ul class="dropdown-menu" id="detect-section" aria-labelledby="section">
                         <input type="text" class="form-control input-lang" placeholder="Search sections..."
                             onkeydown="return /[a-zA-Z1-9]/i.test(event.key)">
-                            <?php //include('php/get_section.php'); ?>
+                            <?php include('php/get_section.php'); ?>
                     </ul>
-                </div> -->
+                </div>
 
-                <!-- <div class="dropdown-lang">
+                <div class="dropdown-lang">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
                         data-bs-toggle="dropdown" aria-expanded="false" data-box="course">Course</button>
                     <ul class="dropdown-menu" id="detect-Course" aria-labelledby="section">
                         <input type="text" class="form-control input-lang" placeholder="Search courses..."
                             onkeydown="return /[a-zA-Z]/i.test(event.key)">
-                            <?php //include('php/get_course.php'); ?>
+                            <?php include('php/get_course.php'); ?>
                     </ul>
-                </div> -->
+                </div>
 
-                <!-- <div class="dropdown-lang">
+                <div class="dropdown-lang">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
                         data-bs-toggle="dropdown" aria-expanded="false" data-box="department">Department</button>
                     <ul class="dropdown-menu" id="detect-department" aria-labelledby="section">
                         <input type="text" class="form-control input-lang" placeholder="Search departments..."
                             onkeydown="return /[a-zA-Z]/i.test(event.key)">
-                            <?php //include('php/get_department.php'); ?>
+                            <?php include('php/get_department.php'); ?>
                     </ul>
-                </div> -->
+                </div> 
             </div>
         </div>
         <div>
@@ -710,6 +710,7 @@ $_SESSION['currentpage'] = "manage";
             currentPage = 1;
         });
         setInterval(() => {
+            console.log(course);
             $.ajax({
                 type: 'POST',
                 data: {
@@ -807,10 +808,13 @@ $_SESSION['currentpage'] = "manage";
             const button = tabPane.find('button.dropdown-toggle');
             if ($(this).text() === button.text() && button.attr('data-box') === 'section') {
                 button.text('Section');
+                section = '';
             } else if ($(this).text() === button.text() && button.attr('data-box') === 'course') {
                 button.text('Course');
+                course = '';
             } else if ($(this).text() === button.text() && button.attr('data-box') === 'department') {
                 button.text('Department');
+                department = '';
             } else {
                 if (button.attr('data-box') === 'section') {
                     section = $(this).text();

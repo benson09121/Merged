@@ -11,16 +11,26 @@ $section = isset($_POST['section']) ? $_POST['section'] : '';
 $course = isset($_POST['course']) ? $_POST['course'] : '';
 $department = isset($_POST['department']) ? $_POST['department'] : '';
 
-if($section === ''){
-    $section = $search;
+// Add a dynamic condition array to hold query conditions
+$conditions = [];
+if (!empty($section)) {
+    $conditions[] = "e.name LIKE '%$section%'";
 }
-if($course === ''){
-    $course = $search;
+if (!empty($course)) {
+    $conditions[] = "b.name LIKE '%$course%'";
 }
-if($department === ''){
-    $department = $search;
+if (!empty($department)) {
+    $conditions[] = "d.school_name LIKE '%$department%'";
+}
+if (!empty($search)) {
+    $conditions[] = "(a.student_id LIKE '%$search%' OR a.f_name LIKE '%$search%' OR a.l_name LIKE '%$search%')";
 }
 
+// Combine all conditions, including status, with AND
+$conditions[] = "a.account_status = '$status'";
+$finalCondition = implode(' AND ', $conditions);
+
+// Main query with dynamic filtering and pagination
 $query = "SELECT 
     a.student_id, 
     a.f_name, 
@@ -40,13 +50,7 @@ $query = "SELECT
      LEFT JOIN tbl_department_info c2 ON b2.department_id = c2.department_id
      LEFT JOIN tbl_school_info d2 ON c2.school_id = d2.school_id
      LEFT JOIN tbl_section_info e2 ON a2.section_id = e2.section_id
-     WHERE(a.student_id LIKE '%$search%'OR 
-     a2.f_name LIKE '%$search%' OR 
-     a2.l_name LIKE '%$search%' OR 
-     e2.name LIKE '%$section%' OR 
-     b2.description LIKE '%$course%' OR 
-     d2.description LIKE '%$department%') 
-     AND a2.account_status = '$status'
+     WHERE $finalCondition
     ) AS total
 FROM 
     tbl_student_info a
@@ -57,32 +61,23 @@ LEFT JOIN
 LEFT JOIN 
     tbl_school_info d ON c.school_id = d.school_id
 LEFT JOIN
-	tbl_section_info e ON a.section_id = e.section_id
-WHERE
-  (a.student_id LIKE '%$search%'OR 
-  a.f_name LIKE '%$search%' OR 
-  a.l_name LIKE '%$search%' OR 
-  e.name LIKE '%$search%' OR 
-  b.description LIKE '%$search%' OR 
-  d.description LIKE '%$search%') 
-  AND a.account_status = '$status' 
+    tbl_section_info e ON a.section_id = e.section_id
+WHERE $finalCondition
 LIMIT $limit OFFSET $offset;";
 
 $result = $conn->query($query);
-
 $totalResult = $conn->query($query);
 $totalRow = $totalResult->fetch_assoc();
-if($totalRow === null){
+if ($totalRow === null) {
     $totalRecords = 0;
-}else{
-$totalRecords = $totalRow['total'];
-}   
+} else {
+    $totalRecords = $totalRow['total'];
+}
 $totalPages = ceil($totalRecords / $limit);
 
-
 $students = [];
-while($row = $result->fetch_assoc()) {
-    if($row === FALSE){
+while ($row = $result->fetch_assoc()) {
+    if ($row === FALSE) {
         break;
     }
     $students[] = $row;

@@ -6,8 +6,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-$sender_email = $_SESSION['admin_email'] ?? NULL;
-$details = $_POST['emails'] ?? []; // Expecting an array of associative arrays with 'email' and 'message'
+// $sender_email = $_SESSION['admin_email'] ?? NULL;
+// $details = $_POST['emails'] ?? []; // Expecting an array of associative arrays with 'email' and 'message'
 
 // Load Composer's autoloader
 require '../../vendor/autoload.php';

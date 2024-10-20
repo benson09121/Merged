@@ -3,7 +3,7 @@ session_start();
 include '../../database/database_conn.php';
 
 $students = $_POST['students'] ?? NULL;
-$violation_id = $_POST['violation_type'] ?? NULL;
+$violation_list = $_POST['violation_list'] ?? NULL;
 $penalty_id = $_POST['category'] ?? NULL;
 $due_date = $_POST['due_date'] ?? NULL;
 $method = $_POST['choice'] ?? NULL;
@@ -18,23 +18,25 @@ $conference_list = [];
 $_SESSION['violations'] = [];
 
 if ($method == 'counseling') {
-
     foreach ($students as $student) {
         $student_id = $student['student_id'];
-        $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
-        $stmt->bind_param('sii', $student_id, $violation_id, $penalty_id);
-        $stmt->execute();
-        $last_id = $conn->insert_id;
-        $student_list[] = $last_id;
+        foreach ($violation_list as $violation) {
+            $violation_id = $violation['violation_id'];
+            $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
+            $stmt->bind_param('sii', $student_id, $violation_id, $penalty_id);
+            $stmt->execute();
+            $last_id = $conn->insert_id;
+            $student_list[] = $last_id;
 
-        // Store violation details in the session array
-        $_SESSION['violations'][] = [
-            'violation_slip' => $last_id,
-            'student_id' => $student_id,
-            'name' => $student['student_name'],
-            'course' => $student['course'],
-            'section' => $student['section']
-        ];
+            // Store violation details in the session array
+            $_SESSION['violations'][] = [
+                'violation_slip' => $last_id,
+                'student_id' => $student_id,
+                'name' => $student['student_name'],
+                'course' => $student['course'],
+                'section' => $student['section']
+            ];
+        }
     }
 
     $_SESSION['violation_slip'] = $last_id;
@@ -45,30 +47,28 @@ if ($method == 'counseling') {
         $stmt->execute();
     }
 
-    $sql = "SELECT * FROM tbl_major_violation WHERE violation_id = $violation_id";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
-    $_SESSION['violation'] = $violation = $row['short_desc'];
     echo 'success';
 
 } else if ($method == 'community') {
-
     foreach ($students as $student) {
         $student_id = $student['student_id'];
-        $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
-        $stmt->bind_param('sii', $student_id, $violation_id, $penalty_id);
-        $stmt->execute();
-        $last_id = $conn->insert_id;
-        $student_list[] = $last_id;
+        foreach ($violation_list as $violation) {
+            $violation_id = $violation['violation_id'];
+            $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
+            $stmt->bind_param('sii', $student_id, $violation_id, $penalty_id);
+            $stmt->execute();
+            $last_id = $conn->insert_id;
+            $student_list[] = $last_id;
 
-        // Store violation details in the session array
-        $_SESSION['violations'][] = [
-            'violation_slip' => $last_id,
-            'student_id' => $student_id,
-            'name' => $student['student_name'],
-            'course' => $student['course'],
-            'section' => $student['section']
-        ];
+            // Store violation details in the session array
+            $_SESSION['violations'][] = [
+                'violation_slip' => $last_id,
+                'student_id' => $student_id,
+                'name' => $student['student_name'],
+                'course' => $student['course'],
+                'section' => $student['section']
+            ];
+        }
     }
 
     $_SESSION['violation_slip'] = $last_id;
@@ -79,30 +79,28 @@ if ($method == 'counseling') {
         $stmt->execute();
     }
 
-    $sql = "SELECT * FROM tbl_major_violation WHERE violation_id = $violation_id";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
-    $_SESSION['violation'] = $violation = $row['short_desc'];
     echo 'success';
 
 } else if ($method == 'conference') {
-
     foreach ($students as $student) {
         $student_id = $student['student_id'];
-        $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
-        $stmt->bind_param('sii', $student_id, $violation_id, $penalty_id);
-        $stmt->execute();
-        $last_id = $conn->insert_id;
-        $student_list[] = $last_id;
+        foreach ($violation_list as $violation) {
+            $violation_id = $violation['violation_id'];
+            $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
+            $stmt->bind_param('sii', $student_id, $violation_id, $penalty_id);
+            $stmt->execute();
+            $last_id = $conn->insert_id;
+            $student_list[] = $last_id;
 
-        // Store violation details in the session array
-        $_SESSION['violations'][] = [
-            'violation_slip' => $last_id,
-            'student_id' => $student_id,
-            'name' => $student['student_name'],
-            'course' => $student['course'],
-            'section' => $student['section']
-        ];
+            // Store violation details in the session array
+            $_SESSION['violations'][] = [
+                'violation_slip' => $last_id,
+                'student_id' => $student_id,
+                'name' => $student['student_name'],
+                'course' => $student['course'],
+                'section' => $student['section']
+            ];
+        }
     }
 
     $_SESSION['violation_slip'] = $last_id;
@@ -124,11 +122,6 @@ if ($method == 'counseling') {
         $sql .= implode(", ", $values);
         $result = $conn->query($sql);
     }
-
-    $sql = "SELECT * FROM tbl_major_violation WHERE violation_id = $violation_id";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
-    $_SESSION['violation'] = $violation = $row['short_desc'];
 
     echo 'success';
 }
