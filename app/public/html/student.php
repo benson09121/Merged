@@ -70,20 +70,7 @@ unset($_SESSION['error_message']);
                         <h1>Student Violation</h1>
                         <hr>
                     </div>
-
-                    <div class="table-nav">
-                        <div class="nav-list">
-                            <ul>
-                                <a href="#" style="border-bottom: solid 3px rgb(98, 130, 172)">
-                                    <li>SINGLE VIOLATION</li>
-                                </a>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="student-content">
+                    <div class="student-content" >
 
 
                         <div class="student-left info-left">
@@ -115,10 +102,11 @@ unset($_SESSION['error_message']);
 
                             </div>
 
-                            <div class="guide2">
+                            <div class="guide2" style="display: flex; flex-direction: column;">
 
-
-                                <div style="overflow: auto; width: 520px; height: 190px">
+                                <!-- <p style="text-align: center;color: rgb(84, 95, 110); font-size: 20px;Margin-top:2.7%">
+                                    Student List</p> -->
+                                <div style="overflow: auto; width: 520px; height: 190px; margin-left:5%">
                                     <table class="table">
 
 
@@ -145,7 +133,7 @@ unset($_SESSION['error_message']);
 
                 </div>
 
-                <hr>
+                <hr style="margin-top: 4%">
 
                 <div class="violation-header info-header">
                     <div class="violation_slip">
@@ -171,10 +159,15 @@ unset($_SESSION['error_message']);
                                     <option value="Major">Major offense</option>
                                     <option value="Minor">Minor offense</option>
                                 </select>
-
-                                <select id="violation_type" name="violation_type" required disabled>
-                                    <option value="" style="display: none;">Select Violation Type</option>
-                                </select>
+                                <div class="dropdown-lang">
+                                    <button class="btn dropdown-toggle" type="button" id="section"
+                                        data-bs-toggle="dropdown" aria-expanded="false" data-box="course"
+                                        style="width: 100%;border: 1px solid black;text-align: left;font-size: 98%;"
+                                        disabled>Select Violation Type</button>
+                                    <ul class="dropdown-menu" id="detect-Course" aria-labelledby="section"
+                                        style="width: 50%; overflow: auto; height: 40%">
+                                    </ul>
+                                </div>
 
                                 <textarea id="desicriptionField" name="description" readonly></textarea>
 
@@ -187,16 +180,30 @@ unset($_SESSION['error_message']);
                         </div>
 
                     </div>
+                    <div class="info-left1" style="display: flex; flex-direction: column;">
+                    <p style="text-align: center;color: rgb(84, 95, 110); font-size: 20px; margin-left: -11%">
+                    Violation List</p>
+                        <div style="overflow: auto; width: 520px; height: 190px;margin-top: -2%">
+                            <table class="table">
 
 
-                    <div class="right">
-                        <p style="display: none; color: red" id="error">Fill in the fields to continue</p>
-                        <button id="next_btn">Next</button>
+                                <thead>
+                                    <td>Violation Type</td>
+                                    <td>Action</td>
+                                </thead>
+
+                                <tbody id="violation_selected">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
-
-                <hr>
+                <div class="right">
+                    <p style="display: none; color: red" id="error">Fill in the fields to continue</p>
+                    <button id="next_btn">Next</button>
+                </div>
             </div>
 
         </div>
@@ -282,7 +289,7 @@ unset($_SESSION['error_message']);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary btn-closee" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -297,6 +304,7 @@ unset($_SESSION['error_message']);
 
         var students = [];
         var email_list = [];
+        var violation_list = [];
 
         $(document).ready(function () {
             $('#studentID').on('input', function () {
@@ -400,27 +408,81 @@ unset($_SESSION['error_message']);
                 var offense_type = $(this).val();
                 if (offense_type == 'Major') {
                     $('#violation_type').empty();
+                    $('#detect-Course').empty();
                     $('#category_type').attr('disabled', false);
+                    console.log(major_data);
+                    $('#detect-Course').append(`<input type="text" class="form-control input-lang" placeholder="Search violations..."
+                            onkeydown="return /[a-zA-Z ]/i.test(event.key)">`);
                     major_data.forEach(element => {
                         let violation = element.violation_name;
-                        if (element.violation_name.length > 100) {
-                            element.violation_name = element.violation_name.substring(0, 100) + '...';
-                        }
-                        $('#violation_type').append('<option value="' + element.violation_id + '" data-value="' + violation + '">' + element.violation_name + '</option>');
-                    });
+                        $('#detect-Course').append('<li><a class="dropdown-item" href="#" data-value="' + violation + '" data-id="'+ element.violation_id  +'">' + element.short_desc + '</a></li>');
+                    })
                 } else {
-                    $('#violation_type').empty();
+
+                    $('#detect-Course').empty();
+                    $('#detect-Course').append(`<input type="text" class="form-control input-lang" placeholder="Search violations..."
+                            onkeydown="return /[a-zA-Z ]/i.test(event.key)">`);
                     minor_data.forEach(element => {
                         let violation = element.violation_name;
-                        if (element.violation_name.length > 100) {
-                            element.violation_name = element.violation_name.substring(0, 100) + '...';
-                        }
-                        $('#violation_type').append('<option value="' + element.violation_id + '" data-value="' + violation + '">' + element.violation_name + '</option>');
-                    });
+                        $('#detect-Course').append('<li><a class="dropdown-item" href="#" data-value="' + violation + '" data-id="'+ element.violation_id  +'">' + element.short_desc + '</a></li>');
+                    })
                     $('#category_txt').text('Category:');
                     $('#category_type').attr('disabled', true);
                 }
+                $('.dropdown-toggle').attr('disabled', false);
+                $('#violation_selected').empty();
+                violation_list = [];
             })
+            $('#detect-Course').on('input', '.input-lang', function () {
+                const inputText = $(this).val().toLowerCase();
+                const length = $(this).text().length;
+                const dropDown = $(this).closest('.dropdown-lang');
+                const items = dropDown.find('.dropdown-item');
+
+                items.each(function () {
+                    let itemText = $(this).text().toLowerCase();
+                    if (itemText.includes(inputText)) {
+                        $(this).attr('style', 'display: block');
+                    } else {
+                        $(this).attr('style', 'display: none');
+                    }
+                });
+
+            })
+            $('.dropdown-menu').on('click', '.dropdown-item', function () {
+
+                let violation_id = $(this).data('id');
+                let violation_desc = $(this).text();
+                let violationExists = false;
+
+                $('#violation_selected').find('.viol-item').each(function () {
+                    if ($(this).data('id') == violation_id) {
+                        violationExists = true;
+                        return false;
+                    }
+                });
+                let newViolation = {
+                    violation_id : violation_id,
+                    violation_desc : violation_desc,
+                };  
+                if (!violationExists) {
+                    violation_list.push(newViolation);
+                    $('#violation_selected').append(`
+                    <tr class="viol-item" data-id="${violation_id}">
+                        <td>${violation_desc}</td>
+                        <td><button class="btn btn-danger btn-sm delete-violation">Remove</button></td>
+                    </tr>`);
+                }
+            })
+            $('#violation_selected').on('click', '.delete-violation', function () {
+                $(this).closest('tr').remove();
+
+                let violation_id = $(this).closest('tr').data('id');
+
+                violation_list = violation_list.filter(violation => violation.violation_id !== violation_id);
+                console.log(violation_list);
+            })
+
             $('#next_btn').on('click', function () {
 
                 if ($('#category_type').val() == '' && $('#offense_type').val() == 'Major') {
@@ -487,11 +549,11 @@ unset($_SESSION['error_message']);
                             url: 'php/insert_minor_violation.php',
                             type: 'POST',
                             data: {
-                                violation_type: $('#violation_type').val(),
+                                violation_list: JSON.stringify(violation_list),
                                 students: JSON.stringify(students),
                             },
                             success: function (response) {
-
+                                console.log(response);
 
                                 if (response == 'success') {
                                     $('#error').css('display', 'none');
@@ -546,6 +608,12 @@ unset($_SESSION['error_message']);
                 });
 
             });
+            $('.btn-closee').click(function () {
+                $('#student_selected').empty();
+                students = [];
+                $('#violation_selected').empty();
+                violation_list = [];
+            })
         })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
