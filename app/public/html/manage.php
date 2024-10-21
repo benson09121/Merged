@@ -710,7 +710,6 @@ $_SESSION['currentpage'] = "manage";
             currentPage = 1;
         });
         setInterval(() => {
-            console.log(course);
             $.ajax({
                 type: 'POST',
                 data: {
@@ -859,7 +858,7 @@ $_SESSION['currentpage'] = "manage";
             $('#edit_student_Modal').modal('hide'); 
         });
         $('#edit-admin').on('click', function(){
-            console.log('click');
+            
             const student_id = $('#student_id_edit').val();
             const f_name = $('#firstname_edit').val();
             const l_name = $('#lastname_edit').val();
@@ -877,7 +876,7 @@ $_SESSION['currentpage'] = "manage";
                 $('#edit_error_email').show();
             }
             else{
-                console.log(student_id, f_name, l_name);
+                
                 $.ajax({
                     type: 'POST',
                     data: {
@@ -888,7 +887,7 @@ $_SESSION['currentpage'] = "manage";
                     },
                     url: 'php/update_student_profile.php ',
                     success: function(response){
-                        console.log(response);
+                        
                         if(response === 'success'){
                             $('#edit_student_Modal').modal('hide');
                             $('#studentProfileModal').modal('show');
@@ -907,9 +906,10 @@ $_SESSION['currentpage'] = "manage";
                 student_id: $('#student_id').text()
             },
             success: function (response) {
+                
                 $('#minor_violation_tbody').empty();
                 $('#major_violation_tbody').empty();
-                const data = JSON.parse(response);
+                const data = JSON.parse(JSON.stringify(response));
                 const minor = data.minor;
                 const major = data.major;
                 if(minor === 'no data'){
