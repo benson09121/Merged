@@ -401,11 +401,13 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 let message = $('#announcement_message').val();
                 let department = $('#Select').val();
                 let formData = new FormData();
+                let $photo = $('#formFile')[0].files[0];
                 formData.append('title', title);
                 formData.append('message', message);
                 formData.append('department', department);
                 formData.append('employee_id', <?php echo $_SESSION['employee_id']; ?>);
-                formData.append('photo', $('#formFile')[0].files[0]);
+                formData.append('image', $('#formFile')[0].files[0]);
+                console.log($('#formFile')[0].files[0]);
                 $.ajax({
                     type: "POST",
                     url: "php/add-announcement.php",

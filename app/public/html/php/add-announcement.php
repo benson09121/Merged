@@ -6,7 +6,7 @@ $title = $_POST['title'];
 $message = $_POST['message'];
 $recipient = $_POST['department'];
 
-$targetDir = __DIR__ . '../../image_announcement'; // Directory for storing uploaded announcement images
+$targetDir = __DIR__ . '../../../image_announcement/'; // Directory for storing uploaded announcement images
 
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0775, true);
@@ -15,12 +15,12 @@ if (!file_exists($targetDir)) {
 $photoFileName = null; // Initialize photo file name
 
 // Check if a file is uploaded
-if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-    $photoFileName = basename($_FILES['photo']['name']);
+if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    $photoFileName = basename($_FILES['image']['name']);
     $targetFile = $targetDir . $photoFileName;
 
     // Move the uploaded file to the target directory
-    if (!move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
+    if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
         echo 'error';
         $conn->close();
         exit();
