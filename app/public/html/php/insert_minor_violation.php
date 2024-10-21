@@ -2,12 +2,13 @@
 session_start();
 include '../../database/database_conn.php';
 
-$student_json = $_POST['students'];
+$students = $_POST['students'];
 $violation_list = $_POST['violation_list'] ?? NULL;
 
-$students = json_decode($student_json, true);
-$violation_list = json_decode($violation_list, true);
 
+$_SESSION['students_list'] = $students;
+$_SESSION['violationString'] = $_POST['violationString'] ?? '';
+$_SESSION['offense'] = "Minor";
 $stmt = $conn->prepare("INSERT INTO tbl_minor_violation_records (student_id, violation_id, date_of_apprehension, status) VALUES (?, ?, NOW(), 'Not Cleared')");
 
 // Initialize the session array to store violation details

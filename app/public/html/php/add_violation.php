@@ -11,9 +11,13 @@ $department = $_POST['department'] ?? NULL;
 $attendees = $_POST['attendees'] ?? NULL;
 $conference = $_POST['conference'] ?? NULL;
 $date_of_conference = $_POST['date_of_conference'] ?? NULL;
+$violationString = $_POST['violationString'] ?? NULL;
 $student_list = [];
 $conference_list = [];
 
+$_SESSION['students_list'] = $students;
+$_SESSION['violationString'] = $violationString; 
+$_SESSION['departments'] = $department;
 // Initialize the session array to store violation details
 $_SESSION['violations'] = [];
 
@@ -62,7 +66,6 @@ if ($method == 'counseling') {
 
             // Store violation details in the session array
             $_SESSION['violations'][] = [
-                'violation_slip' => $last_id,
                 'student_id' => $student_id,
                 'name' => $student['student_name'],
                 'course' => $student['course'],

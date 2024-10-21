@@ -7,7 +7,8 @@
 
             <div class="student-violation">
                 <div class="student-header info-header">
-                    <h1>Student Violation</h1>
+                <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back"
+                style="color: #1b4284;"></i>Student Violation</h1>
                     <hr>
                 </div>
 
@@ -112,6 +113,7 @@
                     <div class="modal-body">
                         <p>Major violation has been successfully added</p>
                         <div class="buttons">
+                        <input type="submit" name="" id="print_left" value="">
                             <input type="submit" name="send_email" id="print_violation" value="Print Violation">
                         </div>
                     </div>
@@ -132,6 +134,7 @@
             $('.nav-choice').css('border-bottom', 'none');
             $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
             if ($(this).attr('name') == 'counseling') {
+                $('#print_left').attr('value', 'Print Recommendation');
                 choice = 'counseling';
                 $('.department-function').css('display', 'none');
                 $('#department').val('');
@@ -145,6 +148,7 @@
                 email_list = [];
             } else if ($(this).attr('name') == 'community') {
                 choice = 'community';
+                $('#print_left').attr('value', 'Print Endorsement');
                 $('.department-function').css('display', 'block');
                 $('#dateField').val('');
                 $('#notice').val('');
@@ -179,7 +183,7 @@
 
 <p><strong>Details of the Conference:</strong></p>
 <ul>
-    <li>Violation: ${$('#violation_type option:selected').data('value')}</li>
+    <li>Violation: ${violationString}</li>
     <li>Classification: Major Violation</li>
     <li>Date: ${$('#date_conference').val()}</li>
     <li>Facilitator: [Name of School Official/Disciplinary Counselor]</li>
@@ -219,7 +223,7 @@
     <p>This serves as a formal notice regarding a violation of the school's rules and regulations that you have committed.</p>
     <p>Details of Violation:</p>
     <ul>
-        <li>Violation Committed: ${$('#violation_type option:selected').data('value')}</li>
+        <li>Violation Committed: ${violationString}</li>
         <li>Classification: Major Violation</li>
     </ul>
     <p>The above-stated violation was observed and recorded on ${formattedPresentDate}</p>
@@ -250,7 +254,7 @@
     <p>This serves as a formal notice regarding a violation of the school's rules and regulations that you have committed.</p>
     <p>Details of Violation:</p>
     <ul>
-        <li>Violation Committed: ${$('#violation_type option:selected').data('value')}</li>
+        <li>Violation Committed: ${violationString}</li>
         <li>Classification:Major Violation</li>
     </ul>
     <p>The above-stated violation was observed and recorded on ${formattedPresentDate}. As per the school's code of conduct, this action is categorized as a Major violation, which has serious implications.</p>
@@ -290,6 +294,7 @@
                 return;
             }
             if (choice == 'counseling') {
+                $('#print_left').css('display', 'block');
                 $('#add_error').text('');
                 <?php $_SESSION['violations'] = []; ?>  
                 $.ajax({
@@ -303,6 +308,7 @@
                         notice: $('#notice').val(),
                         type: 'major',
                         choice: choice,
+                        violationString: violationString
                     },
                     success: function (data) {
                         console.log(data);
@@ -313,6 +319,7 @@
                                 data: {
                                     subject: 'Notice of Violation',
                                     email: email_list,
+                                    violations: violationString,
                                 },success: function(data){
                                 }
                             })
@@ -330,20 +337,22 @@
                     $('#add_error').text('Please select a department');
                     return;
                 }
+                $('#print_left').css('display', 'block');
                 $('#add_error').text('');
                 <?php $_SESSION['violations'] = []; ?>
                 $.ajax({
                     url: 'php/add_violation.php',
                     type: 'POST',
                     data: {
-                        student_id: $('#studentIDField').val(),
+                        students: students,
                         due_date: $('#dateField').val(),
                         violation_list: violation_list,
                         category: $('#category_type').val(),
                         notice: $('#notice').val(),
                         department: $('#department').val(),
                         type: 'major',
-                        choice: choice
+                        choice: choice,
+                        violationString: violationString
                     },
                     success: function (data) {
                         if (data == 'success') {
@@ -354,6 +363,7 @@
                                     data: {
                                         subject: 'Notice of Violation',
                                         email: email_list,
+                                        violations: violationString,
                                     }, success: function (data) {
 
                                     }
@@ -376,6 +386,7 @@
                 $('#teacher-list').children().each(function () {
                     attendees.push($(this).children().first().text());
                 })
+                $('#print_left').css('display', 'none');
                 <?php $_SESSION['violations'] = []; ?>
                 $.ajax({
                     url: 'php/add_violation.php',
@@ -389,7 +400,8 @@
                         conference: $('#con-type').val(),
                         type: 'major',
                         choice: choice,
-                        attendees: attendees
+                        attendees: attendees,
+                        violationString: violationString
                     },
                     success: function (data) {
                         if (data == 'success') {
@@ -399,6 +411,7 @@
                                 data: {
                                     subject: 'Notice of Violation',
                                     email: email_list,
+                                    violations: violationString,
                                 }, success: function (data) {
                                     console.log(data);
                                 }
@@ -431,47 +444,16 @@
             $('#nameField').val('');
             $('#courseField').val('');
             $('#offense_type').val('');
-            $('#violation_type').val('');
             $('#error').css('display', 'none');
             $('#studentID').val('');
             $('#studentID').trigger('keyup');
             $('#error').css('display', 'none');
             $('#nextstep').css('display', 'none');
             $('#main_body').css('display', 'block');
+            $('#violation_selected').empty();
         })
         $('#print_violation').on('click', function () {
-            $.ajax({
-                url: 'printable/set_print.php',
-                type: 'POST',
-                data: {
-                    category: $('#category_type').val(),
-                    type: 'major',
-                    choice: choice,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-
-                    if (Array.isArray(data)) {
-                        let delay = 0;
-
-                        data.forEach(function (entry) {
-                            const queryString = encodeURIComponent(JSON.stringify(entry));
-
-                            setTimeout(function () {
-                                window.open('./printable/print.php?data=' + queryString, '_blank');
-                            }, delay);
-
-                            delay += 200;
-                        });
-                    } else {
-                        console.error('Expected an array but got:', data);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX request failed:', status, error);
-                }
-            });
+           window.open('./printable/print.php', '_blank').focus();
         });
         $('#add-con').on('click', function () {
             if ($('#attendees').val() == '') {
@@ -498,4 +480,11 @@
             $(this).closest('tr').remove();
         })
     });
+    $('#print_left').on('click', function () {
+        if(choice == "counseling"){
+            window.open('./printable/recommendation.php', '_blank').focus();
+        } else if(choice == "community"){
+            window.open('./printable/endorsement_letter.php', '_blank').focus();
+        }
+    })
 </script>

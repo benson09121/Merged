@@ -67,7 +67,8 @@ unset($_SESSION['error_message']);
 
                 <div class="student-violation">
                     <div class="student-header info-header">
-                        <h1>Student Violation</h1>
+                    <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back"
+                    style="color: #1b4284; display: none;"></i>Student Violation</h1>
                         <hr>
                     </div>
                     <div class="student-content" >
@@ -284,6 +285,7 @@ unset($_SESSION['error_message']);
                     </div>
                     <div class="modal-body">
                         <p>Minor violation has been successfully recorded.</p>
+                        <p>Email has been sent successfully.</p>
                         <div class="buttons">
                             <input type="submit" name="send_email" id="print_violation_minor" value="Print Violation">
                         </div>
@@ -305,6 +307,7 @@ unset($_SESSION['error_message']);
         var students = [];
         var email_list = [];
         var violation_list = [];
+        var violationString = "";
 
         $(document).ready(function () {
             $('#studentID').on('input', function () {
@@ -484,15 +487,17 @@ unset($_SESSION['error_message']);
             })
 
             $('#next_btn').on('click', function () {
-
-                if ($('#category_type').val() == '' && $('#offense_type').val() == 'Major') {
+                violationString = violation_list.map(violation => violation.violation_desc).join(', ');
+                console.log(students);
+                
+                if ($('#category_type').val() == '' && $('#offense_type').val() == 'Major' && $('#violation_selected').children().length === 0) {
 
                     $('#error').css('display', 'block');
                     console.log($('#offense_type').val());
                     return;
 
                 } else {
-
+                    
                     if ($('#offense_type').val() == 'Major') {
                         $('#service').attr('disabled', false);
                         $('#service').css('display', 'block');
@@ -549,8 +554,10 @@ unset($_SESSION['error_message']);
                             url: 'php/insert_minor_violation.php',
                             type: 'POST',
                             data: {
-                                violation_list: JSON.stringify(violation_list),
-                                students: JSON.stringify(students),
+                                violation_list: violation_list,
+                                students: students,
+                                violationString: violationString,
+                                offense: "Minor"
                             },
                             success: function (response) {
                                 console.log(response);
@@ -575,44 +582,17 @@ unset($_SESSION['error_message']);
             })
 
             $('#print_violation_minor').on('click', function () {
-                $.ajax({
-                    url: 'printable/set_print.php',
-                    type: 'POST',
-                    data: {
-                        category: $('#category_type').val(),
-                        type: 'minor',
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log(data);
-
-                        if (Array.isArray(data)) {
-                            let delay = 0;
-
-                            data.forEach(function (entry) {
-                                const queryString = encodeURIComponent(JSON.stringify(entry));
-
-                                setTimeout(function () {
-                                    window.open('./printable/print.php?data=' + queryString, '_blank');
-                                }, delay);
-
-                                delay += 200;
-                            });
-                        } else {
-                            console.error('Expected an array but got:', data);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX request failed:', status, error);
-                    }
-                });
-
+                window.open('./printable/print.php', '_blank').focus();
             });
             $('.btn-closee').click(function () {
                 $('#student_selected').empty();
                 students = [];
                 $('#violation_selected').empty();
                 violation_list = [];
+            })
+            $('.btn_back').click(function () {
+                $('#nextstep').css('display', 'none');
+                $('#main_body').css('display', 'block');
             })
         })
     </script>
