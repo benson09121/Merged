@@ -1,89 +1,72 @@
 <?php
+// Include TCPDF library
+require_once __DIR__ . '/../../tcpdf/tcpdf.php';
+
 session_start();
+// Create new PDF document
 
-$data = isset($_GET['data']) ? json_decode(urldecode($_GET['data']), true) : [];
+class CustomTCPDF extends TCPDF {
+    // Override the default header method
+    public function Header() {
+        // Do nothing to remove the header
+    }
+}
 
+$pdf = new CustomTCPDF();
 
-$student_id = $data['student_id'];
-$name = $data['name'];
-$section = $data['section'];
-$course = $data['course'];
-$violation_slip_number = $data['violation_slip'];
+// Set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('Disciplinary Committee');
+$pdf->SetTitle('Violation Slip');
 
-$violation = $_SESSION['violation'];
-$category = $_SESSION['category'];
-$type = $_SESSION['type'];
+// Path to your external HTML and CSS files
+$htmlFile = __DIR__ . '/../../documents/print.html'; // Adjust the path to your HTML file
+$cssFile = __DIR__ . '/../../documents/print.css';  // Adjust the path to your CSS file
 
-$formatted_violation_slip_number = str_pad($violation_slip_number, 4, '0', STR_PAD_LEFT);
+// Get the content of the CSS file
+$cssContent = file_get_contents($cssFile);
 
+// Combine CSS and HTML
+$cssStyle = '<style>' . $cssContent . '</style>';
+
+// Sample array of student names
+$students = $_SESSION['students_list'];
+$currentDate = date('j F Y');
+$violationString = $_SESSION['violationString'] ?? '';
+$offense = $_SESSION['offense'] ?? '';
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// Iterate over each student
+foreach ($students as $student) {
+    // Add a page
+    $pdf->AddPage();
+
+    // Set the background image
+    $imagePath = __DIR__ . '/../../documents/images/aaafds.jpg';
+    $pdf->Image($imagePath, 10, 9, 55, 50, '', '', '', false, 300, '', false, false,0);
+
+    $ndImage = __DIR__ . '/../../documents/nu_logo/nu_logo.png';
+    $pdf->Image($ndImage, 120, 13, 80, 40, '', '', '', false, 300, '', false, false,0);
+
+    // Get the content of the HTML file
+    $htmlContent = file_get_contents($htmlFile);
+
+    // Replace placeholder with student details
+    $htmlContent = str_replace('[Name]', $student['student_name'], $htmlContent);
+    $htmlContent = str_replace('[StudentID]', $student['student_id'], $htmlContent);
+    $htmlContent = str_replace('[Course]', $student['course'], $htmlContent);
+    $htmlContent = str_replace('[Section]', $student['section'], $htmlContent);
+    $htmlContent = str_replace('[Violation]', $violationString, $htmlContent);
+    $htmlContent = str_replace('[Date]', $currentDate, $htmlContent);
+    $htmlContent = str_replace('[Offense]', $offense, $htmlContent);
+
+    // Combine CSS and HTML
+    $fullHTML = $cssStyle . $htmlContent;
+
+    // Write the combined HTML with CSS to the PDF
+    $pdf->writeHTML($fullHTML, true, false, true, false, '');
+}
+
+// Output the PDF
+$pdf->Output('Violation_Slip.pdf', 'I'); // 'I' for inline display, 'D' for download
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../../images/DOMS_logo.png" type="image/x-icon">
-    <title>Violation Slip</title>
-    <link rel="stylesheet" href="print.css">
-</head>
-
-<body>
-    <div class="container">
-        <h1>DISCIPLINE OFFICE</h1>
-        <img src="../../images/DOMS_logo.png" alt="DOMS Logo">
-
-        <div class="info">
-            <div class="upper">
-                <!-- how can I add 0000 on the violation slipa and I add something it would jsut be 0001 -->
-
-                <h2>Violation Slip No. &nbsp;&nbsp;:&nbsp;&nbsp; <span><?php echo $formatted_violation_slip_number; ?></span></h2>
-                <h3 id="currentDate"></h3>
-            </div>
-            <div class="mid">
-                <div class="input-wrap">
-                    <label for="student-id">Student ID:</label>
-                    <input type="text" name="student-id" value="<?php echo $student_id ?>">
-                </div>
-                <div class="input-wrap">
-                    <label for="name">Name:</label>
-                    <input type="text" name="name" value="<?php echo $name ?>">
-                </div>
-                <div class="input-wrap">
-                    <label for="course">Course:</label>
-                    <input type="text" name="course" value="<?php echo $course ?>">
-                </div>
-                <div class="input-wrap">
-                    <label for="section">Section:</label>
-                    <input type="text" name="section" value="<?php echo $section ?>">
-                </div>
-                <div class="input-wrap">
-                    <label for="violation">Violation Type:</label>
-                    <input type="text" name="violation" value="<?php echo $violation ?>">
-                </div>
-                <div class="input-wrap">
-                    <label for="offense">Offense Type:</label>
-                    <input type="text" name="offense" value="<?php echo $type ?>">
-                </div>
-                <label for="description">Description:</label>
-                <textarea name="description" id=""></textarea>
-            </div>
-            <div class="lower">
-                <div class="lower-info">
-                    <hr>
-                    <h4>Discipline Office Personnel</h4>
-                </div>
-                <div class="lower-info">
-                    <hr>
-                    <h4>Student's Signature</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-<script>
-    window.print();
-</script>
-
-</html>
