@@ -72,11 +72,6 @@ $_SESSION['currentpage'] = "issued";
                 </div>
                 <div class="dropdowns">
 
-                    <select name="" id="">
-                        <option value="" style="display: none;" selected>Filter Status</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                    </select>
 
                     <span><i class="fa-solid fa-filter"></i> Date filter</span>
 
@@ -116,8 +111,8 @@ $_SESSION['currentpage'] = "issued";
 
             </div>
 
-            <!-- Modal DATE -->
-            <div id="dateModal" class="modal-date">
+           <!-- Modal DATE -->
+           <div id="dateModal" class="modal-date">
                 <div class="modal-content-date">
 
                     <span class="close-date">&times;</span>
@@ -137,12 +132,34 @@ $_SESSION['currentpage'] = "issued";
                             <label for="to">To</label>
                             <input type="date" name="to">
                         </div>
-
-                        <button id="applyFilterBtn">APPLY FILTER</button>
+                        <button id="fil_apply">APPLY FILTER</button>
+                        <button id="fil_clear" style="margin-top: -2%; color: red">CLEAR FILTER</button>
                     </div>
 
                 </div>
             </div>
+
+            <script>
+                var modaldate = document.getElementById("dateModal");
+
+                var btndate = document.querySelector(".dropdowns span");
+
+                var spandate = document.getElementsByClassName("close-date")[0];
+
+                btndate.onclick = function() {
+                    modaldate.style.display = "block";
+                }
+
+                spandate.onclick = function() {
+                    modaldate.style.display = "none";
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == modaldate) {
+                        modaldate.style.display = "none";
+                    }
+                }
+            </script>
 
             <div class="body-table" data-nav="all">
                 <table class="table table-hover">
@@ -360,6 +377,8 @@ $_SESSION['currentpage'] = "issued";
         var search = '';
         var currentPage = 1;
         var itemsPerPage = 10;
+        var from = '';
+        var to = '';
         $(document).ready(function () {
 
             $('.nav-click').click(function () {
@@ -384,7 +403,9 @@ $_SESSION['currentpage'] = "issued";
                         select: select,
                         page: currentPage,
                         limit: itemsPerPage,
-                        search: search
+                        search: search,
+                        from: from,
+                        to: to
                     },
                     success: function (response) {
                         // console.log(response);
@@ -396,6 +417,7 @@ $_SESSION['currentpage'] = "issued";
                         totalEntryPass = data.totalEntryPass;
                         totalAdmissionPass = data.totalAdmissionPass;
                         totalPass = data.totalPass;
+                        console.log(request);
                         $('#tableBody_all').empty();
                         $('#tableBody_goodmoral').empty();
                         $('#tableBody_admissionpass').empty();
@@ -441,7 +463,7 @@ $_SESSION['currentpage'] = "issued";
                         <td colspan="7">No data</td>
                         </tr>`);
                         }
-                        if (select == 'admissionpass') {
+                        if (select == 'admissionpass' && request != 'no data') {
                             request.forEach(element => {
                                 $('#tableBody_admissionpass').append(`<tr class="row-data" data-type="Admission Pass">
                         <td>${element.request_no}</td>
@@ -467,7 +489,7 @@ $_SESSION['currentpage'] = "issued";
                         <td colspan="5">No data</td>
                         </tr>`);
                         }
-                        if (select == 'entrypass') {
+                        if (select == 'entrypass' && request != 'no data') {
                             request.forEach(element => {
                                 if (element.valid_until == null) {
                                     element.valid_until = 'N/A';
@@ -754,6 +776,22 @@ $_SESSION['currentpage'] = "issued";
                 $('#overlayImage').attr('src', src);
                 $('#overlay').css('display', 'block');
             });
+            $('#generateReportBtn').click(function () {
+                window.location.href = 'php/generate_Issued_report.php';
+            });
+            $('#fil_apply').on('click', function(){
+                from = $('input[name="from"]').val();
+                to = $('input[name="to"]').val();
+                $('#dateModal').css('display', 'none');
+                
+            })
+            $('#fil_clear').on('click', function(){
+                from = '';
+                to = '';
+                $('input[name="from"]').val('');
+                $('input[name="to"]').val('');
+                $('#dateModal').css('display', 'none');
+            })
         });
 
     </script>
