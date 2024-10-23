@@ -67,9 +67,8 @@ unset($_SESSION['error_message']);
 
                 <div class="student-violation">
                     <div class="student-header info-header">
-                    <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back"
-                    style="color: #1b4284; display: none;"></i>Student Violation</h1>
-                        <hr>
+                    <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
+                        style="color: #1b4284;"></i>Student Violation</h1>
                     </div>
                     <div class="student-content" >
 

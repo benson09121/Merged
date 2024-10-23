@@ -6,10 +6,21 @@ $select = $_POST['select'];
 $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
 $limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 10;
 $search = isset($_POST['search']) ? $_POST['search'] : '';
+$from = isset($_POST['from']) ? $_POST['from'] : '';
+$to = isset($_POST['to']) ? $_POST['to'] : '';
 $offset = ($page - 1) * $limit;
 
+// Build the date filter condition
+$dateFilter = '';
+if (!empty($from) && !empty($to)) {
+    $dateFilter = "AND date_requested BETWEEN '$from' AND '$to'";
+} elseif (!empty($from)) {
+    $dateFilter = "AND date_requested >= '$from'";
+} elseif (!empty($to)) {
+    $dateFilter = "AND date_requested <= '$to'";
+}
 
-if($select == 'all'){
+if ($select == 'all') {
     $sql = "SELECT 
     'Entry Pass' AS request_type,
     a.request_no,
@@ -25,8 +36,9 @@ if($select == 'all'){
 FROM 
     tbl_request_entrypass a
 WHERE 
-    a.student_id LIKE '%$search%' OR
-     a.reason LIKE '%$search%'
+    (a.student_id LIKE '%$search%' OR
+     a.reason LIKE '%$search%')
+    $dateFilter
 
 UNION ALL
 
@@ -45,8 +57,9 @@ SELECT
 FROM 
     tbl_request_admissionpass b
 WHERE 
-    b.student_id LIKE '%$search%' OR
-     b.reason LIKE '%$search%'
+    (b.student_id LIKE '%$search%' OR
+     b.reason LIKE '%$search%')
+    $dateFilter
 
 UNION ALL
 
@@ -65,27 +78,31 @@ SELECT
 FROM 
     tbl_request_goodmoral c
 WHERE 
-    c.student_id LIKE '%$search%' OR
-     c.reason LIKE '%$search%'
+    (c.student_id LIKE '%$search%' OR
+     c.reason LIKE '%$search%')
+    $dateFilter
 ORDER BY request_no
 LIMIT $limit OFFSET $offset";
 
-} else if($select == 'goodmoral'){
+} else if ($select == 'goodmoral') {
     $sql = "SELECT * FROM tbl_request_goodmoral
-    WHERE student_id LIKE '%$search%' OR
-    reason LIKE '%$search%'
+    WHERE (student_id LIKE '%$search%' OR
+    reason LIKE '%$search%')
+    $dateFilter
     ORDER BY request_no
     LIMIT $limit OFFSET $offset";
-} else if($select == 'entrypass'){
+} else if ($select == 'entrypass') {
     $sql = "SELECT * FROM tbl_request_entrypass
-    WHERE student_id LIKE '%$search%' OR
-    reason LIKE '%$search%'
+    WHERE (student_id LIKE '%$search%' OR
+    reason LIKE '%$search%')
+    $dateFilter
     ORDER BY request_no
     LIMIT $limit OFFSET $offset";
-} else if($select == 'admissionpass'){
+} else if ($select == 'admissionpass') {
     $sql = "SELECT * FROM tbl_request_admissionpass
-    WHERE student_id LIKE '%$search%' OR
-    reason LIKE '%$search%'
+    WHERE (student_id LIKE '%$search%' OR
+    reason LIKE '%$search%')
+    $dateFilter
     ORDER BY request_no
     LIMIT $limit OFFSET $offset";
 }
@@ -94,33 +111,26 @@ $result = $conn->query($sql);
 
 $totalPages = ceil($result->num_rows / $limit);
 
-if($result->num_rows > 0){
+if ($result->num_rows > 0) {
     $data = array();
-    while($row = $result->fetch_assoc()){
+    while ($row = $result->fetch_assoc()) {
         $data[] = $row;
     }
-}
-else{
+} else {
     $data = 'no data'; 
 }
-
 
 // FOR COUNTING TOTAL ROWS
 $sql = "SELECT * FROM tbl_request_goodmoral";
 $result = $conn->query($sql);
-
 $totalGoodMooral = $result->num_rows;
 
 $sql = "SELECT * FROM tbl_request_entrypass";
-
 $result = $conn->query($sql);
-
 $totalEntryPass = $result->num_rows;
 
 $sql = "SELECT * FROM tbl_request_admissionpass";
-
 $result = $conn->query($sql);
-
 $totalAdmissionPass = $result->num_rows;
 
 $totalpass = $totalGoodMooral + $totalEntryPass + $totalAdmissionPass;
@@ -136,3 +146,4 @@ $response = [
 
 echo json_encode($response);
 $conn->close();
+?>
