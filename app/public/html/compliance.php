@@ -265,6 +265,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
             // intervention datatable initialization
             var oTable = $('#dt_intervention').DataTable({
+                ordering: false,
                 layout: {
                     // top2start: 'search',
                     topStart: null,
@@ -306,6 +307,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
             // conference datatable intitialization
             var aTable = $('#dt_conference').DataTable({
+                ordering: false,
                 layout: {
                     // top2start: 'search',
                     // topStart: $('<nav class="mx-3 navigation"><div class="nav nav-underline " id="nav-tab" role="tablist"> <button class="nav-link position-relative me-4" id="nav-intervention-tab" data-bs-toggle="tab" data-bs-target="#nav-intervention" type="button" role="tab"aria-controls="nav-intervention" aria-selected="true" >INTERVENTION<span class="" style="font-size: .9rem; background-color: #daf6ff; color: rgb(128, 152, ); padding: 3px; border-radius: 5px; margin-left: 5px;">' + intCount + '</span></button><button class="nav-link position-relative active" id="nav-conference-tab" data-bs-toggle="tab" data-bs-target="#nav-conference" type="button" role="tab" aria-controls="nav-conference" aria-selected="false" style="color:#1b4284">CONFERENCE<span class="text-secondary" style="font-size: .9rem; background-color: #daf6ff; color: rgb(128, 152, ); padding: 3px; border-radius: 5px; margin-left: 5px;">' + conCount + '</span></button></div></nav>'),
