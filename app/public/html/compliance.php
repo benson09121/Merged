@@ -91,7 +91,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                         <input class="border-0 type=" text" id="input_search" placeholder="Search...">
                     </div>
 
-                    <span class="text-secondary" id="btn_dateFilter" onclick="btn_dateFilter()"
+                    <span class="text-secondary m-0 align-middle" id="btn_dateFilter" onclick="btn_dateFilter()"
                         style="font-size:1.2rem; cursor:pointer"><i class="fa-solid fa-filter"></i>Date Filter</span>
                 </div>
                 <hr>
@@ -99,15 +99,15 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 <!-- navigation -->
                 <nav class="mx-3 navigation">
                     <div class="nav nav-underline " id="nav-tab" role="tablist">
-                        <button class="nav-link me-4 active" id="nav-intervention-tab" data-bs-toggle="tab"
+                        <button class="nav-link me-4 fw-medium active" id="nav-intervention-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-intervention" type="button" role="tab" aria-controls="nav-intervention"
-                            aria-selected="true">INTERVENTION<span class="count"><?php
+                            aria-selected="true" style="color:#1b4284">INTERVENTION<span class="count"><?php
                             include('php/getIntervention.php');
                             echo count($data);
                             ?></span></button>
-                        <button class="nav-link" id="nav-conference-tab" data-bs-toggle="tab"
+                        <button class="nav-link fw-medium" id="nav-conference-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-conference" type="button" role="tab" aria-controls="nav-conference"
-                            aria-selected="false">CONFERENCE<span class="count"><?php
+                            aria-selected="false" style="color:#1b4284">CONFERENCE<span class="count"><?php
                             include 'php/getConference.php';
                             echo count($dataConference);
                             ?></span></button>

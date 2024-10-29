@@ -6,16 +6,6 @@
   color: #ade3f5;
 }
 
-.navigation .nav-link {
-  /* border: 1px solid red; */
-  color: grey;
-}
-
-.navigation .nav-link:hover {
-  /* border: 1px solid red; */
-  color: darkblue;
-}
-
 .navigation .nav-link .count {
   font-size: 0.9rem;
   background-color: #daf6ff;
