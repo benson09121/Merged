@@ -26,6 +26,8 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
         <link rel="stylesheet" href="../css/studentCompliance.css">
 
         <link href="https://cdn.datatables.net/v/dt/dt-2.1.8/datatables.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" rel="stylesheet">
 
         <script src="js/screen_timeout.js"></script>
 
@@ -33,7 +35,10 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
             integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        <script src="https://cdn.datatables.net/v/dt/dt-2.1.8/datatables.min.js"></script>
+        <!-- <script src="https://cdn.datatables.net/v/dt/dt-2.1.8/datatables.min.js"></script> -->
+        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
+        <!-- <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script> -->
 
 
     </head>
@@ -71,51 +76,52 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
             <div class="body-content">
 
                 <div class="title-page">
-                  
+
                     <!-- <button onclick="history.go(-1);"><i class="fa-solid fa-left-long"></i></button> -->
 
                     <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
-                            style="color: #1b4284;"></i>Student
-                        Compliance</h1>
+                            style="color: #1b4284;"></i>Student Compliance</h1>
                     <hr>
                 </div>
 
+                <hr>
+                <div class="filters d-flex justify-content-between my-4 ms-3">
+                    <div class="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input class="border-0 type=" text" id="input_search" placeholder="Search...">
+                    </div>
+
+                    <span class="text-secondary" id="btn_dateFilter" onclick="btn_dateFilter()"
+                        style="font-size:1.2rem; cursor:pointer"><i class="fa-solid fa-filter"></i>Date Filter</span>
+                </div>
+                <hr>
+
                 <!-- navigation -->
                 <nav class="mx-3 navigation">
-                    <div class="nav nav-tabs d-flex justify-content-around" id="nav-tab" role="tablist">
-                        <button class="nav-link position-relative active " id="nav-intervention-tab" data-bs-toggle="tab"
+                    <div class="nav nav-underline " id="nav-tab" role="tablist">
+                        <button class="nav-link me-4 active" id="nav-intervention-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-intervention" type="button" role="tab" aria-controls="nav-intervention"
-                            aria-selected="true">INTERVENTION<span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">
-                                <?php
-                                include('php/getIntervention.php');
-
-                                echo count($data);
-
-                                ?>
-
-                            </span></button>
-                        <button class="nav-link position-relative" id="nav-conference-tab" data-bs-toggle="tab"
+                            aria-selected="true">INTERVENTION<span class="count"><?php
+                            include('php/getIntervention.php');
+                            echo count($data);
+                            ?></span></button>
+                        <button class="nav-link" id="nav-conference-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-conference" type="button" role="tab" aria-controls="nav-conference"
-                            aria-selected="false">CONFERENCE<span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">
-                                <?php
-                                include 'php/getConference.php';
-
-                                echo count($dataConference);
-
-                                ?>
-
-                            </span></button>
+                            aria-selected="false">CONFERENCE<span class="count"><?php
+                            include 'php/getConference.php';
+                            echo count($dataConference);
+                            ?></span></button>
                     </div>
                 </nav>
+
+
                 <!-- tabs -->
-                <div class="tab-content mt-5" id="nav-tabContent">
+                <div class="tab-content mt-1" id="nav-tabContent">
                     <!-- intervention tab -->
                     <div class="tab-pane fade show active" id="nav-intervention" role="tabpanel"
                         aria-labelledby="nav-intervention-tab" tabindex="0">
                         <div class="ms-3 table-responsive">
-                            <table id="dt_intervention" class="table table-striped" style="width:100%">
+                            <table id="dt_intervention" class="table table-striped mt-4" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th class="text-start">INTERVENTION NO.</th>
@@ -151,7 +157,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     <div class="tab-pane fade" id="nav-conference" role="tabpanel" aria-labelledby="nav-conference-tab"
                         tabindex="0">
                         <div class="ms-3 table-responsive">
-                            <table id="dt_conference" class="table table-striped" style="width:100%">
+                            <table id="dt_conference" class="table table-striped mt-4" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th class="text-start">CONFERENCE NO.</th>
@@ -164,6 +170,8 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                 </thead>
                                 <tbody>
                                     <?php
+                                    // include 'php/getConference.php';
+                                
                                     foreach ($dataConference as $row) {
                                         $attendees = '';
                                         foreach ($dataAttendees as $rowA) {
@@ -187,7 +195,55 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     </div>
                 </div>
 
+
+
             </div>
+            <div id="dateModal" class="modal-date">
+                <div class="modal-content-date">
+
+                    <span class="close-date">&times;</span>
+
+                    <div class="date-header">
+                        <h2>FILTER DATE</h2>
+                    </div>
+
+                    <div class="modal-date-details">
+
+                        <div class="input-date">
+                            <label for="from">From</label>
+                            <input type="date" id="filter-from">
+                        </div>
+
+                        <div class="input-date">
+                            <label for="to">To</label>
+                            <input type="date" id="filter-to">
+                        </div>
+                        <button id="fil_apply">APPLY FILTER</button>
+                        <button id="fil_clear" style="margin-top: -2%; color: red">CLEAR FILTER</button>
+                    </div>
+
+                </div>
+            </div>
+            <script>
+
+                var modaldate = document.getElementById("dateModal");
+
+                var spandate = document.getElementsByClassName("close-date")[0];
+
+                function btn_dateFilter() {
+                    modaldate.style.display = "block";
+                }
+
+                spandate.onclick = function () {
+                    modaldate.style.display = "none";
+                }
+
+                window.onclick = function (event) {
+                    if (event.target == modaldate) {
+                        modaldate.style.display = "none";
+                    }
+                }
+            </script>
 
         </section>
 
@@ -195,58 +251,29 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
     <script>
 
+
+        function toConf() {
+
+        }
+
+
         $(document).ready(function () {
+
+
+            const intCount = $('#dt_intervention').attr("data-count");
+            const conCount = $('#dt_conference').attr("data-count");
 
             // intervention datatable initialization
             var oTable = $('#dt_intervention').DataTable({
                 layout: {
-                    topStart: 'search',
-                    topEnd: $(' <div class="dt-filter-date"><label for="dt-date-from">from: </label><input type="date" class="dt-input mx-2 align-middle" id="dt-date-from" placeholder="" aria-controls="dt_intervention"><label for="dt-date-to">to:</label><input type="date" class="dt-input mx-2 align-middle" id="dt-date-to" placeholder="" aria-controls="dt_intervention"><button type="button" class="btn btn-danger" id="btn_clear_filter">clear filter</button></div>'),
-                    bottomStart: 'pageLength',
-                    bottom2End: 'info',
+                    // top2start: 'search',
+                    topStart: null,
+                    // topStart: $('<nav class="mx-3 navigation"><div class="nav nav-underline " id="nav-tab" role="tablist"> <button class="nav-link position-relative active me-4" data-bs-toggle="tab" data-bs-target="#nav-intervention" type="button" role="tab"aria-controls="nav-intervention" aria-selected="true" style="color:#1b4284" >INTERVENTION<span class="text-secondary" style="font-size: .9rem; background-color: #daf6ff; color: rgb(128, 152, ); padding: 3px; border-radius: 5px; margin-left: 5px;">' + intCount + '</span></button><button class="nav-link position-relative" id="nav-conference-tab" data-bs-toggle="tab" data-bs-target="#nav-conference" type="button" role="tab" aria-controls="nav-conference" aria-selected="false" >CONFERENCE<span class="text-secondary" style="font-size: .9rem; background-color: #daf6ff; color: rgb(128, 152, ); padding: 3px; border-radius: 5px; margin-left: 5px;">' + conCount + '</span></button></div></nav><button onclick="toConf()">click</button>'),
+                    topEnd: null,
+                    bottomStart: null,
                 }
             });
 
-            // clear date filter intervention
-            $('#btn_clear_filter').on('click', function () {
-
-                if ($('#dt-date-to').val() || $('#dt-date-from').val()) {
-                    $('#dt-date-to').val('');
-                    $('#dt-date-from').val('');
-                    minDateFilter = "";
-                    maxDateFilter = "";
-                    oTable.draw();
-                }
-
-
-
-            });
-
-            // get input dates
-            $(function () {
-
-                // get max date (to)
-                $("#dt-date-to").on("change", function () {
-
-                    let date_to = $('#dt-date-to').val();
-
-                    maxDateFilter = new Date(date_to).getTime();
-                    oTable.draw();
-
-                });
-
-                // get min date (from)
-                $("#dt-date-from").on("change", function () {
-
-                    let date_from = $('#dt-date-from').val();
-
-                    minDateFilter = new Date(date_from).getTime();
-                    oTable.draw();
-
-                });
-
-
-            });
 
             // Date range filter intervention
             minDateFilter = "";
@@ -275,57 +302,60 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 }
             );
 
+
+
             // conference datatable intitialization
             var aTable = $('#dt_conference').DataTable({
                 layout: {
-                    topStart: 'search',
-                    topEnd: $(' <div class="dt-filter-date-c"><label for="dt-date-from-c">from: </label><input type="date" class="dt-input mx-2 align-middle" id="dt-date-from-c" placeholder="" aria-controls="dt_conference"><label for="dt-date-to-c">to:</label><input type="date" class="dt-input mx-2 align-middle" id="dt-date-to-c" placeholder="" aria-controls="dt_conference"><button type="button" class="btn btn-danger" id="btn_clear_filter-c">clear filter</button></div>'),
-                    bottomStart: 'pageLength',
-                    bottom2End: 'info',
+                    // top2start: 'search',
+                    // topStart: $('<nav class="mx-3 navigation"><div class="nav nav-underline " id="nav-tab" role="tablist"> <button class="nav-link position-relative me-4" id="nav-intervention-tab" data-bs-toggle="tab" data-bs-target="#nav-intervention" type="button" role="tab"aria-controls="nav-intervention" aria-selected="true" >INTERVENTION<span class="" style="font-size: .9rem; background-color: #daf6ff; color: rgb(128, 152, ); padding: 3px; border-radius: 5px; margin-left: 5px;">' + intCount + '</span></button><button class="nav-link position-relative active" id="nav-conference-tab" data-bs-toggle="tab" data-bs-target="#nav-conference" type="button" role="tab" aria-controls="nav-conference" aria-selected="false" style="color:#1b4284">CONFERENCE<span class="text-secondary" style="font-size: .9rem; background-color: #daf6ff; color: rgb(128, 152, ); padding: 3px; border-radius: 5px; margin-left: 5px;">' + conCount + '</span></button></div></nav>'),
+                    topEnd: null,
+                    topStart: null,
+                    bottomStart: null,
+                    // bottom2End: 'pageLength',
                 }
             });
 
 
-            // clear date filter intervention
-            $('#btn_clear_filter-c').on('click', function () {
 
-                if ($('#dt-date-to-c').val() || $('#dt-date-from-c').val()) {
-                    $('#dt-date-to-c').val('');
-                    $('#dt-date-from-c').val('');
-                    minDateFilter = "";
-                    maxDateFilter = "";
-                    aTable.draw();
-                }
+            $('#fil_apply').on('click', function () {
 
+                // let target = $('#dateModal').val();
+                let date_to2 = $('#filter-to').val();
+                let date_from2 = $('#filter-from').val();
 
+                // console.log(target);
+                // console.log(date_to2);
+                // console.log(date_from2);
 
-            });
+                maxDateFilter = new Date(date_to2).getTime();
+                minDateFilter = new Date(date_from2).getTime();
 
-            // get input dates
-            $(function () {
+                dt_draw();
 
-                // get max date (to)
-                $("#dt-date-to-c").on("change", function () {
-
-                    let date_to = $('#dt-date-to-c').val();
-
-                    maxDateFilter = new Date(date_to).getTime();
-                    aTable.draw();
-
-                });
-
-                // get min date (from)
-                $("#dt-date-from-c").on("change", function () {
-
-                    let date_from = $('#dt-date-from-c').val();
-
-                    minDateFilter = new Date(date_from).getTime();
-                    aTable.draw();
-
-                });
-
+                $('#filter-from').val('');
+                $('#filter-to').val('');
+                modaldate.style.display = "none";
 
             });
+
+            $('#fil_clear').on('click', function () {
+                // let target = $('#dateModal').data('id');
+                $('#filter-from').val('');
+                $('#filter-to').val('');
+                maxDateFilter = '';
+                minDateFilter = '';
+                dt_draw();
+                modaldate.style.display = "none";
+
+            })
+
+            function dt_draw() {
+                oTable.draw();
+                // console.log('int draw');
+                aTable.draw();
+                // console.log('conf draw');
+            }
 
             // date filter function conference
             $.fn.dataTableExt.afnFiltering.push(
@@ -349,6 +379,12 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     return true;
                 }
             );
+
+            // search function
+            $('#input_search').keyup(function () {
+                oTable.search($(this).val()).draw();
+                aTable.search($(this).val()).draw();
+            })
 
         })
 

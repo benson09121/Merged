@@ -2,13 +2,25 @@
   color: aquamarine;
   border: 1px slid red;
 } */
+.filters .search i {
+  color: #ade3f5;
+}
 
 .navigation .nav-link {
   /* border: 1px solid red; */
   color: grey;
 }
-.navigation .nav-link.active {
+
+.navigation .nav-link:hover {
   /* border: 1px solid red; */
-  color: #1b4284;
-  font-weight: 700;
+  color: darkblue;
+}
+
+.navigation .nav-link .count {
+  font-size: 0.9rem;
+  background-color: #daf6ff;
+  color: rgb(128, 152, 184);
+  padding: 3px;
+  border-radius: 5px;
+  margin-left: 5px;
 }
