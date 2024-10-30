@@ -130,6 +130,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                         <th class="text-start">INTERVENTION METHOD</th>
                                         <th class="text-start">ASSIGNED DEPARTMENT</th>
                                         <th class="text-start">COMPLIANCE DUE DATE</th>
+                                        <th class="text-start">ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -144,6 +145,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                             <td class='text-start'>{$row['method']}</td>
                                             <td class='text-start'>{$row['department']}</td>
                                             <td class='text-start'>{$row['due_date']}</td>
+                                            <td class='text-start'><button type='button' class='btn btn-success'>Clear</button></td>
                                             </tr>";
                                     }
 
