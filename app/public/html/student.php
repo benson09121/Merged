@@ -58,7 +58,7 @@ unset($_SESSION['error_message']);
         <i class="fas fa-bars"></i>
     </div>
 
-    <section class="main-do" id="main_body">
+    <section class="main-do" id="main_body" style="display: block">
 
 
         <div class="body-content">
@@ -319,6 +319,7 @@ unset($_SESSION['error_message']);
         var hasCategory4 = "No";
         var hasCategory5 = "No";
         $(document).ready(function () {
+            
             $('#studentID').on('input', function () {
                 search = $(this).val();
             })
