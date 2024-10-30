@@ -111,10 +111,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Major violation has been successfully added</p>
+                        <p>Major violation has been successfully added and Email has been sent.</p>
                         <div class="buttons">
-                        <input type="submit" name="" id="print_left" value="">
-                            <input type="submit" name="send_email" id="print_violation" value="Print Violation">
+                        <input type="submit" name="" id="print_left" value="Recommendation" style="font-size: 15px; display: none;">
+                        <input type="submit" name="" id="print_center" value="Endorsement" style="font-size 18px; display: none;">
+                            <input type="submit" name="send_email" id="print_violation" value="Print Violation" style="font-size 18px;">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -158,7 +159,6 @@
             $('.nav-choice').css('border-bottom', 'none');
             $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
             if ($(this).attr('name') == 'counseling') {
-                $('#print_left').attr('value', 'Print Recommendation');
                 choice = 'counseling';
                 $('.department-function').css('display', 'none');
                 $('#department').val('');
@@ -172,7 +172,6 @@
                 email_list = [];
             } else if ($(this).attr('name') == 'community') {
                 choice = 'community';
-                $('#print_left').attr('value', 'Print Endorsement');
                 $('.department-function').css('display', 'block');
                 $('#dateField').val('');
                 $('#notice').val('');
@@ -323,6 +322,7 @@ if (hasCategory1 === "Yes") {
         category1_choice = "counseling";
         category1_due_date = $('#dateField').val();
         category1_notice = $('#notice').val();
+        $('#print_left').css('display', 'block');
     } else if (choice == "conference") {
         category1_choice = "conference";
         category1_due_date = $('#date_conference').val();
@@ -352,11 +352,13 @@ if (hasCategory1 === "Yes") {
             category2_choice = "counseling";
             category2_due_date = $('#dateField').val();
             category2_notice = $('#notice').val();
+            $('#print_left').css('display', 'block');
         } else if (choice === "community") {
             category2_choice = "community";
             category2_due_date = $('#dateField').val();
             category2_department = $('#department').val();
             category2_notice = $('#notice').val();
+            $('#print_center').css('display', 'block');
         } else if (choice === "conference") {
             category2_choice = "conference";
             category2_due_date = $('#date_conference').val();
@@ -642,10 +644,12 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
     $('#print_left').on('click', function () {
         if(choice == "counseling"){
             window.open('./printable/recommendation.php', '_blank').focus();
-        } else if(choice == "community"){
-            window.open('./printable/endorsement_letter.php', '_blank').focus();
         }
     })
+
+    $('#print_center').on('click', function () {
+    window.open('./printable/endorsement_letter.php', '_blank').focus();
+    });
     function LoadMajorViolation(){
         $.ajax({
             url: 'php/fetch_major_violation_records.php',
