@@ -150,7 +150,7 @@ unset($_SESSION['error_message']);
                                 <label>Offense Type:</label>
                                 <label>Violation Type:</label>
                                 <label>Description:</label>
-                                <label id="category_txt">Category:</label>
+                                <!-- <label id="category_txt">Category:</label> -->
 
                             </div>
                             <div class="middle">
@@ -171,9 +171,9 @@ unset($_SESSION['error_message']);
 
                                 <textarea id="desicriptionField" name="description" readonly></textarea>
 
-                                <select id="category_type" name="category_type" disabled>
+                                <!-- <select id="category_type" name="category_type" disabled>
                                     <option value="" style="display: none;">Select Category</option>
-                                </select>
+                                </select> -->
 
                             </div>
 
