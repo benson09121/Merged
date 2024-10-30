@@ -1,7 +1,7 @@
 <?php
 
 
-$sql = "SELECT intervention.ref_id, student.student_id, violation.slip_no, intervention.method, intervention.assigned_department, intervention.compliance_due_date
+$sql = "SELECT intervention.ref_id, student.student_id, violation.slip_no, intervention.method, intervention.assigned_department, intervention.compliance_due_date, intervention.status
         FROM sql12729827.tbl_for_intervention as intervention
         INNER JOIN sql12729827.tbl_major_violation_records as violation
         ON intervention.slip_no = violation.slip_no
@@ -24,7 +24,8 @@ foreach ($result as $row) {
         'slip_no' => $row['slip_no'],
         'method' => $row['method'],
         'department' => $row['assigned_department'] ?? '--',
-        'due_date' => $row['compliance_due_date']
+        'due_date' => $row['compliance_due_date'],
+        'status' => $row['status']
     ];
 
 }

@@ -124,12 +124,13 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                             <table id="dt_intervention" class="table table-striped mt-4" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="text-start">INTERVENTION NO.</th>
+                                        <!-- <th class="text-start">INTERVENTION NO.</th> -->
                                         <th class="text-start">STUDENT ID</th>
                                         <th class="text-start">SLIP NO.</th>
                                         <th class="text-start">INTERVENTION METHOD</th>
                                         <th class="text-start">ASSIGNED DEPARTMENT</th>
                                         <th class="text-start">COMPLIANCE DUE DATE</th>
+                                        <th class="text-start">STATUS</th>
                                         <th class="text-start">ACTION</th>
                                     </tr>
                                 </thead>
@@ -138,15 +139,34 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                     <?php
                                     // include('php/getIntervention.php');
                                     foreach ($data as $row) {
-                                        echo "<tr>
-                                            <td class='text-start'>{$row['ref_id']}</td>
+
+                                        if ($row['status'] == 'Cleared') {
+                                            echo "<tr>
                                             <td class='text-start'>{$row['student_id']}</td>
                                             <td class='text-start'>{$row['slip_no']}</td>
                                             <td class='text-start'>{$row['method']}</td>
                                             <td class='text-start'>{$row['department']}</td>
                                             <td class='text-start'>{$row['due_date']}</td>
-                                            <td class='text-start'><button type='button' class='btn btn-success'>Clear</button></td>
+                                            <td class='text-start'>{$row['status']}</td>
+                                            <td class='text-start'>
+                                            
+                                            </td>
                                             </tr>";
+                                        } else {
+                                            echo "<tr>
+                                            <td class='text-start'>{$row['student_id']}</td>
+                                            <td class='text-start'>{$row['slip_no']}</td>
+                                            <td class='text-start'>{$row['method']}</td>
+                                            <td class='text-start'>{$row['department']}</td>
+                                            <td class='text-start'>{$row['due_date']}</td>
+                                            <td class='text-start'>{$row['status']}</td>
+                                            <td class='text-start'>
+                                            <button onclick='btn_clearIntModal({$row['ref_id']})' type='button' class='btn btn-success me-2' data-bs-toggle='modal' data-bs-target='#clearIntModal'>Clear</button>
+                                            </td>
+                                            </tr>";
+                                        }
+
+
                                     }
 
                                     ?>
@@ -162,12 +182,14 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                             <table id="dt_conference" class="table table-striped mt-4" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="text-start">CONFERENCE NO.</th>
+                                        <!-- <th class="text-start">CONFERENCE NO.</th> -->
                                         <th class="text-start">STUDENT ID</th>
                                         <th class="text-start">SLIP NO.</th>
                                         <th class="text-start">CONFERENCE TYPE</th>
                                         <th class="text-start">ATENDEES</th>
                                         <th class="text-start">SCHEDULED DATE</th>
+                                        <th class="text-start">STATUS</th>
+                                        <th class="text-start">ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -181,14 +203,32 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                                                 $attendees = $attendees . $rowA['name'] . '<br/>';
                                             }
                                         }
-                                        echo "<tr>
-                                            <td class='text-start'>{$row['ref_id']}</td>
+
+                                        if ($row['status'] == 'Cleared') {
+                                            echo "<tr>
                                             <td class='text-start'>{$row['student_id']}</td>
                                             <td class='text-start'>{$row['slip_no']}</td>
                                             <td class='text-start'>{$row['conference_type']}</td>
                                             <td class='text-start'>$attendees</td>
                                             <td class='text-start'>{$row['scheduled_date']}</td>
+                                            <td class='text-start'>{$row['status']}</td>
+                                            <td class='text-start'></td>
                                             </tr>";
+                                        } else {
+                                            echo "<tr>
+                                            <td class='text-start'>{$row['student_id']}</td>
+                                            <td class='text-start'>{$row['slip_no']}</td>
+                                            <td class='text-start'>{$row['conference_type']}</td>
+                                            <td class='text-start'>$attendees</td>
+                                            <td class='text-start'>{$row['scheduled_date']}</td>
+                                            <td class='text-start'>{$row['status']}</td>
+                                            <td class='text-start'>
+                                            <button onclick='btn_clearConModal({$row['ref_id']})' type='button' class='btn btn-success me-2' data-bs-toggle='modal' data-bs-target='#clearConModal'>Clear</button>
+                                            </td>
+                                            </tr>";
+                                        }
+
+
                                     }
                                     ?>
                                 </tbody>
@@ -197,9 +237,8 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     </div>
                 </div>
 
-
-
             </div>
+            <!-- date modal -->
             <div id="dateModal" class="modal-date">
                 <div class="modal-content-date">
 
@@ -226,6 +265,45 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
 
                 </div>
             </div>
+            <!-- clear modal -->
+            <div class="modal fade" id="clearIntModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Clear Intervention?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Clear student of this intervention? This action is irreversible.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="intClear" class="btn btn-primary" data-bs-dismiss="modal">Save
+                                changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- clear conference modal -->
+            <div class="modal fade" id="clearConModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Clear Conference?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Set this conference as CLEARED? This action is irreversible.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="conClear" class="btn btn-primary" data-bs-dismiss="modal">Save
+                                changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <script>
 
                 var modaldate = document.getElementById("dateModal");
@@ -236,14 +314,20 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     modaldate.style.display = "block";
                 }
 
+                function btn_clearModal() {
+                    cleardate.style.display = "block";
+                }
+
                 spandate.onclick = function () {
                     modaldate.style.display = "none";
                 }
+
 
                 window.onclick = function (event) {
                     if (event.target == modaldate) {
                         modaldate.style.display = "none";
                     }
+
                 }
             </script>
 
@@ -254,8 +338,11 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
     <script>
 
 
-        function toConf() {
-
+        function btn_clearIntModal(id) {
+            document.getElementById('clearIntModal').value = id;
+        }
+        function btn_clearConModal(id) {
+            document.getElementById('clearConModal').value = id;
         }
 
 
@@ -389,6 +476,38 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                 oTable.search($(this).val()).draw();
                 aTable.search($(this).val()).draw();
             })
+            // cler interventions
+            $('#intClear').on('click', function () {
+                let id = $('#clearIntModal').val();
+
+                $.ajax({
+                    method: 'POST',
+                    url: 'php/clearIntervention.php',
+                    data: {
+                        ref_id: id,
+                    },
+                    success: function (res) {
+                        dt_draw();
+                    }
+                });
+
+            });
+            // clear conference
+            $('#conClear').on('click', function () {
+                let id = $('#clearConModal').val();
+
+                $.ajax({
+                    method: 'POST',
+                    url: 'php/clearConference.php',
+                    data: {
+                        ref_id: id,
+                    },
+                    success: function (res) {
+                        dt_draw();
+                    }
+                });
+
+            });
 
         })
 

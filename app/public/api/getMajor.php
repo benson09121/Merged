@@ -12,7 +12,7 @@ $sql = "SELECT records.slip_no, penalty.penalty_name, info.violation_name, recor
     ON records.penalty_id = penalty.penalty_id
     INNER JOIN sql12729827.tbl_major_violation_types as types
     ON info.violation_type_id = types.violation_type_id
-    INNER JOIN sql12729827.tbl_for_intervention as intervention
+    LEFT JOIN sql12729827.tbl_for_intervention as intervention
     ON records.slip_no = intervention.slip_no
     LEFT JOIN sql12729827.tbl_for_conference as conf
     ON records.slip_no = conf.slip_no
