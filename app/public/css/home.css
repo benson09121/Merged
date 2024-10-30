@@ -322,4 +322,17 @@
     background-color: var(--div-primary-color);
     color: white;
   }
-  
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    overflow-y: auto;
+    max-height: 150px;
+    border: 1px solid #ddd;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

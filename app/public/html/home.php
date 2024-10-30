@@ -369,7 +369,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['role']) && !isset($_SESSI
                     });
                 }
 
-                if (majC.length == 0) { // no records major violatio
+                if (majC.length == 0) { // no records major violatio    
                     $('#major_donut').css('display', 'none');
                 } else {
                     $('#major_donut').css('display', 'inline');

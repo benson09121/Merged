@@ -4,7 +4,7 @@ include '../../database/database_conn.php';
 
 $students = $_POST['students'] ?? NULL;
 $violation_list = $_POST['violation_list'] ?? NULL;
-$penalty_id = $_POST['category'] ?? NULL;
+$category = $_POST['category'] ?? NULL;
 $due_date = $_POST['due_date'] ?? NULL;
 $method = $_POST['choice'] ?? NULL;
 $department = $_POST['department'] ?? NULL;
@@ -18,11 +18,12 @@ $conference_list = [];
 $_SESSION['students_list'] = $students;
 $_SESSION['violationString'] = $violationString; 
 $_SESSION['departments'] = $department;
-// Initialize the session array to store violation details
+$_SESSION['offense'] = "Major";
 $_SESSION['violations'] = [];
 
 if ($method == 'counseling') {
     foreach ($students as $student) {
+        $penalty_id = $student['category'];
         $student_id = $student['student_id'];
         foreach ($violation_list as $violation) {
             $violation_id = $violation['violation_id'];
@@ -56,6 +57,7 @@ if ($method == 'counseling') {
 } else if ($method == 'community') {
     foreach ($students as $student) {
         $student_id = $student['student_id'];
+        $penalty_id = $student['category'];
         foreach ($violation_list as $violation) {
             $violation_id = $violation['violation_id'];
             $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
@@ -65,17 +67,9 @@ if ($method == 'counseling') {
             $student_list[] = $last_id;
 
             // Store violation details in the session array
-            $_SESSION['violations'][] = [
-                'student_id' => $student_id,
-                'name' => $student['student_name'],
-                'course' => $student['course'],
-                'section' => $student['section']
-            ];
         }
     }
-
     $_SESSION['violation_slip'] = $last_id;
-
     foreach ($student_list as $student) {
         $stmt = $conn->prepare("INSERT INTO tbl_for_intervention (slip_no, method, assigned_department, compliance_due_date, status) VALUES (?, ?, ?, ?, 'Not Cleared')");
         $stmt->bind_param('isss', $student, $method, $department, $due_date);
@@ -86,7 +80,10 @@ if ($method == 'counseling') {
 
 } else if ($method == 'conference') {
     foreach ($students as $student) {
+        $penalty_id = $student['category'];
         $student_id = $student['student_id'];
+        if($student['category'] == $category){
+        
         foreach ($violation_list as $violation) {
             $violation_id = $violation['violation_id'];
             $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
@@ -104,6 +101,7 @@ if ($method == 'counseling') {
                 'section' => $student['section']
             ];
         }
+    }
     }
 
     $_SESSION['violation_slip'] = $last_id;

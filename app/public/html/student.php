@@ -67,10 +67,10 @@ unset($_SESSION['error_message']);
 
                 <div class="student-violation">
                     <div class="student-header info-header">
-                    <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
-                        style="color: #1b4284;"></i>Student Violation</h1>
+                        <h1><i class="fa-solid fa-chevron-left fa-sm me-3 btn_back" onclick="history.go(-1);"
+                                style="color: #1b4284;"></i>Student Violation</h1>
                     </div>
-                    <div class="student-content" >
+                    <div class="student-content">
 
 
                         <div class="student-left info-left">
@@ -181,8 +181,8 @@ unset($_SESSION['error_message']);
 
                     </div>
                     <div class="info-left1" style="display: flex; flex-direction: column;">
-                    <p style="text-align: center;color: rgb(84, 95, 110); font-size: 20px; margin-left: -11%">
-                    Violation List</p>
+                        <p style="text-align: center;color: rgb(84, 95, 110); font-size: 20px; margin-left: -11%">
+                            Violation List</p>
                         <div style="overflow: auto; width: 520px; height: 190px;margin-top: -2%">
                             <table class="table">
 
@@ -206,6 +206,10 @@ unset($_SESSION['error_message']);
                 </div>
             </div>
 
+        </div>
+
+        <div class="overlay" style="display: none;">
+            <div class="loading-ring"></div>
         </div>
 
         <!-- Modal Structure -->
@@ -290,7 +294,8 @@ unset($_SESSION['error_message']);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-closee" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary btn-closee"
+                            data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -307,7 +312,12 @@ unset($_SESSION['error_message']);
         var email_list = [];
         var violation_list = [];
         var violationString = "";
-
+        var major_violation_records = [];
+        var hasCategory1 = "No";
+        var hasCategory2 = "No";
+        var hasCategory3 = "No";
+        var hasCategory4 = "No";
+        var hasCategory5 = "No";
         $(document).ready(function () {
             $('#studentID').on('input', function () {
                 search = $(this).val();
@@ -325,24 +335,32 @@ unset($_SESSION['error_message']);
                         student.forEach(element => {
                             $('#student_body').append(`
                         <tr style="cursor: pointer" class="row_student">
-
                             <td class="s_id" data-email="${element.email}" data-section="${element.section}">${element.student_id}</td>
                             <td class="s_name">${element.f_name} ${element.l_name}</td>
                             <td class="s_course">${element.course}</td>`);
-
                         });
                     }
                 })
             }, 500);
             $('#student_body').on('click', '.row_student', function () {
-
                 let student_id = $(this).find('.s_id').text();
                 let student_name = $(this).find('.s_name').text();
                 let course = $(this).find('.s_course').text();
                 let email = $(this).find('.s_id').data('email');
                 let section = $(this).find('.s_id').data('section');
                 let studentExists = false;
-
+                let major4 = false;
+                major_violation_records.forEach(element => {
+                    if (element.student_id == student_id) {
+                        if (element.penalty_id > 4) {
+                            console.log(element.penalty_id);
+                            major4 = true;
+                        }
+                    }
+                });
+                if (major4) {
+                    return;
+                }
                 $('#student_selected').find('.t_id').each(function () {
                     if ($(this).text() == student_id) {
                         studentExists = true;
@@ -417,7 +435,7 @@ unset($_SESSION['error_message']);
                             onkeydown="return /[a-zA-Z ]/i.test(event.key)">`);
                     major_data.forEach(element => {
                         let violation = element.violation_name;
-                        $('#detect-Course').append('<li><a class="dropdown-item" href="#" data-value="' + violation + '" data-id="'+ element.violation_id  +'">' + element.short_desc + '</a></li>');
+                        $('#detect-Course').append('<li><a class="dropdown-item" href="#" data-value="' + violation + '" data-id="' + element.violation_id + '" data-first="' + element.first_penalty + '" data-second="' + element.second_penalty + '">' + element.short_desc + '</a></li>');
                     })
                 } else {
 
@@ -426,7 +444,7 @@ unset($_SESSION['error_message']);
                             onkeydown="return /[a-zA-Z ]/i.test(event.key)">`);
                     minor_data.forEach(element => {
                         let violation = element.violation_name;
-                        $('#detect-Course').append('<li><a class="dropdown-item" href="#" data-value="' + violation + '" data-id="'+ element.violation_id  +'">' + element.short_desc + '</a></li>');
+                        $('#detect-Course').append('<li><a class="dropdown-item" href="#" data-value="' + violation + '" data-id="' + element.violation_id + '">' + element.short_desc + '</a></li>');
                     })
                     $('#category_txt').text('Category:');
                     $('#category_type').attr('disabled', true);
@@ -456,7 +474,8 @@ unset($_SESSION['error_message']);
                 let violation_id = $(this).data('id');
                 let violation_desc = $(this).text();
                 let violationExists = false;
-
+                let first_penalty = $(this).data('first');
+                let second_penalty = $(this).data('second');
                 $('#violation_selected').find('.viol-item').each(function () {
                     if ($(this).data('id') == violation_id) {
                         violationExists = true;
@@ -464,9 +483,11 @@ unset($_SESSION['error_message']);
                     }
                 });
                 let newViolation = {
-                    violation_id : violation_id,
-                    violation_desc : violation_desc,
-                };  
+                    violation_id: violation_id,
+                    violation_desc: violation_desc,
+                    first_penalty: first_penalty,
+                    second_penalty: second_penalty,
+                };
                 if (!violationExists) {
                     violation_list.push(newViolation);
                     $('#violation_selected').append(`
@@ -486,32 +507,121 @@ unset($_SESSION['error_message']);
             })
 
             $('#next_btn').on('click', function () {
+                hasCategory1 = "No";
+                hasCategory2 = "No";
+                hasCategory3 = "No";
+                hasCategory4 = "No";
                 violationString = violation_list.map(violation => violation.violation_desc).join(', ');
                 console.log(students);
-                
                 if ($('#category_type').val() == '' && $('#offense_type').val() == 'Major' && $('#violation_selected').children().length === 0) {
-
                     $('#error').css('display', 'block');
                     console.log($('#offense_type').val());
                     return;
-
                 } else {
-                    
                     if ($('#offense_type').val() == 'Major') {
                         $('#service').attr('disabled', false);
                         $('#service').css('display', 'block');
-                        if ($('#category_type').val() == '2') {
-                            category = '2';
-                            $('#title_category').text('Category ' + category);
+
+                        if (violation_list.length >= 3) {
+                            students.forEach(student => student.category = 4);
+                            hasCategory4 = "Yes";
+                        } else {
+                            students.forEach(student => {
+                                const studentRecords = major_violation_records.filter(record => record.student_id === student.student_id);
+
+                                if (studentRecords.length > 0) {
+
+                                    if (studentRecords.length >= 3) {
+                                        student.category = 4;
+                                    } else {
+                                        let penalties = [];
+
+                                        studentRecords.forEach(record => {
+                                            const matchingViolation = violation_list.find(violation => violation.violation_id == record.violation_id);
+
+                                            if (matchingViolation) {
+
+                                                penalties.push(matchingViolation.second_penalty || matchingViolation.first_penalty);
+                                            } else {
+
+                                                penalties.push(parseInt(record.penalty_id));
+                                            }
+                                        });
+
+
+                                        if (penalties.length === 1) {
+                                            student.category = penalties[0];
+                                        } else {
+                                            const [p1, p2] = penalties.sort((a, b) => a - b);
+
+                                            if ((p1 === 1 && p2 === 2) || (p1 === 2 && p2 === 2)) {
+                                                student.category = 3;
+                                            } else if (p1 === 1 && p2 === 1) {
+                                                student.category = 2;
+                                            } else if ((p1 === 2 && p2 === 3) || (p1 === 3 && p2 === 3)) {
+                                                student.category = 4;
+                                            }
+                                        }
+                                    }
+                                } else {
+
+                                    if (violation_list.length === 1) {
+                                        student.category = violation_list[0].first_penalty;
+                                    } else if (violation_list.length === 2) {
+                                        const penalties = violation_list.map(v => v.first_penalty);
+
+                                        const [p1, p2] = penalties.sort((a, b) => a - b);
+
+                                        if ((p1 === 1 && p2 === 2) || (p1 === 2 && p2 === 2)) {
+                                            student.category = 3;
+                                        } else if (p1 === 1 && p2 === 1) {
+                                            student.category = 2;
+                                        } else if ((p1 === 2 && p2 === 3) || (p1 === 3 && p2 === 3)) {
+                                            student.category = 4;
+                                        }
+                                    }
+                                }
+                                if (student.category === 1) hasCategory1 = "Yes";
+                                if (student.category === 2) hasCategory2 = "Yes";
+                                if (student.category === 3) hasCategory3 = "Yes";
+                                if (student.category === 4) hasCategory4 = "Yes";
+                            });
+                        }
+                        console.log(hasCategory1);
+                        if (hasCategory1 === "Yes") {
+                            $('#title_category').text('Category ' + 1);
                             choice = "counseling";
                             $('#dateField').css('display', 'block');
+                            $('#counseling').css('display', 'block');
+                            $('#service').css('display', 'none');
                             $('.conf-items').css('display', 'none');
+                            $('.conf-table').css('display', 'none');
 
                         }
-                        if ($('#category_type').val() == '3') {
-                            category = '3';
-                            $('#title_category').text('Category ' + category);
+                        else if (hasCategory2 === "Yes") {
+                            $('#title_category').text('Category ' + 2);
+                            choice = "counseling";
+                            category_2 = false;
+                            $('#dateField').css('display', 'block');
+                            $('#counseling').css('display', 'block');
+                            $('.conf-items').css('display', 'none');
+                            $('.conf-table').css('display', 'none');
+                        }
+                        else if (hasCategory3 === "Yes") {
+                            $('#title_category').text('Category ' + 3);
+                            category_3 = false;
                             $('#service').attr('disabled', true);
+                            $('#service').css('display', 'none');
+                            $('#conference').css('display', 'block');
+                            $('#counseling').css('display', 'none');
+                            $('#dateField').css('display', 'none');
+                            $('.conf-items').css('display', 'block');
+                            $('.conf-table').css('display', 'block');
+                        }
+                        else if (hasCategory4 === "Yes") {
+                            $('#title_category').text('Category ' + 4);
+                            $('#service').attr('disabled', true);
+                            category_4 = false;
                             $('#service').css('display', 'none');
                             $('#conference').css('display', 'block');
                             $('#counseling').css('display', 'none');
@@ -520,21 +630,8 @@ unset($_SESSION['error_message']);
                             $('.conf-items').css('display', 'block');
                             $('.conf-table').css('display', 'block');
                         }
-                        if ($('#category_type').val() == '4') {
-                            category = '4';
-                            $('#title_category').text('Category ' + category);
-                            $('#service').attr('disabled', true);
-                            $('#service').css('display', 'none');
-                            $('#conference').css('display', 'block');
-                            $('#counseling').css('display', 'none');
-                            choice = "conference";
-                            $('#dateField').css('display', 'none');
-                            $('.conf-items').css('display', 'block');
-                            $('.conf-table').css('display', 'block');
-                        }
-                        if ($('#category_type').val() == '5') {
-                            category = '5';
-                            $('#title_category').text('Category ' + category);
+                        else if (hasCategory5 === "Yes") {
+                            $('#title_category').text('Category ' + 5);
                             $('#service').attr('disabled', true);
                             $('#service').css('display', 'none');
                             $('#conference').css('display', 'block');
@@ -547,6 +644,10 @@ unset($_SESSION['error_message']);
                         $('#nextstep').css('display', 'block');
                         $('#main_body').css('display', 'none');
                         $('#error').css('display', 'none');
+
+                        console.log(students);
+
+
                     } else {
                         $('#error').css('display', 'none');
                         $.ajax({

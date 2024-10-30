@@ -128,8 +128,32 @@
 <script>
     var choice = "counseling";
     var category = '';
-    $(document).ready(function () {
+    var category_1 = true;
+    var category_2 = true;
+    var category_3 = true;
+    var category_4 = true;
+    var category1_choice = "";
+    var category2_choice = "";
+    var category3_choice = "";
+    var category4_choice = "";
+    var category1_due_date = "";
+    var category2_due_date = "";
+    var category2_department = "";
+    var category1_notice = "";
+    var category2_notice = "";
+    var category3_notice = "";
+    var category4_notice = "";
+    var category1_attendees = [];
+    var category2_attendees = [];
+    var category3_attendees = [];
+    var category4_attendees = [];
+    var category1_contype = "";
+    var category2_contype = "";
+    var category3_contype = "";
+    var category4_contype = "";
 
+    $(document).ready(function () {
+        LoadMajorViolation();
         $('.nav-choice').click(function () {
             $('.nav-choice').css('border-bottom', 'none');
             $(this).css('border-bottom', 'solid 3px rgb(98, 130, 172)');
@@ -293,143 +317,278 @@
                 $('#add_error').text('Please add attendees');
                 return;
             }
-            if (choice == 'counseling') {
-                $('#print_left').css('display', 'block');
-                $('#add_error').text('');
-                <?php $_SESSION['violations'] = []; ?>  
-                $.ajax({
-                    url: 'php/add_violation.php',
-                    type: 'POST',
-                    data: {
-                        students: students,
-                        due_date: $('#dateField').val(),
-                        violation_list: violation_list,
-                        category: $('#category_type').val(),
-                        notice: $('#notice').val(),
-                        type: 'major',
-                        choice: choice,
-                        violationString: violationString
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        if (data == 'success') {
-                            $.ajax({
-                                url: 'email/mail.php',
-                                type: 'POST',
-                                data: {
-                                    subject: 'Notice of Violation',
-                                    email: email_list,
-                                    violations: violationString,
-                                },success: function(data){
-                                }
-                            })
-                            $('#teacher-list').empty();
-                            $('conf-items').css('display', 'none');
-                            $('conf-table').css('display', 'none');
-                            $('#major_success').modal('show');
-                            $('#student_selected').empty();
-                            students = [];
-                        }
-                    }
-                })
-            } else if (choice == 'community') {
-                if ($('#department').val() == '') {
-                    $('#add_error').text('Please select a department');
-                    return;
+            
+if (hasCategory1 === "Yes") {
+    if (choice == "counseling") {
+        category1_choice = "counseling";
+        category1_due_date = $('#dateField').val();
+        category1_notice = $('#notice').val();
+    } else if (choice == "conference") {
+        category1_choice = "conference";
+        category1_due_date = $('#date_conference').val();
+        category1_notice = $('#notice').val();
+        $('#teacher-list').children().each(function () {
+            category1_attendees.push($(this).children().first().text());
+        });
+        category1_date_of_conference = $('#date_conference').val();
+        category1_contype = $('#con-type').val();
+    }
+    hasCategory1 = "No";
+    $('#dateField').val('');
+    $('#notice').val('');
+    return;
+} else if (hasCategory2 === "Yes") {
+    if (category_2 == true) {
+        $('#title_category').text('Category ' + 2);
+        choice = "counseling";
+        $('#dateField').css('display', 'block');
+        $('#counseling').css('display', 'block');
+        $('.conf-items').css('display', 'none');
+        $('.conf-table').css('display', 'none');
+        category_2 = false;
+        return;
+    } else {
+        if (choice === "counseling") {
+            category2_choice = "counseling";
+            category2_due_date = $('#dateField').val();
+            category2_notice = $('#notice').val();
+        } else if (choice === "community") {
+            category2_choice = "community";
+            category2_due_date = $('#dateField').val();
+            category2_department = $('#department').val();
+            category2_notice = $('#notice').val();
+        } else if (choice === "conference") {
+            category2_choice = "conference";
+            category2_due_date = $('#date_conference').val();
+            category2_notice = $('#notice').val();
+            category2_contype = $('#con-type').val();
+            $('#teacher-list').children().each(function () {
+                category2_attendees.push($(this).children().first().text());
+            });
+        }
+        hasCategory2 = "No";
+        $('#dateField').val('');
+        $('#notice').val('');
+        $('#department').val('');
+    }
+} else if (hasCategory3 === "Yes") {
+    if (category_3 == true) {
+        $('#title_category').text('Category ' + 3);
+        choice = "conference";
+        $('.department-function').css('display', 'none');
+        $('#dateField').css('display', 'none');
+        $('#dateField').val('');
+        $('#datelabel').css('display', 'none');
+        $('#notice').val('');
+        $('.conf-table').css('display', 'block');
+        $('.conf-items').css('display', 'block');
+        category_3 = false;
+        return;
+    } else {
+        if (choice === "conference") {
+            category3_choice = "conference";
+            category3_due_date = $('#date_conference').val();
+            category3_notice = $('#notice').val();
+            category3_contype = $('#con-type').val();
+            $('#teacher-list').children().each(function () {
+                category3_attendees.push($(this).children().first().text());
+            });
+        }
+        hasCategory3 = "No";
+        $('#dateField').val('');
+        $('#notice').val('');
+        $('#department').val('');
+    }
+} else if (hasCategory4 === "Yes") {
+    if (category_4 == true) {
+        $('#title_category').text('Category ' + 4);
+        choice = "conference";
+        $('.department-function').css('display', 'none');
+        $('#dateField').css('display', 'none');
+        $('#dateField').val('');
+        $('#datelabel').css('display', 'none');
+        $('#notice').val('');
+        $('.conf-table').css('display', 'block');
+        $('.conf-items').css('display', 'block');
+        category_4 = false;
+        return;
+    } else {
+        if (choice === "conference") {
+            category4_choice = "conference";
+            category4_due_date = $('#date_conference').val();
+            category4_notice = $('#notice').val();
+            category4_contype = $('#con-type').val();
+            $('#teacher-list').children().each(function () {
+                category4_attendees.push($(this).children().first().text());
+            });
+        }
+        hasCategory4 = "No";
+        $('#dateField').val('');
+        $('#notice').val('');
+        $('#department').val('');
+    }
+} else if (hasCategory5 === "Yes") {
+    // Handle Category 5 if needed
+}
+
+if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasCategory4 == "No" && hasCategory5 == "No") {
+    if (category1_choice !== "") {
+        if (category1_choice === "counseling") {
+            $.ajax({
+                url: 'php/add_violation.php',
+                type: 'POST',
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category1_due_date,
+                    notice: category1_notice,
+                    choice: category1_choice,
+                    type: "major",
+                    violationString: violationString,
+                    category: "1"
+                },
+                success: function (data) {
+            
                 }
-                $('#print_left').css('display', 'block');
-                $('#add_error').text('');
-                <?php $_SESSION['violations'] = []; ?>
-                $.ajax({
-                    url: 'php/add_violation.php',
-                    type: 'POST',
-                    data: {
-                        students: students,
-                        due_date: $('#dateField').val(),
-                        violation_list: violation_list,
-                        category: $('#category_type').val(),
-                        notice: $('#notice').val(),
-                        department: $('#department').val(),
-                        type: 'major',
-                        choice: choice,
-                        violationString: violationString
-                    },
-                    success: function (data) {
-                        if (data == 'success') {
-
-                                $.ajax({
-                                    url: 'email/mail.php',
-                                    type: 'POST',
-                                    data: {
-                                        subject: 'Notice of Violation',
-                                        email: email_list,
-                                        violations: violationString,
-                                    }, success: function (data) {
-
-                                    }
-                                })
-                            $('#major_success').modal('show');
+            });
+        } else if (category1_choice === "conference") {
+            $.ajax({
+                url: 'php/add_violation.php',
+                type: "POST",
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category1_due_date,
+                    attendees: category1_attendees,
+                    conference: category1_contype,
+                    type: "major",
+                    choice: category1_choice,
+                    notice: category1_notice,
+                    category: "1"
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    }
+    if (category2_choice !== "") {
+        if (category2_choice === "counseling") {
+            $.ajax({
+                url: 'php/add_violation.php',
+                type: 'POST',
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category2_due_date,
+                    notice: category2_notice,
+                    choice: category2_choice,
+                    type: "major",
+                    violationString: violationString,
+                    category: "2"
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        } else if (category2_choice === "community") {
+            $.ajax({
+                url: "php/add_violation.php",
+                type: "POST",
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category2_due_date,
+                    department: category2_department,
+                    notice: category2_notice,
+                    choice: category2_choice,
+                    type: "major",
+                    violationString: violationString,
+                    category: "2"
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        } else if (category2_choice === "conference") {
+            $.ajax({
+                url: 'php/add_violation.php',
+                type: "POST",
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category2_due_date,
+                    attendees: category2_attendees,
+                    conference: category2_contype,
+                    type: "major",
+                    choice: category2_choice,
+                    notice: category2_notice,
+                    violationString: violationString,
+                    category: "2"
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+        
+    }
+    if (category3_choice !== "") {
+        if (category3_choice === "conference") {
+            $.ajax({
+                url: 'php/add_violation.php',
+                type: "POST",
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category3_due_date,
+                    attendees: category3_attendees,
+                    conference: category3_contype,
+                    type: "major",
+                    choice: category3_choice,
+                    notice: category3_notice,
+                    violationString: violationString,
+                    category: "3"
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    }
+    if (category4_choice !== "") {
+        if (category4_choice === "conference") {
+            $.ajax({
+                url: 'php/add_violation.php',
+                type: "POST",
+                data: {
+                    students: students,
+                    violation_list: violation_list,
+                    due_date: category4_due_date,
+                    attendees: category4_attendees,
+                    conference: category4_contype,
+                    type: "major",
+                    choice: category4_choice,
+                    notice: category4_notice,
+                    violationString: violationString,
+                    category: "4"
+                },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    }
+    $('#major_success').modal('show');
                             $('#teacher-list').empty();
                             $('conf-items').css('display', 'none');
                             $('conf-table').css('display', 'none');
                             $('#major_success').modal('show');
                             $('#student_selected').empty();
                             students = [];
-                        }
+                        
+}
 
-                    }
-                })
-
-            } else if (choice == 'conference') {
-                $('#add_error').text('');
-                var attendees = [];
-                $('#teacher-list').children().each(function () {
-                    attendees.push($(this).children().first().text());
-                })
-                $('#print_left').css('display', 'none');
-                <?php $_SESSION['violations'] = []; ?>
-                $.ajax({
-                    url: 'php/add_violation.php',
-                    type: 'POST',
-                    data: {
-                        students: students,
-                        date_of_conference: $('#date_conference').val(),
-                        violation_list: violation_list,
-                        category: $('#category_type').val(),
-                        notice: $('#notice').val(),
-                        conference: $('#con-type').val(),
-                        type: 'major',
-                        choice: choice,
-                        attendees: attendees,
-                        violationString: violationString
-                    },
-                    success: function (data) {
-                        if (data == 'success') {
-                            $.ajax({
-                                url: 'email/mail.php',
-                                type: 'POST',
-                                data: {
-                                    subject: 'Notice of Violation',
-                                    email: email_list,
-                                    violations: violationString,
-                                }, success: function (data) {
-                                    console.log(data);
-                                }
-                            })
-
-                            $('#major_success').modal('show');
-                            $('#teacher-list').empty();
-                            $('conf-items').css('display', 'none');
-                            $('conf-table').css('display', 'none');
-                            $('#major_success').modal('show');
-                            $('#student_selected').empty();
-                            students = [];
-                        }
-
-                    }
-                })
-
-            }
         })
         $('#major_success').on('hide.bs.modal', function () {
             $('#dateField').val('');
@@ -487,4 +646,14 @@
             window.open('./printable/endorsement_letter.php', '_blank').focus();
         }
     })
+    function LoadMajorViolation(){
+        $.ajax({
+            url: 'php/fetch_major_violation_records.php',
+            type: 'GET',
+            success: function(data){
+                major_violation_records = JSON.parse(data);
+                console.log(major_violation_records);
+            }
+        })
+    }
 </script>

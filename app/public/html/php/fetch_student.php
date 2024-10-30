@@ -30,7 +30,7 @@ WHERE
   a.l_name LIKE '%$search%' OR 
   e.name LIKE '%$search%' OR 
   b.description LIKE '%$search%' OR 
-  d.description LIKE '%$search%' ";
+  d.description LIKE '%$search%'";
 
 $result = $conn->query($sql);
 

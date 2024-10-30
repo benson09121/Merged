@@ -788,3 +788,35 @@ td img {
     flex-wrap: wrap;
   }
 }
+
+.filter-group .dropdown-lang button {
+  border: none;
+  font-size: 19px;
+  font-weight: 700;
+  color: #212529;
+  padding: 0;
+  margin: 0 0 5px;
+  background: none;
+}
+
+.filter-group .dropdown-toggle:focus,
+.dropdown-toggle:active {
+  background-color: transparent !important;
+  color: #212529;
+}
+
+.filter-group .dropdown-lang button:hover {
+  background: none;
+  border: none;
+  color: #005CD6;
+}
+
+.filter-group .dropdown-lang .dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.filter-group .dropdown-lang .dropdown-menu .form-control {
+  font-size: 14px;
+}

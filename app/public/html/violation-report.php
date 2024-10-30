@@ -79,23 +79,41 @@ $_SESSION['currentpage'] = "violation";
             // echo '<button class="back-button-viocon" onclick="history.back()">> Back</button>';
             ?> -->
 
-            <!-- <div class="filter-group">
+<div class="filter-group">
                 <div class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search...">
+                    <input type="text" placeholder="Search..." id="searchInput">
                 </div>
-                <div class="dropdowns">
-
-                    <select name="" id="">
-                        <option value="" style="display: none;" selected>Filter Course</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                    </select>
-
-                    <span><i class="fa-solid fa-filter"></i> Date filter</span>
-
+                <div class="dropdown-lang">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-box="section">Section</button>
+                    <ul class="dropdown-menu" id="detect-section" aria-labelledby="section">
+                        <input type="text" class="form-control input-lang" placeholder="Search sections..."
+                            onkeydown="return /[a-zA-Z1-9]/i.test(event.key)">
+                            <?php include('php/get_section.php'); ?>
+                    </ul>
                 </div>
-            </div> -->
+
+                <div class="dropdown-lang">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-box="course">Course</button>
+                    <ul class="dropdown-menu" id="detect-Course" aria-labelledby="section">
+                        <input type="text" class="form-control input-lang" placeholder="Search courses..."
+                            onkeydown="return /[a-zA-Z]/i.test(event.key)">
+                            <?php include('php/get_course.php'); ?>
+                    </ul>
+                </div>
+
+                <div class="dropdown-lang">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="section"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-box="department">Department</button>
+                    <ul class="dropdown-menu" id="detect-department" aria-labelledby="section">
+                        <input type="text" class="form-control input-lang" placeholder="Search departments..."
+                            onkeydown="return /[a-zA-Z]/i.test(event.key)">
+                            <?php include('php/get_department.php'); ?>
+                    </ul>
+                </div> 
+            </div>
 
             <div class="table-nav">
                 <div class="nav-list">
@@ -233,6 +251,9 @@ $_SESSION['currentpage'] = "violation";
     var search = '';
     var currentPage = 1;
     var itemsPerPage = 5;
+    var section = '';
+    var course = '';
+    var department = '';
     $(document).ready(function () {
         $('.nav-list ul a').click(function () {
             $('.nav-list ul a').css('border-bottom', 'none');
@@ -251,22 +272,47 @@ $_SESSION['currentpage'] = "violation";
                     selected: selected,
                     search: search,
                     page: currentPage,
-                    limit: itemsPerPage
+                    limit: itemsPerPage,
+                    section: section,
+                    course: course,
+                    department: department
                 },
                 success: function (response) {
-                    console.log(response);
-                    let data = JSON.parse(JSON.stringify(response));
-                    let violations = data.all;
-                    let totalPages = data.totalPages;
-                    let minorCount = data.minorCount;
-                    let majorCount = data.majorCount;
-                    let combinedCount = data.combinedCount;
-                    $('#tableBody_all').empty();
-                    $('#tableBody_minor').empty();
-                    $('#tableBody_major').empty();
-                    violations.forEach(item => {
-                        if (selected == 'all') {
-                            $('#tableBody_all').append(`
+    console.log(response);
+    let data = JSON.parse(JSON.stringify(response));
+    let violations = data.all;
+    let totalPages = data.totalPages;
+    let minorCount = data.minorCount;
+    let majorCount = data.majorCount;
+    let combinedCount = data.combinedCount;
+    $('#tableBody_all').empty();
+    $('#tableBody_minor').empty();
+    $('#tableBody_major').empty();
+
+    if (violations.length === 0) {
+        if (selected == 'all') {
+            $('#tableBody_all').append(`
+                <tr>
+                    <td colspan="7">No data found</td>
+                </tr>
+            `);
+        } else if (selected == 'minor') {
+            $('#tableBody_minor').append(`
+                <tr>
+                    <td colspan="6">No data found</td>
+                </tr>
+            `);
+        } else if (selected == 'major') {
+            $('#tableBody_major').append(`
+                <tr>
+                    <td colspan="8">No data found</td>
+                </tr>
+            `);
+        }
+    } else {
+        violations.forEach(item => {
+            if (selected == 'all') {
+                $('#tableBody_all').append(`
                     <tr>
                         <td>${item.student_id}</td>
                         <td>${item.name} ${item.lastname}</td>
@@ -276,24 +322,23 @@ $_SESSION['currentpage'] = "violation";
                         <td>${item.status}</td>
                         <td>${item.date_of_apprehension}</td>
                     </tr>
-                    `);
-                        } else if (selected == 'minor') {
-                            $('#table')
-                            $('#tableBody_minor').append(`
+                `);
+            } else if (selected == 'minor') {
+                $('#tableBody_minor').append(`
                     <tr>
                         <td>${item.student_id}</td>
-                        <td>${item.name} ${item.last_name}</td>
+                        <td>${item.name} ${item.lastname}</td>
                         <td>${item.course_name}</td>
                         <td>${item.violation_type}</td>
                         <td>${item.violation_name}</td>
                         <td>${item.date_of_apprehension}</td>
                     </tr>
-                    `);
-                        } else if (selected == 'major') {
-                            $('#tableBody_major').append(`
+                `);
+            } else if (selected == 'major') {
+                $('#tableBody_major').append(`
                     <tr>
                         <td>${item.student_id}</td>
-                        <td>${item.student_name}</td>
+                        <td>${item.name} ${item.lastname}</td>
                         <td>${item.course_name}</td>
                         <td>${item.violation_type}</td>
                         <td>${item.violation_name}</td>
@@ -301,15 +346,16 @@ $_SESSION['currentpage'] = "violation";
                         <td>${item.date_of_apprehension}</td>
                         <td><button class="btn btn-primary" style="font-size: 10px">Send Email</button></td>
                     </tr>
-                    `);
-                        }
-                    });
-                    console.log(totalPages);
+                `);
+            }
+        });
+    }
+    console.log(totalPages);
                     generatePagination(totalPages);
                     $('#all_count').text(combinedCount);
                     $('#minor_count').text(minorCount);
                     $('#major_count').text(majorCount);
-                }
+}
             });
         }, 500);
 
@@ -367,7 +413,40 @@ $_SESSION['currentpage'] = "violation";
         $('.generate-btn').on('click', '#generateReportBtn', function () {
             window.location.href = './php/generate_violation_report.php';
         });
+        $('.dropdown-item').on('click', function () {
+            const tabPane = $(this).closest('.dropdown-lang');
+            const button = tabPane.find('button.dropdown-toggle');
+            if ($(this).text() === button.text() && button.attr('data-box') === 'section') {
+                button.text('Section');
+                section = '';
+            } else if ($(this).text() === button.text() && button.attr('data-box') === 'course') {
+                button.text('Course');
+                course = '';
+            } else if ($(this).text() === button.text() && button.attr('data-box') === 'department') {
+                button.text('Department');
+                department = '';
+            } else {
+                if (button.attr('data-box') === 'section') {
+                    section = $(this).text();
+                } else if (button.attr('data-box') === 'course') {
+                    course = $(this).text();
+                } else if (button.attr('data-box') === 'department') {
+                    department = $(this).text();
+                }
+                const text = $(this).text();
+                button.text(text);
+                $(this).attr('style', 'background-color: rgb(0,2550);');
+            }
+        })
+        $('#searchInput').on('input', function () {
+            search = $(this).val();
+            currentPage = 1;
+        });
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 
 </html>
