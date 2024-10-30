@@ -4,7 +4,7 @@ include '../../database/database_conn.php';
 
 $students = $_POST['students'] ?? NULL;
 $violation_list = $_POST['violation_list'] ?? NULL;
-$penalty_id = $_POST['category'] ?? NULL;
+$category = $_POST['category'] ?? NULL;
 $due_date = $_POST['due_date'] ?? NULL;
 $method = $_POST['choice'] ?? NULL;
 $department = $_POST['department'] ?? NULL;
@@ -18,7 +18,7 @@ $conference_list = [];
 $_SESSION['students_list'] = $students;
 $_SESSION['violationString'] = $violationString; 
 $_SESSION['departments'] = $department;
-
+$_SESSION['offense'] = "Major";
 $_SESSION['violations'] = [];
 
 if ($method == 'counseling') {
@@ -57,6 +57,7 @@ if ($method == 'counseling') {
 } else if ($method == 'community') {
     foreach ($students as $student) {
         $student_id = $student['student_id'];
+        $penalty_id = $student['category'];
         foreach ($violation_list as $violation) {
             $violation_id = $violation['violation_id'];
             $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
@@ -79,7 +80,10 @@ if ($method == 'counseling') {
 
 } else if ($method == 'conference') {
     foreach ($students as $student) {
+        $penalty_id = $student['category'];
         $student_id = $student['student_id'];
+        if($student['category'] == $category){
+        
         foreach ($violation_list as $violation) {
             $violation_id = $violation['violation_id'];
             $stmt = $conn->prepare("INSERT INTO tbl_major_violation_records (student_id, violation_id, penalty_id, comment, date_of_apprehension, status) VALUES (?, ?, ?, NULL, NOW(), 'Not Cleared')");
@@ -97,6 +101,7 @@ if ($method == 'counseling') {
                 'section' => $student['section']
             ];
         }
+    }
     }
 
     $_SESSION['violation_slip'] = $last_id;

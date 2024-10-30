@@ -448,7 +448,7 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
                     category: "1"
                 },
                 success: function (data) {
-                    console.log(data);
+            
                 }
             });
         } else if (category1_choice === "conference") {
@@ -523,6 +523,7 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
                     type: "major",
                     choice: category2_choice,
                     notice: category2_notice,
+                    violationString: violationString,
                     category: "2"
                 },
                 success: function (data) {
@@ -530,6 +531,7 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
                 }
             });
         }
+        
     }
     if (category3_choice !== "") {
         if (category3_choice === "conference") {
@@ -545,6 +547,7 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
                     type: "major",
                     choice: category3_choice,
                     notice: category3_notice,
+                    violationString: violationString,
                     category: "3"
                 },
                 success: function (data) {
@@ -567,6 +570,7 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
                     type: "major",
                     choice: category4_choice,
                     notice: category4_notice,
+                    violationString: violationString,
                     category: "4"
                 },
                 success: function (data) {
@@ -575,6 +579,14 @@ if (hasCategory1 == "No" && hasCategory2 == "No" && hasCategory3 == "No" && hasC
             });
         }
     }
+    $('#major_success').modal('show');
+                            $('#teacher-list').empty();
+                            $('conf-items').css('display', 'none');
+                            $('conf-table').css('display', 'none');
+                            $('#major_success').modal('show');
+                            $('#student_selected').empty();
+                            students = [];
+                        
 }
 
         })

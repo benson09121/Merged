@@ -524,6 +524,7 @@ unset($_SESSION['error_message']);
 
                         if (violation_list.length >= 3) {
                             students.forEach(student => student.category = 4);
+                            hasCategory4 = "Yes";
                         } else {
                             students.forEach(student => {
                                 const studentRecords = major_violation_records.filter(record => record.student_id === student.student_id);
